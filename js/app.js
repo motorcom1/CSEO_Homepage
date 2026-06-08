@@ -1,0 +1,785 @@
+/* ==========================================================================
+   CSEO Integrated System - Premium Interactive Sidebar Javascript Logic
+   ========================================================================== */
+
+document.addEventListener('DOMContentLoaded', () => {
+    
+    // Initialize Lucide Icons
+    lucide.createIcons();
+
+    // ==========================================================================
+    // 1. Welcome Screen (Intro) Text Rotation
+    // ==========================================================================
+    const welcomeText = document.getElementById('welcome-text');
+    const welcomeScreen = document.getElementById('welcome-screen');
+    
+    const greetings = [
+        "안녕하세요!",     // Korean
+        "환영합니다!",     // Korean Welcome
+        "Hello!",         // English
+        "Welcome!",        // English Welcome
+        "Bienvenue!",      // French
+        "Guten Tag!",      // German
+        "Hola!",           // Spanish
+        "Ciao!"            // Italian
+    ];
+    
+    let greetingIndex = 0;
+    let greetingInterval;
+    
+    function rotateGreeting() {
+        if (!welcomeText) return;
+        
+        welcomeText.classList.remove('show');
+        
+        setTimeout(() => {
+            greetingIndex = (greetingIndex + 1) % greetings.length;
+            welcomeText.textContent = greetings[greetingIndex];
+            welcomeText.classList.add('show');
+        }, 350);
+    }
+    
+    if (welcomeText) {
+        welcomeText.classList.add('show');
+        greetingInterval = setInterval(rotateGreeting, 1500);
+    }
+    
+    if (welcomeScreen) {
+        welcomeScreen.addEventListener('click', () => {
+            clearInterval(greetingInterval);
+            navigateTo('portal-screen');
+        });
+    }
+
+    // ==========================================================================
+    // 2. SPA Screen Navigation & Sidebar View Reset
+    // ==========================================================================
+    const screens = {
+        'welcome-screen': document.getElementById('welcome-screen'),
+        'portal-screen': document.getElementById('portal-screen'),
+        'manage-screen': document.getElementById('manage-screen'),
+        'energy-screen': document.getElementById('energy-screen'),
+        'safety-screen': document.getElementById('safety-screen')
+    };
+
+    function navigateTo(screenId) {
+        // Remove active class from all screens
+        Object.values(screens).forEach(screen => {
+            if (screen) screen.classList.remove('active');
+        });
+        
+        // Add active class to target screen
+        const targetScreen = document.getElementById(screenId);
+        if (targetScreen) {
+            targetScreen.classList.add('active');
+        }
+        
+        // Reset subviews and active sidebar buttons to default on entry
+        if (screenId === 'manage-screen') {
+            resetSidebarViews('manage-screen', 'manage-org', '조직 구성도');
+            stopEnergySimulator();
+            stopSafetySimulator();
+        } else if (screenId === 'energy-screen') {
+            resetSidebarViews('energy-screen', 'energy-overview', '실시간 전력 분석');
+            stopSafetySimulator();
+            startEnergySimulator();
+            setTimeout(initEnergyChart, 200); /* Proactively initialize the integrated chart */
+        } else if (screenId === 'safety-screen') {
+            resetSidebarViews('safety-screen', 'safety-overview', '실시간 안전 모니터링');
+            stopEnergySimulator();
+            startSafetySimulator();
+            setTimeout(initSafetyChart, 200); /* Proactively initialize the integrated safety chart */
+        } else {
+            stopEnergySimulator();
+            stopSafetySimulator();
+        }
+    }
+
+    // Helper to reset a dashboard to its default first tab
+    function resetSidebarViews(screenId, defaultViewId, breadcrumbText) {
+        const screen = document.getElementById(screenId);
+        if (!screen) return;
+        
+        // Set first sidebar button as active
+        const buttons = screen.querySelectorAll('.sidebar-btn');
+        buttons.forEach((btn, index) => {
+            if (index === 0) btn.classList.add('active');
+            else btn.classList.remove('active');
+        });
+        
+        // Set first sub-view as active
+        const subviews = screen.querySelectorAll('.sub-view');
+        subviews.forEach(view => {
+            if (view.id === defaultViewId) view.classList.add('active');
+            else view.classList.remove('active');
+        });
+        
+        // Reset Breadcrumbs
+        if (screenId === 'manage-screen') {
+            document.getElementById('manage-breadcrumb-text').textContent = breadcrumbText;
+        } else if (screenId === 'energy-screen') {
+            document.getElementById('energy-breadcrumb-text').textContent = breadcrumbText;
+        } else if (screenId === 'safety-screen') {
+            document.getElementById('safety-breadcrumb-text').textContent = breadcrumbText;
+        }
+    }
+
+    // Portal screen button actions
+    document.getElementById('btn-go-manage')?.addEventListener('click', () => navigateTo('manage-screen'));
+    document.getElementById('btn-go-safety')?.addEventListener('click', () => navigateTo('safety-screen'));
+    document.getElementById('btn-go-energy')?.addEventListener('click', () => navigateTo('energy-screen'));
+    
+    // Sidebar return buttons via Logo Click
+    document.getElementById('logo-btn-manage')?.addEventListener('click', () => navigateTo('portal-screen'));
+    document.getElementById('logo-btn-energy')?.addEventListener('click', () => navigateTo('portal-screen'));
+    document.getElementById('logo-btn-safety')?.addEventListener('click', () => navigateTo('portal-screen'));
+
+    // ==========================================================================
+    // 3. Sidebar Menu Sub-view Toggle Engine (좌측 버튼 제어 & 브레드크럼 매핑)
+    // ==========================================================================
+    const sidebarButtons = document.querySelectorAll('.sidebar-btn');
+    
+    sidebarButtons.forEach(button => {
+        button.addEventListener('click', () => {
+            const targetId = button.getAttribute('data-target');
+            if (!targetId) return;
+            
+            // Identify active dashboard screen (manage or energy)
+            const parentScreen = button.closest('.screen');
+            if (!parentScreen) return;
+            
+            // 1. Toggle Active Sidebar Button
+            parentScreen.querySelectorAll('.sidebar-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            button.classList.add('active');
+            
+            // 2. Toggle Active Sub-View panel
+            parentScreen.querySelectorAll('.sub-view').forEach(view => {
+                view.classList.remove('active');
+            });
+            const targetView = document.getElementById(targetId);
+            if (targetView) {
+                targetView.classList.add('active');
+            }
+            
+            // 3. Update Breadcrumb Text dynamically
+            const menuText = button.querySelector('span').textContent;
+            if (parentScreen.id === 'manage-screen') {
+                document.getElementById('manage-breadcrumb-text').textContent = menuText;
+                
+                // Lazy-load Manage Charts only when active
+                if (targetId === 'manage-analytics') {
+                    setTimeout(initManageChart, 100);
+                }
+            } else if (parentScreen.id === 'energy-screen') {
+                document.getElementById('energy-breadcrumb-text').textContent = menuText;
+                
+                // Lazy-load Energy Charts only when active
+                if (targetId === 'energy-overview') {
+                    setTimeout(initEnergyChart, 100);
+                }
+            } else if (parentScreen.id === 'safety-screen') {
+                document.getElementById('safety-breadcrumb-text').textContent = menuText;
+                
+                // Lazy-load Safety Charts only when active
+                if (targetId === 'safety-overview') {
+                    setTimeout(initSafetyChart, 100);
+                }
+            }
+        });
+    });
+
+    // ==========================================================================
+    // 4. Premium Cursor Spotlight Tracking Effect for Portal Cards
+    // ==========================================================================
+    const portalCards = document.querySelectorAll('.portal-card');
+    
+    portalCards.forEach(card => {
+        card.addEventListener('mousemove', (e) => {
+            const rect = card.getBoundingClientRect();
+            const x = e.clientX - rect.left;
+            const y = e.clientY - rect.top;
+            
+            card.style.setProperty('--x', `${x}px`);
+            card.style.setProperty('--y', `${y}px`);
+        });
+        
+        card.addEventListener('mouseleave', () => {
+            card.style.removeProperty('--x');
+            card.style.removeProperty('--y');
+        });
+    });
+
+    // ==========================================================================
+    // 5. Interactive Organization Chart Logic (Manage Screen)
+    // ==========================================================================
+    const deptData = {
+        'node-planning': {
+            badge: '기획',
+            title: '기획조정실 주요 R&R',
+            leader: '이성우 실장 (경영학 석사)',
+            mission: '중장기 전사 사업계획 수립, 글로벌 예산 배정, 사내 자본 재배치 및 ESG 경영 고도화 성과 전반 지휘 관리.',
+            members: ['정서아 수석 (전략기획)', '윤지후 책임 (재무분석)', '송지선 선임 (브랜드홍보)', '한준우 선임 (대외협력)']
+        },
+        'node-rd': {
+            badge: 'R&D',
+            title: '연구개발본부 주요 R&R',
+            leader: '최윤서 본부장 (공학박사)',
+            mission: '인공지능 기반 데이터 수집/가공 머신러닝 엔진 설계, 친환경 분산 전원 시스템 계통 연계 핵심 인프라 H/W 및 S/W 플랫폼 연구개발.',
+            members: ['이진아 수석 (에너지 AI)', '강도현 책임 (IoT 하드웨어)', '정서율 책임 (빅데이터 파이프라인)', '최유진 선임 (클라우드 플랫폼)', '박성민 선임 (모바일 앱)']
+        },
+        'node-ops': {
+            badge: '운영',
+            title: '운영지원부 주요 R&R',
+            leader: '박지한 부장',
+            mission: '사내 임직원 혁신 근무 환경 최적화 설계, 전사 인사 채용 및 인사 평가, 공공 행정 규제 준수 및 사옥 안전 시설 관리 감독.',
+            members: ['김민재 책임 (인사관리)', '이지현 책임 (행정지원)', '서지우 선임 (인프라보안)', '조은우 선임 (총무행정)']
+        },
+        'node-databiz': {
+            badge: '데이터본부',
+            title: '데이터사업부 주요 R&R',
+            leader: '한민석 부장',
+            mission: '연구소에서 가공된 탄소 배출 및 친환경 발전 정제 데이터를 활용한 금융/에너지 도매 시장 유통 기획 및 B2B B2G 전략적 마케팅 세일즈.',
+            members: ['김선우 책임 (비즈니스마케팅)', '임하은 책임 (에너지영업)', '신재희 선임 (솔루션엔지니어)', '김주원 선임 (상품기획)']
+        }
+    };
+
+    const deptNodes = document.querySelectorAll('.dept-node');
+    const detailBadge = document.getElementById('detail-dept-badge');
+    const detailTitle = document.getElementById('detail-dept-title');
+    const detailLeader = document.getElementById('detail-dept-leader');
+    const detailMission = document.getElementById('detail-dept-mission');
+    const detailMembers = document.getElementById('detail-dept-members');
+
+    deptNodes.forEach(node => {
+        node.addEventListener('click', () => {
+            deptNodes.forEach(n => n.classList.remove('active'));
+            node.classList.add('active');
+            
+            const data = deptData[node.id];
+            if (!data) return;
+            
+            if (detailBadge) {
+                detailBadge.textContent = data.badge;
+                detailBadge.className = `detail-badge tag-${node.id.replace('node-', '')}`;
+            }
+            if (detailTitle) detailTitle.textContent = data.title;
+            if (detailLeader) detailLeader.textContent = data.leader;
+            if (detailMission) detailMission.textContent = data.mission;
+            
+            if (detailMembers) {
+                detailMembers.innerHTML = '';
+                data.members.forEach(member => {
+                    const span = document.createElement('span');
+                    span.className = 'member-pill';
+                    span.textContent = member;
+                    detailMembers.appendChild(span);
+                });
+            }
+        });
+    });
+
+    // ==========================================================================
+    // 6. Chart.js Graphs (Manage Analytics)
+    // ==========================================================================
+    let manageChartInstance = null;
+    
+    function initManageChart() {
+        const ctx = document.getElementById('manage-analytics-chart');
+        if (!ctx || manageChartInstance) return;
+        
+        const dataVolume = {
+            labels: ['기획조정실', '연구개발본부', '운영지원부', '데이터사업부'],
+            datasets: [
+                {
+                    label: '로컬 데이터 용량 (GB)',
+                    data: [120, 780, 45, 520],
+                    backgroundColor: 'rgba(99, 102, 241, 0.4)',
+                    borderColor: '#6366f1',
+                    borderWidth: 2,
+                    borderRadius: 8,
+                    borderSkipped: false
+                },
+                {
+                    label: '클라우드 연계 용량 (GB)',
+                    data: [250, 1420, 110, 980],
+                    backgroundColor: 'rgba(59, 130, 246, 0.4)',
+                    borderColor: '#3b82f6',
+                    borderWidth: 2,
+                    borderRadius: 8,
+                    borderSkipped: false
+                }
+            ]
+        };
+
+        manageChartInstance = new Chart(ctx, {
+            type: 'bar',
+            data: dataVolume,
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        position: 'top',
+                        labels: {
+                            font: { family: 'Outfit', size: 12, weight: '500' },
+                            color: '#475569'
+                        }
+                    },
+                    tooltip: {
+                        backgroundColor: 'rgba(255, 255, 255, 0.95)',
+                        titleColor: '#0f172a',
+                        bodyColor: '#475569',
+                        borderColor: 'rgba(99, 102, 241, 0.2)',
+                        borderWidth: 1,
+                        padding: 12,
+                        cornerRadius: 12,
+                        titleFont: { family: 'Noto Sans KR', weight: '700' },
+                        bodyFont: { family: 'Outfit' }
+                    }
+                },
+                scales: {
+                    x: {
+                        grid: { display: false },
+                        ticks: {
+                            font: { family: 'Noto Sans KR', size: 12, weight: '500' },
+                            color: '#475569'
+                        }
+                    },
+                    y: {
+                        grid: { color: 'rgba(226, 232, 240, 0.6)' },
+                        ticks: {
+                            font: { family: 'Outfit', size: 11 },
+                            color: '#94a3b8'
+                        }
+                    }
+                }
+            }
+        });
+    }
+
+    // ==========================================================================
+    // 7. Chart.js Graphs (Energy Trends)
+    // ==========================================================================
+    let energyChartInstance = null;
+
+    function initEnergyChart() {
+        const ctx = document.getElementById('energy-trend-chart');
+        if (!ctx || energyChartInstance) return;
+
+        const hours = ['11:00', '12:00', '13:00', '14:00', '15:00', '16:00', '17:00', '실시간'];
+        
+        const energyData = {
+            labels: hours,
+            datasets: [
+                {
+                    label: '친환경 자가 발전 (kW)',
+                    data: [410, 435, 480, 495, 460, 425, 385, 467.3],
+                    borderColor: '#10b981',
+                    borderWidth: 3,
+                    backgroundColor: 'rgba(16, 185, 129, 0.05)',
+                    fill: true,
+                    tension: 0.4,
+                    pointBackgroundColor: '#10b981',
+                    pointBorderColor: '#ffffff',
+                    pointBorderWidth: 2,
+                    pointRadius: 5,
+                    pointHoverRadius: 7
+                },
+                {
+                    label: '사옥 실시간 부하 (kW)',
+                    data: [390, 410, 435, 420, 445, 430, 405, 412.3],
+                    borderColor: '#3b82f6',
+                    borderWidth: 3,
+                    backgroundColor: 'rgba(59, 130, 246, 0.04)',
+                    fill: true,
+                    tension: 0.4,
+                    pointBackgroundColor: '#3b82f6',
+                    pointBorderColor: '#ffffff',
+                    pointBorderWidth: 2,
+                    pointRadius: 5,
+                    pointHoverRadius: 7
+                }
+            ]
+        };
+
+        energyChartInstance = new Chart(ctx, {
+            type: 'line',
+            data: energyData,
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        position: 'top',
+                        labels: {
+                            font: { family: 'Outfit', size: 12, weight: '500' },
+                            color: '#475569'
+                        }
+                    },
+                    tooltip: {
+                        backgroundColor: 'rgba(255, 255, 255, 0.95)',
+                        titleColor: '#0f172a',
+                        bodyColor: '#475569',
+                        borderColor: 'rgba(16, 185, 129, 0.2)',
+                        borderWidth: 1,
+                        padding: 12,
+                        cornerRadius: 12,
+                        titleFont: { family: 'Outfit', weight: '700' },
+                        bodyFont: { family: 'Outfit' }
+                    }
+                },
+                scales: {
+                    x: {
+                        grid: { display: false },
+                        ticks: {
+                            font: { family: 'Outfit', size: 12, weight: '500' },
+                            color: '#475569'
+                        }
+                    },
+                    y: {
+                        grid: { color: 'rgba(226, 232, 240, 0.6)' },
+                        ticks: {
+                            font: { family: 'Outfit', size: 11 },
+                            color: '#94a3b8'
+                        }
+                    }
+                }
+            }
+        });
+    }
+
+    // ==========================================================================
+    // 8. Live Energy Simulation Engine
+    // ==========================================================================
+    let energySimInterval = null;
+    
+    let liveSolar = 342.8;
+    let liveWind = 124.5;
+    let liveEss = 84.0;
+    let liveLoad = 412.3;
+    
+    let co2Val = 24845;
+    let treesVal = 3764;
+    let savingsVal = 4120400;
+
+    // Simulated Account Billing Prices
+    let priceHvac = 1425000;
+    let priceRd = 1850000;
+    let priceData = 845400;
+
+    function startEnergySimulator() {
+        if (energySimInterval) return;
+        
+        energySimInterval = setInterval(() => {
+            // Fluctuate Solar: 320 to 365 kW
+            liveSolar += (Math.random() - 0.5) * 8;
+            if (liveSolar < 310) liveSolar = 310;
+            if (liveSolar > 370) liveSolar = 370;
+            
+            // Fluctuate Wind: 100 to 150 kW
+            liveWind += (Math.random() - 0.5) * 6;
+            if (liveWind < 100) liveWind = 100;
+            if (liveWind > 150) liveWind = 150;
+            
+            // Fluctuate Building load: 380 to 440 kW
+            liveLoad += (Math.random() - 0.5) * 10;
+            if (liveLoad < 380) liveLoad = 380;
+            if (liveLoad > 440) liveLoad = 440;
+            
+            // ESS charging/discharging
+            const generationTotal = liveSolar + liveWind;
+            if (generationTotal > liveLoad) {
+                liveEss += 0.05;
+            } else {
+                liveEss -= 0.02;
+            }
+            if (liveEss > 100) liveEss = 100;
+            if (liveEss < 10) liveEss = 10;
+
+            // Increment ECO Metrics
+            co2Val += Math.random() * 0.15;
+            treesVal = Math.floor(co2Val * 0.151);
+            
+            // Fluctuate/Increment billing prices
+            priceHvac += Math.floor(Math.random() * 10);
+            priceRd += Math.floor(Math.random() * 12);
+            priceData += Math.floor(Math.random() * 8);
+            savingsVal = priceHvac + priceRd + priceData;
+
+            // Update UI
+            updateEnergyUI();
+            
+            // Update Live Chart point
+            if (energyChartInstance) {
+                const datasets = energyChartInstance.data.datasets;
+                datasets[0].data[datasets[0].data.length - 1] = parseFloat(generationTotal.toFixed(1));
+                datasets[1].data[datasets[1].data.length - 1] = parseFloat(liveLoad.toFixed(1));
+                energyChartInstance.update('none');
+            }
+
+        }, 3000);
+    }
+
+    function stopEnergySimulator() {
+        if (energySimInterval) {
+            clearInterval(energySimInterval);
+            energySimInterval = null;
+        }
+    }
+
+    function updateEnergyUI() {
+        const txtSolar = document.getElementById('live-solar-val');
+        const barSolar = document.getElementById('live-solar-bar');
+        const txtWind = document.getElementById('live-wind-val');
+        const barWind = document.getElementById('live-wind-bar');
+        const txtEss = document.getElementById('live-ess-val');
+        const barEss = document.getElementById('live-ess-bar');
+        const txtLoad = document.getElementById('live-load-val');
+        const barLoad = document.getElementById('live-load-bar');
+        
+        const txtCo2 = document.getElementById('eco-co2-val');
+        const txtTrees = document.getElementById('eco-trees-val');
+        const txtSavings = document.getElementById('eco-savings-val');
+        
+        // Dynamic Billing UI Elements
+        const txtSavingsBilling = document.getElementById('eco-savings-val-billing');
+        const txtPriceHvac = document.getElementById('bill-price-hvac');
+        const txtPriceRd = document.getElementById('bill-price-rd');
+        const txtPriceData = document.getElementById('bill-price-data');
+
+        if (txtSolar) txtSolar.textContent = liveSolar.toFixed(1);
+        if (barSolar) barSolar.style.width = `${((liveSolar - 200) / 200) * 100}%`;
+        
+        if (txtWind) txtWind.textContent = liveWind.toFixed(1);
+        if (barWind) barWind.style.width = `${((liveWind - 80) / 100) * 100}%`;
+        
+        if (txtEss) txtEss.textContent = liveEss.toFixed(1);
+        if (barEss) barEss.style.width = `${liveEss}%`;
+        
+        if (txtLoad) txtLoad.textContent = liveLoad.toFixed(1);
+        if (barLoad) barLoad.style.width = `${((liveLoad - 300) / 200) * 100}%`;
+
+        // Eco values
+        if (txtCo2) txtCo2.textContent = Math.floor(co2Val).toLocaleString();
+        if (txtTrees) txtTrees.textContent = treesVal.toLocaleString();
+        if (txtSavings) txtSavings.textContent = savingsVal.toLocaleString();
+        
+        // Billing values
+        if (txtSavingsBilling) txtSavingsBilling.textContent = savingsVal.toLocaleString();
+        if (txtPriceHvac) txtPriceHvac.textContent = priceHvac.toLocaleString();
+        if (txtPriceRd) txtPriceRd.textContent = priceRd.toLocaleString();
+        if (txtPriceData) txtPriceData.textContent = priceData.toLocaleString();
+    }
+
+    // ==========================================================================
+    // 9. Chart.js Graphs (Safety Trends)
+    // ==========================================================================
+    let safetyChartInstance = null;
+
+    function initSafetyChart() {
+        const ctx = document.getElementById('safety-trend-chart');
+        if (!ctx || safetyChartInstance) return;
+
+        const hours = ['11:00', '12:00', '13:00', '14:00', '15:00', '16:00', '17:00', '실시간'];
+        
+        const safetyData = {
+            labels: hours,
+            datasets: [
+                {
+                    label: '종합 안전지수 (%)',
+                    data: [98.2, 98.5, 99.0, 98.7, 98.9, 98.4, 98.8, 98.6],
+                    borderColor: '#f97316',
+                    borderWidth: 3,
+                    backgroundColor: 'rgba(249, 115, 22, 0.05)',
+                    fill: true,
+                    tension: 0.3,
+                    pointBackgroundColor: '#f97316',
+                    pointBorderColor: '#ffffff',
+                    pointBorderWidth: 2,
+                    pointRadius: 5,
+                    pointHoverRadius: 7
+                },
+                {
+                    label: '실내 쾌적도 지수 (%)',
+                    data: [95.0, 95.8, 96.2, 96.0, 96.5, 96.1, 96.4, 96.3],
+                    borderColor: '#8b5cf6',
+                    borderWidth: 2,
+                    borderDash: [5, 5],
+                    backgroundColor: 'transparent',
+                    fill: false,
+                    tension: 0.3,
+                    pointBackgroundColor: '#8b5cf6',
+                    pointBorderColor: '#ffffff',
+                    pointBorderWidth: 1.5,
+                    pointRadius: 4,
+                    pointHoverRadius: 6
+                }
+            ]
+        };
+
+        safetyChartInstance = new Chart(ctx, {
+            type: 'line',
+            data: safetyData,
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        position: 'top',
+                        labels: {
+                            font: { family: 'Outfit', size: 12, weight: '500' },
+                            color: '#475569'
+                        }
+                    },
+                    tooltip: {
+                        backgroundColor: 'rgba(255, 255, 255, 0.95)',
+                        titleColor: '#0f172a',
+                        bodyColor: '#475569',
+                        borderColor: 'rgba(249, 115, 22, 0.2)',
+                        borderWidth: 1,
+                        padding: 12,
+                        cornerRadius: 12,
+                        titleFont: { family: 'Outfit', weight: '700' },
+                        bodyFont: { family: 'Outfit' }
+                    }
+                },
+                scales: {
+                    x: {
+                        grid: { display: false },
+                        ticks: {
+                            font: { family: 'Outfit', size: 12, weight: '500' },
+                            color: '#475569'
+                        }
+                    },
+                    y: {
+                        grid: { color: 'rgba(226, 232, 240, 0.6)' },
+                        ticks: {
+                            font: { family: 'Outfit', size: 11 },
+                            color: '#94a3b8'
+                        }
+                    }
+                }
+            }
+        });
+    }
+
+    // ==========================================================================
+    // 10. Live Safety Simulation Engine
+    // ==========================================================================
+    let safetySimInterval = null;
+    let safetyClockInterval = null;
+    
+    let liveSafety = 98.6;
+    let liveOxygen = 20.9;
+    let liveGas = 0;
+    let liveOccupant = 48;
+    
+    // Safety Accumulative Time
+    let safetyAccDays = 412;
+    let safetyAccHours = 9888;
+    let safetyAccMinutes = 24;
+    let safetyAccSeconds = 35;
+
+    function startSafetySimulator() {
+        if (safetySimInterval) return;
+        
+        // 1s Clock Timer for Safety Accumulative Time
+        safetyClockInterval = setInterval(() => {
+            safetyAccSeconds++;
+            if (safetyAccSeconds >= 60) {
+                safetyAccSeconds = 0;
+                safetyAccMinutes++;
+                if (safetyAccMinutes >= 60) {
+                    safetyAccMinutes = 0;
+                    safetyAccHours++;
+                    if (safetyAccHours % 24 === 0) {
+                        safetyAccDays++;
+                    }
+                }
+            }
+            updateSafetyClockUI();
+        }, 1000);
+        
+        // 3s Fluctuation Simulation
+        safetySimInterval = setInterval(() => {
+            // Fluctuate Safety Index: 98.4% to 99.2%
+            liveSafety += (Math.random() - 0.5) * 0.2;
+            if (liveSafety < 98.0) liveSafety = 98.0;
+            if (liveSafety > 99.5) liveSafety = 99.5;
+            
+            // Fluctuate Oxygen: 20.7% to 21.0%
+            liveOxygen += (Math.random() - 0.5) * 0.05;
+            if (liveOxygen < 20.5) liveOxygen = 20.5;
+            if (liveOxygen > 21.2) liveOxygen = 21.2;
+            
+            // Fluctuate Gas: 0 to 1 ppm
+            if (Math.random() > 0.8) {
+                liveGas = Math.random() > 0.5 ? 1 : 0;
+            }
+            
+            // Fluctuate occupants: 45 to 52
+            liveOccupant += Math.random() > 0.5 ? 1 : -1;
+            if (liveOccupant < 40) liveOccupant = 40;
+            if (liveOccupant > 55) liveOccupant = 55;
+
+            // Update UI
+            updateSafetyUI();
+            
+            // Update Live Chart point
+            if (safetyChartInstance) {
+                const datasets = safetyChartInstance.data.datasets;
+                datasets[0].data[datasets[0].data.length - 1] = parseFloat(liveSafety.toFixed(1));
+                datasets[1].data[datasets[1].data.length - 1] = parseFloat((liveSafety - 2.3 + Math.random() * 0.4).toFixed(1));
+                safetyChartInstance.update('none');
+            }
+
+        }, 3000);
+    }
+
+    function stopSafetySimulator() {
+        if (safetySimInterval) {
+            clearInterval(safetySimInterval);
+            safetySimInterval = null;
+        }
+        if (safetyClockInterval) {
+            clearInterval(safetyClockInterval);
+            safetyClockInterval = null;
+        }
+    }
+
+    function updateSafetyClockUI() {
+        const txtHours = document.getElementById('safety-hours-val');
+        const txtSuffix = document.getElementById('safety-time-suffix');
+        if (txtHours) {
+            txtHours.textContent = safetyAccDays.toLocaleString();
+        }
+        if (txtSuffix) {
+            txtSuffix.innerHTML = `일 연속 (실시간 누적: <strong>${safetyAccHours.toLocaleString()}시간 ${safetyAccMinutes}분 ${safetyAccSeconds}초</strong>)`;
+        }
+    }
+
+    function updateSafetyUI() {
+        const txtSafety = document.getElementById('live-safety-val');
+        const barSafety = document.getElementById('live-safety-bar');
+        const txtOxygen = document.getElementById('live-oxygen-val');
+        const barOxygen = document.getElementById('live-oxygen-bar');
+        const txtGas = document.getElementById('live-gas-val');
+        const barGas = document.getElementById('live-gas-bar');
+        const txtOccupant = document.getElementById('live-occupant-val');
+        const barOccupant = document.getElementById('live-occupant-bar');
+
+        if (txtSafety) txtSafety.textContent = liveSafety.toFixed(1);
+        if (barSafety) barSafety.style.width = `${liveSafety}%`;
+        
+        if (txtOxygen) txtOxygen.textContent = liveOxygen.toFixed(1);
+        if (barOxygen) barOxygen.style.width = `${((liveOxygen - 15) / 10) * 100}%`;
+        
+        if (txtGas) txtGas.textContent = liveGas;
+        if (barGas) barGas.style.width = `${(liveGas / 10) * 100}%`;
+        
+        if (txtOccupant) txtOccupant.textContent = liveOccupant;
+        if (barOccupant) barOccupant.style.width = `${(liveOccupant / 80) * 100}%`;
+    }
+});

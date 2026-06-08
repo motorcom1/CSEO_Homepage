@@ -1,0 +1,1293 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CSEO 데이터 및 에너지 통합 관리 시스템</title>
+    <meta name="description" content="CSEO 조직 데이터 관리 및 실시간 에너지 모니터링 시스템">
+    
+    <!-- Google Fonts: Outfit & Noto Sans KR for Premium Typography -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700;900&family=Outfit:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    
+    <!-- Lucide Icons for high-fidelity vector icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    
+    <!-- Chart.js for premium analytics charts -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+    <!-- Beautiful light background glowing ambient mesh spheres -->
+    <div class="ambient-mesh-glow">
+        <div class="mesh-sphere mesh-purple"></div>
+        <div class="mesh-sphere mesh-emerald"></div>
+        <div class="mesh-sphere mesh-blue"></div>
+    </div>
+
+    <!-- 1. Apple-Style Welcome Screen (Intro) -->
+    <section id="welcome-screen" class="screen active" aria-label="환영 화면">
+        <!-- Giant faint background watermark for depth effect -->
+        <div class="welcome-bg-watermark">CSEO</div>
+        
+        <div class="welcome-container">
+            <h1 class="welcome-text-container">
+                <span id="welcome-text" class="fade-text">안녕하세요!</span>
+            </h1>
+            <p class="welcome-instruction">화면을 아무 곳이나 누르면 시작합니다</p>
+        </div>
+    </section>
+
+    <!-- 2. Dual Portal Choice Screen -->
+    <section id="portal-screen" class="screen" aria-label="시스템 포털 선택">
+        <div class="portal-container">
+            <div class="portal-cards-grid">
+                <!-- Group Card (Left) - Simplified 3D Bevel Layout -->
+                <button type="button" class="portal-card manage-card" id="btn-go-manage" aria-label="Group 시스템 접속">
+                    <span class="portal-card-text text-group">Group</span>
+                </button>
+
+                <!-- Safety Card (Center) - Simplified 3D Bevel Layout -->
+                <button type="button" class="portal-card safety-card" id="btn-go-safety" aria-label="Safety 시스템 접속">
+                    <span class="portal-card-text text-safety">Safety</span>
+                </button>
+
+                <!-- Energy Card (Right) - Simplified 3D Bevel Layout -->
+                <button type="button" class="portal-card energy-card" id="btn-go-energy" aria-label="Energy 시스템 접속">
+                    <span class="portal-card-text text-energy">Energy</span>
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- 3. Manage Dashboard (Left Sidebar Layout) -->
+    <section id="manage-screen" class="screen" aria-label="조직 및 데이터 관리 시스템">
+        <div class="dashboard-layout">
+            <!-- Left Sidebar Navigation -->
+            <aside class="sidebar">
+                <div class="sidebar-top">
+                    <button type="button" class="sidebar-logo" id="logo-btn-manage" aria-label="포털 홈으로 이동">
+                        <div class="logo-mark"><i data-lucide="shield-check"></i></div>
+                        <span class="logo-text">CSEO <span>Group</span></span>
+                    </button>
+                    
+                    <!-- Sidebar Navigation Buttons -->
+                    <nav class="sidebar-menu">
+                        <button type="button" class="sidebar-btn active" data-target="manage-org" aria-label="조직 구성도 보기">
+                            <i data-lucide="network"></i>
+                            <span>조직 구성도</span>
+                        </button>
+                        <button type="button" class="sidebar-btn" data-target="manage-tasks" aria-label="실시간 업무 현황 보기">
+                            <i data-lucide="check-square"></i>
+                            <span>실시간 업무 현황</span>
+                        </button>
+                        <button type="button" class="sidebar-btn" data-target="manage-analytics" aria-label="데이터 축적 트렌드 보기">
+                            <i data-lucide="bar-chart-3"></i>
+                            <span>데이터 통계 분석</span>
+                        </button>
+                        <button type="button" class="sidebar-btn" data-target="manage-ax" aria-label="AX 추진 현황 보기">
+                            <i data-lucide="sparkles"></i>
+                            <span>AX 추진 현황</span>
+                        </button>
+                    </nav>
+                </div>
+                
+                <div class="sidebar-bottom">
+                    <div class="sidebar-status">
+                        <span class="pulse-dot"></span>
+                        <span class="status-lbl">System Active</span>
+                    </div>
+                </div>
+            </aside>
+
+            <!-- Right Main Content Area -->
+            <main class="main-content">
+                <!-- Top Minimal Header Bar -->
+                <header class="main-header">
+                    <div class="header-breadcrumb">
+                        <span class="parent-crumb">Group Hub</span>
+                        <span class="crumb-separator"><i data-lucide="chevron-right"></i></span>
+                        <span class="child-crumb" id="manage-breadcrumb-text">조직 구성도</span>
+                    </div>
+                    <div class="summary-indicators">
+                        <div class="indicator-pill"><i data-lucide="users"></i> 총원 48명</div>
+                        <div class="indicator-pill"><i data-lucide="database"></i> 1.4 TB 관리</div>
+                    </div>
+                </header>
+
+                <!-- Sub-view Panels (Toggled dynamically by Sidebar buttons) -->
+                <div class="sub-view-container">
+                    
+                    <!-- Sub-view 1: Organization Structure (Default) -->
+                    <div id="manage-org" class="sub-view active">
+                        <div class="glass-card full-height-card">
+                            <div class="card-header">
+                                <div class="card-header-title">
+                                    <i data-lucide="network" class="header-icon purple-text"></i>
+                                    <div>
+                                        <h3>조직 계층 구성도</h3>
+                                        <p>클릭하여 각 부서의 핵심 책임자, 미션 및 구성원을 실시간으로 필터링하세요.</p>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="org-tree-wrapper">
+                                <!-- CEO Node -->
+                                <div class="org-node org-node-ceo" id="node-ceo">
+                                    <div class="node-avatar"><i data-lucide="user"></i></div>
+                                    <div class="node-details">
+                                        <div class="node-role">대표이사 (CEO)</div>
+                                        <div class="node-name">김태영 대표</div>
+                                    </div>
+                                </div>
+
+                                <div class="org-tree-line-vertical"></div>
+
+                                <div class="org-executive-level">
+                                    <div class="org-tree-line-horizontal"></div>
+                                    <div class="org-departments-grid">
+                                        <!-- Dept 1: Planning -->
+                                        <div class="org-node dept-node" id="node-planning">
+                                            <div class="node-header-bar color-planning"></div>
+                                            <div class="node-info">
+                                                <span class="dept-tag tag-planning">기획</span>
+                                                <h4 class="dept-title">기획조정실</h4>
+                                                <span class="dept-manager">이성우 실장 (5명)</span>
+                                            </div>
+                                        </div>
+
+                                        <!-- Dept 2: R&D -->
+                                        <div class="org-node dept-node active" id="node-rd">
+                                            <div class="node-header-bar color-rd"></div>
+                                            <div class="node-info">
+                                                <span class="dept-tag tag-rd">R&D</span>
+                                                <h4 class="dept-title">연구개발본부</h4>
+                                                <span class="dept-manager">최윤서 본부장 (18명)</span>
+                                            </div>
+                                        </div>
+
+                                        <!-- Dept 3: Operations -->
+                                        <div class="org-node dept-node" id="node-ops">
+                                            <div class="node-header-bar color-ops"></div>
+                                            <div class="node-info">
+                                                <span class="dept-tag tag-ops">운영</span>
+                                                <h4 class="dept-title">운영지원부</h4>
+                                                <span class="dept-manager">박지한 부장 (8명)</span>
+                                            </div>
+                                        </div>
+
+                                        <!-- Dept 4: Data Business -->
+                                        <div class="org-node dept-node" id="node-databiz">
+                                            <div class="node-header-bar color-databiz"></div>
+                                            <div class="node-info">
+                                                <span class="dept-tag tag-databiz">데이터본부</span>
+                                                <h4 class="dept-title">데이터사업부</h4>
+                                                <span class="dept-manager">한민석 부장 (15명)</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Interactive Detail Card Inside View -->
+                            <div class="org-detail-panel" id="org-detail-panel">
+                                <div class="detail-header">
+                                    <span class="detail-badge tag-rd" id="detail-dept-badge">R&D</span>
+                                    <h4 class="detail-title" id="detail-dept-title">연구개발본부 주요 R&R</h4>
+                                </div>
+                                <div class="detail-body-grid">
+                                    <div class="detail-meta">
+                                        <div class="meta-item">
+                                            <span class="meta-label">부서 총책임자:</span>
+                                            <span class="meta-val" id="detail-dept-leader">최윤서 본부장 (공학박사)</span>
+                                        </div>
+                                        <div class="meta-item">
+                                            <span class="meta-label">핵심 미션:</span>
+                                            <span class="meta-val" id="detail-dept-mission">인공지능 기반 데이터 수집 분석 시스템 설계 및 친환경 신에너지 계통 연계 인프라 기술 연구개발</span>
+                                        </div>
+                                    </div>
+                                    <div class="detail-members">
+                                        <span class="meta-label">핵심 구성원 및 부서 파트:</span>
+                                        <div class="member-pills-container" id="detail-dept-members">
+                                            <span class="member-pill">이진아 수석 (에너지 AI)</span>
+                                            <span class="member-pill">강도현 책임 (IoT 하드웨어)</span>
+                                            <span class="member-pill">정서율 책임 (빅데이터 파이프라인)</span>
+                                            <span class="member-pill">최유진 선임 (클라우드 플랫폼)</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Sub-view 2: Departmental Tasks (업무현황) -->
+                    <div id="manage-tasks" class="sub-view">
+                        <div class="glass-card full-height-card">
+                            <div class="card-header">
+                                <div class="card-header-title">
+                                    <i data-lucide="check-square" class="header-icon blue-text"></i>
+                                    <div>
+                                        <h3>부서별 업무 실시간 관리판</h3>
+                                        <p>부서별 최우선 혁신 프로젝트의 리딩 담당자 및 실시간 진행 진척률을 추적합니다.</p>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="tasks-scroll-container">
+                                <div class="tasks-container" id="tasks-list">
+                                    <!-- Task 1 -->
+                                    <div class="task-item">
+                                        <div class="task-meta">
+                                            <span class="task-dept tag-rd">R&D</span>
+                                            <span class="task-status status-ongoing">진행중</span>
+                                        </div>
+                                        <h4 class="task-title">IoT 에너지 실시간 계측 모듈 통신 속도 고도화</h4>
+                                        <div class="task-progress-section">
+                                            <div class="progress-bar-bg">
+                                                <div class="progress-bar-fill progress-rd" style="width: 82%;"></div>
+                                            </div>
+                                            <span class="progress-percentage">82%</span>
+                                        </div>
+                                        <div class="task-footer">
+                                            <span class="task-assignee"><i data-lucide="user-2"></i> 담당: 강도현 책임</span>
+                                            <span class="task-deadline">D-5일 (6/3까지)</span>
+                                        </div>
+                                    </div>
+
+                                    <!-- Task 2 -->
+                                    <div class="task-item">
+                                        <div class="task-meta">
+                                            <span class="task-dept tag-databiz">데이터사업부</span>
+                                            <span class="task-status status-ongoing">진행중</span>
+                                        </div>
+                                        <h4 class="task-title">조직 데이터 레이크하우스(Lakehouse) 1차 동기화 구축</h4>
+                                        <div class="task-progress-section">
+                                            <div class="progress-bar-bg">
+                                                <div class="progress-bar-fill progress-databiz" style="width: 45%;"></div>
+                                            </div>
+                                            <span class="progress-percentage">45%</span>
+                                        </div>
+                                        <div class="task-footer">
+                                            <span class="task-assignee"><i data-lucide="user-2"></i> 담당: 김선우 선임</span>
+                                            <span class="task-deadline">D-12일 (6/10까지)</span>
+                                        </div>
+                                    </div>
+
+                                    <!-- Task 3 -->
+                                    <div class="task-item">
+                                        <div class="task-meta">
+                                            <span class="task-dept tag-planning">기획조정실</span>
+                                            <span class="task-status status-completed">완료됨</span>
+                                        </div>
+                                        <h4 class="task-title">ESG 지속가능 에너지 경영 등재를 위한 종합 지표 개발</h4>
+                                        <div class="task-progress-section">
+                                            <div class="progress-bar-bg">
+                                                <div class="progress-bar-fill progress-planning" style="width: 100%;"></div>
+                                            </div>
+                                            <span class="progress-percentage">100%</span>
+                                        </div>
+                                        <div class="task-footer">
+                                            <span class="task-assignee"><i data-lucide="user-2"></i> 담당: 정서아 수석</span>
+                                            <span class="task-deadline">경영위원회 심사 승인</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Sub-view 3: Analytics (통계데이터) -->
+                    <div id="manage-analytics" class="sub-view">
+                        <div class="glass-card full-height-card">
+                            <div class="card-header">
+                                <div class="card-header-title">
+                                    <i data-lucide="bar-chart-3" class="header-icon indigo-text"></i>
+                                    <div>
+                                        <h3>부서별 데이터 축적 및 클라우드 연계 트렌드</h3>
+                                        <p>각 핵심 부서가 로컬 서버 및 클라우드 통합 저장소에 업로드한 데이터 볼륨 수치를 시각화합니다.</p>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="analytics-content-grid">
+                                <div class="chart-wrapper">
+                                    <canvas id="manage-analytics-chart"></canvas>
+                                </div>
+                                
+                                <div class="analytics-summary-widget">
+                                    <h4 class="widget-subtitle">통합 스토리지 상태 요약</h4>
+                                    <div class="storage-progress-item">
+                                        <div class="storage-lbl"><span>로컬 총 용량</span> <strong>1,465 GB</strong></div>
+                                        <div class="progress-bar-bg"><div class="progress-bar-fill" style="width: 68%; background: var(--primary-purple);"></div></div>
+                                    </div>
+                                    <div class="storage-progress-item">
+                                        <div class="storage-lbl"><span>클라우드 연동</span> <strong>2,760 GB</strong></div>
+                                        <div class="progress-bar-bg"><div class="progress-bar-fill" style="width: 48%; background: var(--blue-accent);"></div></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Sub-view 4: 전사 AI 전환 (AX) 추진 현황판 -->
+                    <div id="manage-ax" class="sub-view">
+                        <div class="glass-card full-height-card">
+                            <div class="card-header">
+                                <div class="card-header-title">
+                                    <i data-lucide="sparkles" class="header-icon purple-text"></i>
+                                    <div>
+                                        <h3>전사 AI 전환 (AX) 추진 현황판</h3>
+                                        <p>CSEO의 핵심 부서별 인공지능 기술 도입 로드맵과 실시간 AI 연동 진척도를 실시간 스캔합니다.</p>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="tasks-scroll-container">
+                                <div class="tasks-container">
+                                    <!-- AX Task 1 -->
+                                    <div class="task-item">
+                                        <div class="task-meta">
+                                            <span class="task-dept tag-planning">기획 R&R</span>
+                                            <span class="task-status status-ongoing">운영 적용</span>
+                                        </div>
+                                        <h4 class="task-title">사내 업무 효율화를 위한 GenAI 비서 챗봇 'CSEO-GPT' 도입</h4>
+                                        <div class="task-progress-section">
+                                            <div class="progress-bar-bg">
+                                                <div class="progress-bar-fill progress-planning" style="width: 95%;"></div>
+                                            </div>
+                                            <span class="progress-percentage">95%</span>
+                                        </div>
+                                        <div class="task-footer">
+                                            <span class="task-assignee"><i data-lucide="user-2"></i> 담당: 정서아 수석 (기획)</span>
+                                            <span class="task-deadline">전 부서 베타 릴리즈 완료 (피드백 반영 중)</span>
+                                        </div>
+                                    </div>
+
+                                    <!-- AX Task 2 -->
+                                    <div class="task-item">
+                                        <div class="task-meta">
+                                            <span class="task-dept tag-rd">R&D R&R</span>
+                                            <span class="task-status status-ongoing">모델 학습</span>
+                                        </div>
+                                        <h4 class="task-title">AI 기반 글로벌 신에너지 특허 및 연구 문서 지능형 요약 엔진 개발</h4>
+                                        <div class="task-progress-section">
+                                            <div class="progress-bar-bg">
+                                                <div class="progress-bar-fill progress-rd" style="width: 72%;"></div>
+                                            </div>
+                                            <span class="progress-percentage">72%</span>
+                                        </div>
+                                        <div class="task-footer">
+                                            <span class="task-assignee"><i data-lucide="user-2"></i> 담당: 이진아 수석 (에너지 AI)</span>
+                                            <span class="task-deadline">LLM 파인튜닝 테스트 가동 및 정밀도 검증 (D-10)</span>
+                                        </div>
+                                    </div>
+
+                                    <!-- AX Task 3 -->
+                                    <div class="task-item">
+                                        <div class="task-meta">
+                                            <span class="task-dept tag-databiz">데이터본부 R&R</span>
+                                            <span class="task-status status-ongoing">인프라 구축</span>
+                                        </div>
+                                        <h4 class="task-title">B2B 분산 자원 에너지 수요 예측 지능형 머신러닝 모듈 구축</h4>
+                                        <div class="task-progress-section">
+                                            <div class="progress-bar-bg">
+                                                <div class="progress-bar-fill progress-databiz" style="width: 48%;"></div>
+                                            </div>
+                                            <span class="progress-percentage">48%</span>
+                                        </div>
+                                        <div class="task-footer">
+                                            <span class="task-assignee"><i data-lucide="user-2"></i> 담당: 신재희 선임 (솔루션)</span>
+                                            <span class="task-deadline">데이터 피드 정제 및 학습 파이프라인 연계 중 (D-25)</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </main>
+        </div>
+    </section>
+
+    <!-- 4. Energy Dashboard (Left Sidebar Layout) -->
+    <section id="energy-screen" class="screen" aria-label="에너지 모니터링 시스템">
+        <div class="dashboard-layout">
+            <!-- Left Sidebar Navigation -->
+            <aside class="sidebar energy-sidebar">
+                <div class="sidebar-top">
+                    <button type="button" class="sidebar-logo" id="logo-btn-energy" aria-label="포털 홈으로 이동">
+                        <div class="logo-mark mark-green"><i data-lucide="zap"></i></div>
+                        <span class="logo-text">CSEO <span>Energy</span></span>
+                    </button>
+                    
+                    <!-- Sidebar Navigation Buttons: Expanded to 5 customized operations tabs -->
+                    <nav class="sidebar-menu">
+                        <button type="button" class="sidebar-btn active" data-target="energy-overview" aria-label="실시간 전력 분석">
+                            <i data-lucide="activity"></i>
+                            <span>실시간 전력 분석</span>
+                        </button>
+                        <button type="button" class="sidebar-btn" data-target="energy-bill-analysis" aria-label="계정별 요금 분석">
+                            <i data-lucide="coins"></i>
+                            <span>계정별 요금 분석</span>
+                        </button>
+                        <button type="button" class="sidebar-btn" data-target="energy-facility-status" aria-label="설비별 에너지 현황">
+                            <i data-lucide="cpu"></i>
+                            <span>설비별 에너지 현황</span>
+                        </button>
+                        <button type="button" class="sidebar-btn" data-target="energy-savings-tasks" aria-label="에너지 절감 과제">
+                            <i data-lucide="trending-down"></i>
+                            <span>에너지 절감 과제</span>
+                        </button>
+                        <button type="button" class="sidebar-btn" data-target="energy-eco" aria-label="친환경 기여 지표">
+                            <i data-lucide="leaf"></i>
+                            <span>친환경 기여 지표</span>
+                        </button>
+                    </nav>
+                </div>
+                
+                <div class="sidebar-bottom">
+                    <div class="sidebar-status">
+                        <span class="pulse-dot green"></span>
+                        <span class="status-lbl green-text">Grid Synced</span>
+                    </div>
+                </div>
+            </aside>
+
+            <!-- Right Main Content Area -->
+            <main class="main-content">
+                <!-- Top Minimal Header Bar -->
+                <header class="main-header">
+                    <div class="header-breadcrumb">
+                        <span class="parent-crumb green-text">Energy Operations</span>
+                        <span class="crumb-separator"><i data-lucide="chevron-right"></i></span>
+                        <span class="child-crumb" id="energy-breadcrumb-text">실시간 발전 및 소비</span>
+                    </div>
+                    <div class="summary-indicators">
+                        <div class="indicator-pill text-green"><span class="pulse-dot green"></span> ECO PLUS 달성</div>
+                        <div class="indicator-pill"><i data-lucide="trending-up"></i> 요율 안정</div>
+                    </div>
+                </header>
+
+                <!-- Sub-view Panels (Toggled dynamically by Sidebar buttons) -->
+                <div class="sub-view-container">
+                    
+                    <!-- Sub-view 1: 실시간 전력 분석 (Live Grid 2x2 + Time-series Line Chart unified layout) -->
+                    <div id="energy-overview" class="sub-view active">
+                        <div class="energy-live-unified-layout">
+                            <div class="energy-live-grid-2x2 compact-grid">
+                                <!-- Card 1: Solar Gen -->
+                                <div class="energy-widget-card solar-widget compact">
+                                    <div class="widget-head">
+                                        <div class="widget-title">
+                                            <i data-lucide="sun" class="icon-solar"></i>
+                                            <div>
+                                                <h4>태양광 발전 (Solar)</h4>
+                                                <span class="widget-subtitle">자가 친환경 발전량</span>
+                                            </div>
+                                        </div>
+                                        <span class="live-blink-tag solar">LIVE</span>
+                                    </div>
+                                    <div class="widget-body">
+                                        <div class="widget-numeric">
+                                            <span class="value-num" id="live-solar-val">342.8</span>
+                                            <span class="value-unit">kW</span>
+                                        </div>
+                                        <div class="widget-bar-track">
+                                            <div class="widget-bar-fill fill-solar" id="live-solar-bar" style="width: 72%;"></div>
+                                        </div>
+                                        <div class="widget-footer-info">
+                                            <span>누적: <strong>1.82 MWh</strong></span>
+                                            <span class="pct-val positive">+8.4% 전일비</span>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Card 2: Wind Gen -->
+                                <div class="energy-widget-card wind-widget compact">
+                                    <div class="widget-head">
+                                        <div class="widget-title">
+                                            <i data-lucide="wind" class="icon-wind animate-wind-icon"></i>
+                                            <div>
+                                                <h4>풍력 발전 (Wind)</h4>
+                                                <span class="widget-subtitle">대관령 친환경 발전</span>
+                                            </div>
+                                        </div>
+                                        <span class="live-blink-tag wind">LIVE</span>
+                                    </div>
+                                    <div class="widget-body">
+                                        <div class="widget-numeric">
+                                            <span class="value-num" id="live-wind-val">124.5</span>
+                                            <span class="value-unit">kW</span>
+                                        </div>
+                                        <div class="widget-bar-track">
+                                            <div class="widget-bar-fill fill-wind" id="live-wind-bar" style="width: 41%;"></div>
+                                        </div>
+                                        <div class="widget-footer-info">
+                                            <span>풍속: <strong>6.8 m/s</strong></span>
+                                            <span class="pct-val negative">-2.1% 전일비</span>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Card 3: Storage ESS -->
+                                <div class="energy-widget-card ess-widget compact">
+                                    <div class="widget-head">
+                                        <div class="widget-title">
+                                            <i data-lucide="battery-charging" class="icon-ess"></i>
+                                            <div>
+                                                <h4>ESS 배터리 뱅크</h4>
+                                                <span class="widget-subtitle">실시간 충·방전 모니터</span>
+                                            </div>
+                                        </div>
+                                        <span class="live-blink-tag ess">충전중</span>
+                                    </div>
+                                    <div class="widget-body">
+                                        <div class="widget-numeric">
+                                            <span class="value-num" id="live-ess-val">84.0</span>
+                                            <span class="value-unit">%</span>
+                                        </div>
+                                        <div class="widget-bar-track">
+                                            <div class="widget-bar-fill fill-ess" id="live-ess-bar" style="width: 84%;"></div>
+                                        </div>
+                                        <div class="widget-footer-info">
+                                            <span>잔여: <strong>14.5시간</strong></span>
+                                            <span class="pct-val positive">840 kWh 보유</span>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Card 4: Load Grid -->
+                                <div class="energy-widget-card grid-widget compact">
+                                    <div class="widget-head">
+                                        <div class="widget-title">
+                                            <i data-lucide="building-2" class="icon-grid"></i>
+                                            <div>
+                                                <h4>빌딩 총 소비전력</h4>
+                                                <span class="widget-subtitle">사옥 실시간 소비 부하</span>
+                                            </div>
+                                        </div>
+                                        <span class="live-blink-tag grid">계통연계</span>
+                                    </div>
+                                    <div class="widget-body">
+                                        <div class="widget-numeric">
+                                            <span class="value-num" id="live-load-val">412.3</span>
+                                            <span class="value-unit">kW</span>
+                                        </div>
+                                        <div class="widget-bar-track">
+                                            <div class="widget-bar-fill fill-grid" id="live-load-bar" style="width: 63%;"></div>
+                                        </div>
+                                        <div class="widget-footer-info">
+                                            <span>자급률: <strong>113.3%</strong></span>
+                                            <span class="pct-val green-text">에너지 흑자!</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- Bottom Time-series power supply chart integrated under live cards -->
+                            <div class="glass-card energy-integrated-chart-card">
+                                <div class="chart-wrapper energy-chart-wrapper-mini">
+                                    <canvas id="energy-trend-chart"></canvas>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Sub-view 2: 계정별 요금 분석 (신규 요금 도넛 차트 및 예상 청구액 시뮬레이터) -->
+                    <div id="energy-bill-analysis" class="sub-view">
+                        <div class="glass-card full-height-card">
+                            <div class="card-header">
+                                <div class="card-header-title">
+                                    <i data-lucide="coins" class="header-icon green-text"></i>
+                                    <div>
+                                        <h3>계정 및 용도별 전기요금 실시간 추세</h3>
+                                        <p>사옥 내 주요 핵심 전력 소비처별 요금 부담 비중과 한전 요금(을) 기준 당월 예상 요금을 정산합니다.</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="bill-analysis-grid">
+                                <!-- Left Billing Account List -->
+                                <div class="bill-accounts-list">
+                                    <div class="bill-account-item">
+                                        <div class="acct-info">
+                                            <span class="acct-badge acct-planning">공용 설비</span>
+                                            <span class="acct-name">HVAC 및 조명 전력</span>
+                                        </div>
+                                        <div class="acct-val">
+                                            <span class="acct-price" id="bill-price-hvac">1,425,000</span>
+                                            <span class="acct-unit">원</span>
+                                            <span class="pct-val positive">+2.1%</span>
+                                        </div>
+                                    </div>
+                                    <div class="bill-account-item">
+                                        <div class="acct-info">
+                                            <span class="acct-badge acct-rd">연구개발</span>
+                                            <span class="acct-name">실험 장비 및 인프라</span>
+                                        </div>
+                                        <div class="acct-val">
+                                            <span class="acct-price" id="bill-price-rd">1,850,000</span>
+                                            <span class="acct-unit">원</span>
+                                            <span class="pct-val negative">-4.5%</span>
+                                        </div>
+                                    </div>
+                                    <div class="bill-account-item">
+                                        <div class="acct-info">
+                                            <span class="acct-badge acct-databiz">데이터본부</span>
+                                            <span class="acct-name">전산 서버룸 IDC 냉각</span>
+                                        </div>
+                                        <div class="acct-val">
+                                            <span class="acct-price" id="bill-price-data">845,400</span>
+                                            <span class="acct-unit">원</span>
+                                            <span class="pct-val positive">+8.7%</span>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Right billing estimation simulation widget -->
+                                <div class="bill-estimate-widget">
+                                    <div class="estimate-header">
+                                        <h4>당월 실시간 예상 청구 요금</h4>
+                                        <span class="estimate-date">5/29 19시 정산 기준</span>
+                                    </div>
+                                    <div class="estimate-body">
+                                        <div class="estimate-total">
+                                            <span class="lbl">통합 누계 요금</span>
+                                            <div class="price-box">
+                                                <span class="price-val" id="eco-savings-val-billing">4,120,400</span>
+                                                <span class="price-unit">KRW</span>
+                                            </div>
+                                            <span class="desc">한전 고압(을) 전력 기본료 및 사용량 합산 요율 적용</span>
+                                        </div>
+                                        <div class="estimate-progress-bar">
+                                            <div class="bar-lbl"><span>월 목표 예산 (500만원) 대비 달성률</span> <strong>82.4%</strong></div>
+                                            <div class="progress-bar-bg">
+                                                <div class="progress-bar-fill progress-bill-estimate" style="width: 82.4%;"></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Sub-view 3: 설비별 에너지 현황 (신규 4대 설비 감시 그리드 + LED 점멸등) -->
+                    <div id="energy-facility-status" class="sub-view">
+                        <div class="glass-card full-height-card">
+                            <div class="card-header">
+                                <div class="card-header-title">
+                                    <i data-lucide="cpu" class="header-icon green-text"></i>
+                                    <div>
+                                        <h3>주요 대형 전력 소비 설비 실시간 감시</h3>
+                                        <p>사옥 가동 핵심 장치들의 실시간 작동율, 소모 전력량 및 상태 LED를 추적합니다.</p>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="facility-monitoring-grid">
+                                <!-- Machine 1 -->
+                                <div class="facility-card">
+                                    <div class="fac-status-led">
+                                        <span class="led-dot led-active"></span>
+                                        <span class="led-lbl-active">가동중</span>
+                                    </div>
+                                    <h4 class="fac-title">중앙 HVAC 공조 시스템 1호기</h4>
+                                    <div class="fac-meta-grid">
+                                        <div class="fac-meta-item"><span>실시간 부하:</span> <strong>142.5 kW</strong></div>
+                                        <div class="fac-meta-item"><span>기기 효율:</span> <strong>COP 4.2</strong></div>
+                                    </div>
+                                    <div class="fac-load-track">
+                                        <div class="fac-load-bar" style="width: 71%; background: var(--primary-green);"></div>
+                                    </div>
+                                </div>
+
+                                <!-- Machine 2 -->
+                                <div class="facility-card">
+                                    <div class="fac-status-led">
+                                        <span class="led-dot led-active"></span>
+                                        <span class="led-lbl-active">가동중</span>
+                                    </div>
+                                    <h4 class="fac-title">사옥 터보 냉동기 및 빙축열 설비</h4>
+                                    <div class="fac-meta-grid">
+                                        <div class="fac-meta-item"><span>실시간 부하:</span> <strong>185.0 kW</strong></div>
+                                        <div class="fac-meta-item"><span>유량 속도:</span> <strong>3.2 m³/h</strong></div>
+                                    </div>
+                                    <div class="fac-load-track">
+                                        <div class="fac-load-bar" style="width: 82%; background: var(--primary-green);"></div>
+                                    </div>
+                                </div>
+
+                                <!-- Machine 3 -->
+                                <div class="facility-card">
+                                    <div class="fac-status-led">
+                                        <span class="led-dot led-warning"></span>
+                                        <span class="led-lbl-warning">완충대기</span>
+                                    </div>
+                                    <h4 class="fac-title">ESS 리튬 배터리 랙 및 PCS 모듈</h4>
+                                    <div class="fac-meta-grid">
+                                        <div class="fac-meta-item"><span>배터리 용량:</span> <strong>84.0%</strong></div>
+                                        <div class="fac-meta-item"><span>충·방전율:</span> <strong>0.15 C</strong></div>
+                                    </div>
+                                    <div class="fac-load-track">
+                                        <div class="fac-load-bar" style="width: 84%; background: var(--blue-accent);"></div>
+                                    </div>
+                                </div>
+
+                                <!-- Machine 4 -->
+                                <div class="facility-card">
+                                    <div class="fac-status-led">
+                                        <span class="led-dot led-standby"></span>
+                                        <span class="led-lbl-standby">발전대기</span>
+                                    </div>
+                                    <h4 class="fac-title">옥상 친환경 태양광 인버터 (100kW급)</h4>
+                                    <div class="fac-meta-grid">
+                                        <div class="fac-meta-item"><span>일사량:</span> <strong>12 W/m²</strong></div>
+                                        <div class="fac-meta-item"><span>현재 발전:</span> <strong>0 kW (야간)</strong></div>
+                                    </div>
+                                    <div class="fac-load-track">
+                                        <div class="fac-load-bar" style="width: 0%; background: var(--orange-accent);"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Sub-view 4: 에너지 절감 과제 (부서별 절감 이니셔티브 태스크 관리 보드) -->
+                    <div id="energy-savings-tasks" class="sub-view">
+                        <div class="glass-card full-height-card">
+                            <div class="card-header">
+                                <div class="card-header-title">
+                                    <i data-lucide="trending-down" class="header-icon green-text"></i>
+                                    <div>
+                                        <h3>사옥 에너지 감축 혁신 프로젝트</h3>
+                                        <p>전사 ESG 비용 절감 활동을 위해 부서별로 주관 중인 행동강령 및 설비 지능 제어 과제를 모니터합니다.</p>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="tasks-scroll-container">
+                                <div class="tasks-container">
+                                    <!-- Task 1 -->
+                                    <div class="task-item">
+                                        <div class="task-meta">
+                                            <span class="task-dept tag-rd">R&D R&R</span>
+                                            <span class="task-status status-ongoing">진행중</span>
+                                        </div>
+                                        <h4 class="task-title">LED 스마트 디밍 조명 밝기 제어 프로토콜 개발</h4>
+                                        <div class="task-progress-section">
+                                            <div class="progress-bar-bg">
+                                                <div class="progress-bar-fill progress-rd" style="width: 92%;"></div>
+                                            </div>
+                                            <span class="progress-percentage">92%</span>
+                                        </div>
+                                        <div class="task-footer">
+                                            <span class="task-assignee"><i data-lucide="user-2"></i> 리더: 이진아 수석 (에너지 AI)</span>
+                                            <span class="task-deadline">금주 안정성 최종 테스트 (D-3)</span>
+                                        </div>
+                                    </div>
+
+                                    <!-- Task 2 -->
+                                    <div class="task-item">
+                                        <div class="task-meta">
+                                            <span class="task-dept tag-databiz">데이터사업부</span>
+                                            <span class="task-status status-ongoing">진행중</span>
+                                        </div>
+                                        <h4 class="task-title">전사 퇴근 후 미사용 대기 전력 차단 플러그 자동화 캠페인</h4>
+                                        <div class="task-progress-section">
+                                            <div class="progress-bar-bg">
+                                                <div class="progress-bar-fill progress-databiz" style="width: 70%;"></div>
+                                            </div>
+                                            <span class="progress-percentage">70%</span>
+                                        </div>
+                                        <div class="task-footer">
+                                            <span class="task-assignee"><i data-lucide="user-2"></i> 리더: 임하은 책임</span>
+                                            <span class="task-deadline">전 부서 사물 인터넷 스마트탭 배부 (D-7)</span>
+                                        </div>
+                                    </div>
+
+                                    <!-- Task 3 -->
+                                    <div class="task-item">
+                                        <div class="task-meta">
+                                            <span class="task-dept tag-planning">기획조정실</span>
+                                            <span class="task-status status-completed">완료됨</span>
+                                        </div>
+                                        <h4 class="task-title">중앙 HVAC 공조 설비 전력 피크 컷 (Peak Cut) 지능형 알고리즘 도입</h4>
+                                        <div class="task-progress-section">
+                                            <div class="progress-bar-bg">
+                                                <div class="progress-bar-fill progress-planning" style="width: 100%;"></div>
+                                            </div>
+                                            <span class="progress-percentage">100%</span>
+                                        </div>
+                                        <div class="task-footer">
+                                            <span class="task-assignee"><i data-lucide="user-2"></i> 리더: 정서아 수석</span>
+                                            <span class="task-deadline">기초 전력 요금 연 14% 절감 효과 검증</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Sub-view 5: 친환경 기여 지표 (이산화탄소 저감, 소나무 식재, 누적 경제 효과) -->
+                    <div id="energy-eco" class="sub-view">
+                        <div class="glass-card full-height-card">
+                            <div class="card-header">
+                                <div class="card-header-title">
+                                    <i data-lucide="leaf" class="header-icon green-text"></i>
+                                    <div>
+                                        <h3>탄소 배출 저감 및 누적 경제 성과</h3>
+                                        <p>친환경 자가 발전을 대체 자원으로 활용하여 기여한 누적 이산화탄소 절감량 및 혜택입니다.</p>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="eco-metrics-list">
+                                <!-- Metric 1: Carbon -->
+                                <div class="eco-metric-item">
+                                    <div class="eco-icon-container"><i data-lucide="cloud-lightning"></i></div>
+                                    <div class="eco-data">
+                                        <span class="eco-label">누적 탄소 저감량</span>
+                                        <div class="eco-value-row">
+                                            <span class="eco-val" id="eco-co2-val">24,845</span>
+                                            <span class="eco-unit">kg CO₂</span>
+                                        </div>
+                                        <p class="eco-desc">석탄 전력 대체로 감축한 이산화탄소량</p>
+                                    </div>
+                                </div>
+
+                                <!-- Metric 2: Trees -->
+                                <div class="eco-metric-item">
+                                    <div class="eco-icon-container tree-bg"><i data-lucide="trees"></i></div>
+                                    <div class="eco-data">
+                                        <span class="eco-label">소나무 식재 기여도</span>
+                                        <div class="eco-value-row">
+                                            <span class="eco-val" id="eco-trees-val">3,764</span>
+                                            <span class="eco-unit">그루</span>
+                                        </div>
+                                        <p class="eco-desc">30년생 소나무 한 달 흡수량 기준으로 환산된 식목 성과</p>
+                                    </div>
+                                </div>
+
+                                <!-- Metric 3: Savings -->
+                                <div class="eco-metric-item">
+                                    <div class="eco-icon-container dollar-bg"><i data-lucide="coins"></i></div>
+                                    <div class="eco-data">
+                                        <span class="eco-label">전기 요금 누적 절감액</span>
+                                        <div class="eco-value-row">
+                                            <span class="eco-val" id="eco-savings-val">4,120,400</span>
+                                            <span class="eco-unit">원</span>
+                                        </div>
+                                        <p class="eco-desc">한전 요금 고압(을) 기준 자체 생산 에너지 절감액</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </main>
+        </div>
+    </section>
+
+    <!-- 5. Safety Dashboard (Left Sidebar Layout) -->
+    <section id="safety-screen" class="screen" aria-label="안전 통합 모니터링 시스템">
+        <div class="dashboard-layout">
+            <!-- Left Sidebar Navigation -->
+            <aside class="sidebar safety-sidebar">
+                <div class="sidebar-top">
+                    <button type="button" class="sidebar-logo" id="logo-btn-safety" aria-label="포털 홈으로 이동">
+                        <div class="logo-mark mark-orange"><i data-lucide="shield-alert"></i></div>
+                        <span class="logo-text">CSEO <span>Safety</span></span>
+                    </button>
+                    
+                    <!-- Sidebar Navigation Buttons: 4 customized operations tabs -->
+                    <nav class="sidebar-menu">
+                        <button type="button" class="sidebar-btn active" data-target="safety-overview" aria-label="실시간 안전 모니터링">
+                            <i data-lucide="shield-check"></i>
+                            <span>실시간 안전 모니터링</span>
+                        </button>
+                        <button type="button" class="sidebar-btn" data-target="safety-risk-factors" aria-label="설비 위험 요인 감시">
+                            <i data-lucide="radio"></i>
+                            <span>설비 위험 요인 감시</span>
+                        </button>
+                        <button type="button" class="sidebar-btn" data-target="safety-tasks" aria-label="안전 규정 및 캠페인">
+                            <i data-lucide="shield-alert"></i>
+                            <span>안전 규정 및 캠페인</span>
+                        </button>
+                        <button type="button" class="sidebar-btn" data-target="safety-eco-metrics" aria-label="무재해 기여 지표">
+                            <i data-lucide="award"></i>
+                            <span>무재해 기여 지표</span>
+                        </button>
+                    </nav>
+                </div>
+                
+                <div class="sidebar-bottom">
+                    <div class="sidebar-status">
+                        <span class="pulse-dot orange"></span>
+                        <span class="status-lbl orange-text">Safe Operations</span>
+                    </div>
+                </div>
+            </aside>
+
+            <!-- Right Main Content Area -->
+            <main class="main-content">
+                <!-- Top Minimal Header Bar -->
+                <header class="main-header">
+                    <div class="header-breadcrumb">
+                        <span class="parent-crumb orange-text">Safety Operations</span>
+                        <span class="crumb-separator"><i data-lucide="chevron-right"></i></span>
+                        <span class="child-crumb" id="safety-breadcrumb-text">실시간 안전 모니터링</span>
+                    </div>
+                    <div class="summary-indicators">
+                        <div class="indicator-pill text-orange"><span class="pulse-dot orange"></span> ZERO ACCIDENT</div>
+                        <div class="indicator-pill"><i data-lucide="alert-triangle"></i> 위험 경보 무</div>
+                    </div>
+                </header>
+
+                <!-- Sub-view Panels (Toggled dynamically by Sidebar buttons) -->
+                <div class="sub-view-container">
+                    
+                    <!-- Sub-view 1: 실시간 안전 모니터링 (Live Sensors grid + Line Chart) -->
+                    <div id="safety-overview" class="sub-view active">
+                        <div class="energy-live-unified-layout">
+                            <div class="energy-live-grid-2x2 compact-grid">
+                                <!-- Card 1: Safety Score -->
+                                <div class="energy-widget-card safety-widget compact">
+                                    <div class="widget-head">
+                                        <div class="widget-title">
+                                            <i data-lucide="heart" class="icon-safety-score"></i>
+                                            <div>
+                                                <h4>종합 안전지수 (Index)</h4>
+                                                <span class="widget-subtitle">실시간 사옥 안전 쾌적율</span>
+                                            </div>
+                                        </div>
+                                        <span class="live-blink-tag safety">SECURE</span>
+                                    </div>
+                                    <div class="widget-body">
+                                        <div class="widget-numeric">
+                                            <span class="value-num" id="live-safety-val">98.6</span>
+                                            <span class="value-unit">%</span>
+                                        </div>
+                                        <div class="widget-bar-track">
+                                            <div class="widget-bar-fill fill-safety" id="live-safety-bar" style="width: 98.6%;"></div>
+                                        </div>
+                                        <div class="widget-footer-info">
+                                            <span>등급: <strong>최고 우수</strong></span>
+                                            <span class="pct-val positive">오차 0.2% 안정</span>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Card 2: Oxygen -->
+                                <div class="energy-widget-card oxygen-widget compact">
+                                    <div class="widget-head">
+                                        <div class="widget-title">
+                                            <i data-lucide="wind" class="icon-oxygen"></i>
+                                            <div>
+                                                <h4>실내 산소 농도 (O₂)</h4>
+                                                <span class="widget-subtitle">사내 대기 환경 산소 센서</span>
+                                            </div>
+                                        </div>
+                                        <span class="live-blink-tag safety">NORMAL</span>
+                                    </div>
+                                    <div class="widget-body">
+                                        <div class="widget-numeric">
+                                            <span class="value-num" id="live-oxygen-val">20.9</span>
+                                            <span class="value-unit">%</span>
+                                        </div>
+                                        <div class="widget-bar-track">
+                                            <div class="widget-bar-fill fill-oxygen" id="live-oxygen-bar" style="width: 83.6%;"></div>
+                                        </div>
+                                        <div class="widget-footer-info">
+                                            <span>적정 기준: <strong>18~21%</strong></span>
+                                            <span class="pct-val positive">적정 수준 유지</span>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Card 3: Gas/CO -->
+                                <div class="energy-widget-card gas-widget compact">
+                                    <div class="widget-head">
+                                        <div class="widget-title">
+                                            <i data-lucide="activity" class="icon-gas"></i>
+                                            <div>
+                                                <h4>유해가스 감지 (CO)</h4>
+                                                <span class="widget-subtitle">일산화탄소 미세 센서</span>
+                                            </div>
+                                        </div>
+                                        <span class="live-blink-tag safety-secure">SAFE</span>
+                                    </div>
+                                    <div class="widget-body">
+                                        <div class="widget-numeric">
+                                            <span class="value-num" id="live-gas-val">0</span>
+                                            <span class="value-unit">ppm</span>
+                                        </div>
+                                        <div class="widget-bar-track">
+                                            <div class="widget-bar-fill fill-gas" id="live-gas-bar" style="width: 0%;"></div>
+                                        </div>
+                                        <div class="widget-footer-info">
+                                            <span>임계치: <strong>10 ppm</strong></span>
+                                            <span class="pct-val green-text">감지된 위협 없음</span>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Card 4: Occupancy -->
+                                <div class="energy-widget-card occupant-widget compact">
+                                    <div class="widget-head">
+                                        <div class="widget-title">
+                                            <i data-lucide="users" class="icon-occupant"></i>
+                                            <div>
+                                                <h4>사옥 내 상주 인원</h4>
+                                                <span class="widget-subtitle">스마트 출입문 실시간 체크</span>
+                                            </div>
+                                        </div>
+                                        <span class="live-blink-tag safety">SYNCED</span>
+                                    </div>
+                                    <div class="widget-body">
+                                        <div class="widget-numeric">
+                                            <span class="value-num" id="live-occupant-val">48</span>
+                                            <span class="value-unit">명</span>
+                                        </div>
+                                        <div class="widget-bar-track">
+                                            <div class="widget-bar-fill fill-occupant" id="live-occupant-bar" style="width: 68%;"></div>
+                                        </div>
+                                        <div class="widget-footer-info">
+                                            <span>재실률: <strong>68%</strong></span>
+                                            <span class="pct-val green-text">비상 대피 완벽 통제</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- Bottom Time-series safety index chart -->
+                            <div class="glass-card energy-integrated-chart-card">
+                                <div class="chart-wrapper energy-chart-wrapper-mini">
+                                    <canvas id="safety-trend-chart"></canvas>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Sub-view 2: 설비 위험 요인 감시 (4대 설비 감시 그리드 + LED 점멸등) -->
+                    <div id="safety-risk-factors" class="sub-view">
+                        <div class="glass-card full-height-card">
+                            <div class="card-header">
+                                <div class="card-header-title">
+                                    <i data-lucide="radio" class="header-icon orange-text"></i>
+                                    <div>
+                                        <h3>주요 핵심 안전 제어 기기 실시간 감시</h3>
+                                        <p>사옥 안전과 소방을 담보하는 필수 장치들의 실시간 작동율 및 상태 LED를 추적합니다.</p>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="facility-monitoring-grid">
+                                <!-- Machine 1 -->
+                                <div class="facility-card">
+                                    <div class="fac-status-led">
+                                        <span class="led-dot led-active-orange"></span>
+                                        <span class="led-lbl-active-orange">정상 가동</span>
+                                    </div>
+                                    <h4 class="fac-title">중앙 대형 급·배기 환기팬 (1층~8층)</h4>
+                                    <div class="fac-meta-grid">
+                                        <div class="fac-meta-item"><span>공기 순환율:</span> <strong>94.2%</strong></div>
+                                        <div class="fac-meta-item"><span>팬 속도:</span> <strong>1240 RPM</strong></div>
+                                    </div>
+                                    <div class="fac-load-track">
+                                        <div class="fac-load-bar" style="width: 94%; background: var(--primary-safety);"></div>
+                                    </div>
+                                </div>
+
+                                <!-- Machine 2 -->
+                                <div class="facility-card">
+                                    <div class="fac-status-led">
+                                        <span class="led-dot led-active-orange"></span>
+                                        <span class="led-lbl-active-orange">정상 대기</span>
+                                    </div>
+                                    <h4 class="fac-title">사옥 비상 방화 셔터 제어반 및 인버터</h4>
+                                    <div class="fac-meta-grid">
+                                        <div class="fac-meta-item"><span>셔터 대기수:</span> <strong>24개 완료</strong></div>
+                                        <div class="fac-meta-item"><span>제어 신호:</span> <strong>Link Active</strong></div>
+                                    </div>
+                                    <div class="fac-load-track">
+                                        <div class="fac-load-bar" style="width: 100%; background: var(--primary-safety);"></div>
+                                    </div>
+                                </div>
+
+                                <!-- Machine 3 -->
+                                <div class="facility-card">
+                                    <div class="fac-status-led">
+                                        <span class="led-dot led-warning"></span>
+                                        <span class="led-lbl-warning">정밀 점검중</span>
+                                    </div>
+                                    <h4 class="fac-title">지하 보일러실 가동 및 가스 차단 밸브</h4>
+                                    <div class="fac-meta-grid">
+                                        <div class="fac-meta-item"><span>가스 감지:</span> <strong>0.02% 미만</strong></div>
+                                        <div class="fac-meta-item"><span>작동 상태:</span> <strong>점검 중 (정상)</strong></div>
+                                    </div>
+                                    <div class="fac-load-track">
+                                        <div class="fac-load-bar" style="width: 30%; background: var(--blue-accent);"></div>
+                                    </div>
+                                </div>
+
+                                <!-- Machine 4 -->
+                                <div class="facility-card">
+                                    <div class="fac-status-led">
+                                        <span class="led-dot led-active-orange"></span>
+                                        <span class="led-lbl-active-orange">상시 대기</span>
+                                    </div>
+                                    <h4 class="fac-title">옥상 소방 펌프실 및 고압 스프링클러</h4>
+                                    <div class="fac-meta-grid">
+                                        <div class="fac-meta-item"><span>압력 레벨:</span> <strong>1.2 MPa (정상)</strong></div>
+                                        <div class="fac-meta-item"><span>수원 보유량:</span> <strong>100%</strong></div>
+                                    </div>
+                                    <div class="fac-load-track">
+                                        <div class="fac-load-bar" style="width: 100%; background: var(--primary-safety);"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Sub-view 3: 안전 규정 및 캠페인 (부서별 태스크 관리 보드) -->
+                    <div id="safety-tasks" class="sub-view">
+                        <div class="glass-card full-height-card">
+                            <div class="card-header">
+                                <div class="card-header-title">
+                                    <i data-lucide="shield-alert" class="header-icon orange-text"></i>
+                                    <div>
+                                        <h3>사내 부서별 안전 실무 활동 리스트</h3>
+                                        <p>전사 임직원의 건강과 사고 없는 사업장 조성을 위한 부서별 안전 프로젝트 진행률입니다.</p>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="tasks-scroll-container">
+                                <div class="tasks-container">
+                                    <!-- Task 1 -->
+                                    <div class="task-item">
+                                        <div class="task-meta">
+                                            <span class="task-dept tag-ops">운영지원부</span>
+                                            <span class="task-status status-ongoing">진행중</span>
+                                        </div>
+                                        <h4 class="task-title">전직원 분기별 안전 소방 훈련 및 CPR 교육 이수</h4>
+                                        <div class="task-progress-section">
+                                            <div class="progress-bar-bg">
+                                                <div class="progress-bar-fill progress-safety-task" style="width: 85%;"></div>
+                                            </div>
+                                            <span class="progress-percentage">85%</span>
+                                        </div>
+                                        <div class="task-footer">
+                                            <span class="task-assignee"><i data-lucide="user-2"></i> 담당: 박지한 부장</span>
+                                            <span class="task-deadline">금주 내 잔여 인원 이수 (6/2까지)</span>
+                                        </div>
+                                    </div>
+
+                                    <!-- Task 2 -->
+                                    <div class="task-item">
+                                        <div class="task-meta">
+                                            <span class="task-dept tag-planning">기획조정실</span>
+                                            <span class="task-status status-completed">완료됨</span>
+                                        </div>
+                                        <h4 class="task-title">사옥 비상 계단 피난 유도선 및 미끄럼 방지 타일 전면 리뉴얼</h4>
+                                        <div class="task-progress-section">
+                                            <div class="progress-bar-bg">
+                                                <div class="progress-bar-fill progress-safety-task" style="width: 100%;"></div>
+                                            </div>
+                                            <span class="progress-percentage">100%</span>
+                                        </div>
+                                        <div class="task-footer">
+                                            <span class="task-assignee"><i data-lucide="user-2"></i> 담당: 정서아 수석</span>
+                                            <span class="task-deadline">전 층 시공 및 감리 승인 완료</span>
+                                        </div>
+                                    </div>
+
+                                    <!-- Task 3 -->
+                                    <div class="task-item">
+                                        <div class="task-meta">
+                                            <span class="task-dept tag-rd">R&D 본부</span>
+                                            <span class="task-status status-ongoing">진행중</span>
+                                        </div>
+                                        <h4 class="task-title">인공지능 CCTV 기반 사옥 침입 및 낙상 이상 탐지 알고리즘 적용</h4>
+                                        <div class="task-progress-section">
+                                            <div class="progress-bar-bg">
+                                                <div class="progress-bar-fill progress-safety-task" style="width: 62%;"></div>
+                                            </div>
+                                            <span class="progress-percentage">62%</span>
+                                        </div>
+                                        <div class="task-footer">
+                                            <span class="task-assignee"><i data-lucide="user-2"></i> 담당: 이진아 수석</span>
+                                            <span class="task-deadline">베타 알고리즘 성능 튜닝 중 (6/15까지)</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Sub-view 4: 무재해 기여 지표 (누적 무재해일/시간, 적합도) -->
+                    <div id="safety-eco-metrics" class="sub-view">
+                        <div class="glass-card full-height-card">
+                            <div class="card-header">
+                                <div class="card-header-title">
+                                    <i data-lucide="award" class="header-icon orange-text"></i>
+                                    <div>
+                                        <h3>무재해 누적 성과 및 사내 쾌적 지수</h3>
+                                        <p>체계적 예방 점검으로 단 한 건의 유해 사고 없이 연속 달성 중인 무재해 기록입니다.</p>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="eco-metrics-list">
+                                <!-- Metric 1: Days -->
+                                <div class="eco-metric-item">
+                                    <div class="eco-icon-container orange-bg"><i data-lucide="calendar"></i></div>
+                                    <div class="eco-data">
+                                        <span class="eco-label">무재해 연속 가동일</span>
+                                        <div class="eco-value-row">
+                                            <span class="eco-val">412</span>
+                                            <span class="eco-unit">일 연속</span>
+                                        </div>
+                                        <p class="eco-desc">무사고/무재해 통합 관제 연속 달성 일수</p>
+                                    </div>
+                                </div>
+
+                                <!-- Metric 2: Hours -->
+                                <div class="eco-metric-item">
+                                    <div class="eco-icon-container orange-bg"><i data-lucide="clock"></i></div>
+                                    <div class="eco-data">
+                                        <span class="eco-label">무재해 실시간 누적 시간</span>
+                                        <div class="eco-value-row">
+                                            <span class="eco-val" id="safety-hours-val">9,888</span>
+                                            <span class="eco-unit" id="safety-time-suffix">시간 24분 35초</span>
+                                        </div>
+                                        <p class="eco-desc">안전 센서 및 출입문 기준 누적 무사고 운영 초시간</p>
+                                    </div>
+                                </div>
+
+                                <!-- Metric 3: Compliance -->
+                                <div class="eco-metric-item">
+                                    <div class="eco-icon-container orange-bg"><i data-lucide="shield-check"></i></div>
+                                    <div class="eco-data">
+                                        <span class="eco-label">산업 안전 규정 적합도 (Compliance)</span>
+                                        <div class="eco-value-row">
+                                            <span class="eco-val">99.8</span>
+                                            <span class="eco-unit">%</span>
+                                        </div>
+                                        <p class="eco-desc">고용노동부 안전보건관리 지침 준수 적합 판정율</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </main>
+        </div>
+    </section>
+
+    <!-- Shared application script -->
+    <script src="js/app.js"></script>
+</body>
+</html>
