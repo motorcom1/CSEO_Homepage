@@ -1805,3 +1805,28 @@ button {
     50% { transform: scale(1.15); opacity: 1; box-shadow: 0 0 10px var(--blue-accent); }
 }
 
+/* Defibrillator logo overlay styles for Safety screen */
+.defibrillator-logo {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.defibrillator-logo .heart-icon {
+    width: 20px !important;
+    height: 20px !important;
+    color: #ffffff !important;
+}
+
+.defibrillator-logo .zap-icon {
+    position: absolute !important;
+    width: 10px !important;
+    height: 10px !important;
+    color: #ffffff !important;
+    fill: #ffffff !important;
+    top: 52% !important; /* Optical adjustment inside heart */
+    left: 50% !important;
+    transform: translate(-50%, -50%) !important;
+}
+
