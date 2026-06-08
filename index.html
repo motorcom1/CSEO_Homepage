@@ -41,21 +41,26 @@
         </div>
     </section>
 
-    <!-- 2. Dual Portal Choice Screen -->
+    <!-- 2. Multi-Portal Choice Screen -->
     <section id="portal-screen" class="screen" aria-label="시스템 포털 선택">
         <div class="portal-container">
             <div class="portal-cards-grid">
-                <!-- Group Card (Left) - Simplified 3D Bevel Layout -->
+                <!-- Group Card (Top Left) - Simplified 3D Bevel Layout -->
                 <button type="button" class="portal-card manage-card" id="btn-go-manage" aria-label="Group 시스템 접속">
                     <span class="portal-card-text text-group">Group</span>
                 </button>
 
-                <!-- Safety Card (Center) - Simplified 3D Bevel Layout -->
+                <!-- AX Card (Top Right) - Simplified 3D Bevel Layout -->
+                <button type="button" class="portal-card ax-card" id="btn-go-ax" aria-label="AX 시스템 접속">
+                    <span class="portal-card-text text-ax">AX</span>
+                </button>
+
+                <!-- Safety Card (Bottom Left) - Simplified 3D Bevel Layout -->
                 <button type="button" class="portal-card safety-card" id="btn-go-safety" aria-label="Safety 시스템 접속">
                     <span class="portal-card-text text-safety">Safety</span>
                 </button>
 
-                <!-- Energy Card (Right) - Simplified 3D Bevel Layout -->
+                <!-- Energy Card (Bottom Right) - Simplified 3D Bevel Layout -->
                 <button type="button" class="portal-card energy-card" id="btn-go-energy" aria-label="Energy 시스템 접속">
                     <span class="portal-card-text text-energy">Energy</span>
                 </button>
@@ -1277,6 +1282,403 @@
                                             <span class="eco-unit">%</span>
                                         </div>
                                         <p class="eco-desc">고용노동부 안전보건관리 지침 준수 적합 판정율</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </main>
+        </div>
+    </section>
+
+    <!-- 6. AX Dashboard (Left Sidebar Layout) -->
+    <section id="ax-screen" class="screen" aria-label="AX 통합 모니터링 시스템">
+        <div class="dashboard-layout">
+            <!-- Left Sidebar Navigation -->
+            <aside class="sidebar ax-sidebar">
+                <div class="sidebar-top">
+                    <button type="button" class="sidebar-logo" id="logo-btn-ax" aria-label="포털 홈으로 이동">
+                        <div class="logo-mark mark-purple"><i data-lucide="sparkles"></i></div>
+                        <span class="logo-text">CSEO <span>AX</span></span>
+                    </button>
+                    
+                    <!-- Sidebar Navigation Buttons: 4 customized operations tabs -->
+                    <nav class="sidebar-menu">
+                        <button type="button" class="sidebar-btn active" data-target="ax-overview" aria-label="실시간 AI 가동 분석">
+                            <i data-lucide="activity"></i>
+                            <span>실시간 AI 가동 분석</span>
+                        </button>
+                        <button type="button" class="sidebar-btn" data-target="ax-agents" aria-label="AI 에이전트 모니터">
+                            <i data-lucide="cpu"></i>
+                            <span>AI 에이전트 모니터</span>
+                        </button>
+                        <button type="button" class="sidebar-btn" data-target="ax-tasks" aria-label="AX 추진 과제">
+                            <i data-lucide="check-square"></i>
+                            <span>AX 추진 과제</span>
+                        </button>
+                        <button type="button" class="sidebar-btn" data-target="ax-readiness" aria-label="전사 AI 적합도">
+                            <i data-lucide="award"></i>
+                            <span>전사 AI 적합도</span>
+                        </button>
+                    </nav>
+                </div>
+                
+                <div class="sidebar-bottom">
+                    <div class="sidebar-status">
+                        <span class="pulse-dot purple"></span>
+                        <span class="status-lbl purple-text">AI Engine Online</span>
+                    </div>
+                </div>
+            </aside>
+
+            <!-- Right Main Content Area -->
+            <main class="main-content">
+                <!-- Top Minimal Header Bar -->
+                <header class="main-header">
+                    <div class="header-breadcrumb">
+                        <span class="parent-crumb purple-text">AX Operations</span>
+                        <span class="crumb-separator"><i data-lucide="chevron-right"></i></span>
+                        <span class="child-crumb" id="ax-breadcrumb-text">실시간 AI 가동 분석</span>
+                    </div>
+                    <div class="summary-indicators">
+                        <div class="indicator-pill text-purple"><span class="pulse-dot purple"></span> GPU RUNNING</div>
+                        <div class="indicator-pill"><i data-lucide="cpu"></i> CSEO-GPT Active</div>
+                    </div>
+                </header>
+
+                <!-- Sub-view Panels (Toggled dynamically by Sidebar buttons) -->
+                <div class="sub-view-container">
+                    
+                    <!-- Sub-view 1: 실시간 AI 가동 분석 -->
+                    <div id="ax-overview" class="sub-view active">
+                        <div class="energy-live-unified-layout">
+                            <div class="energy-live-grid-2x2 compact-grid">
+                                <!-- Card 1: GPU Load -->
+                                <div class="energy-widget-card gpu-widget compact">
+                                    <div class="widget-head">
+                                        <div class="widget-title">
+                                            <i data-lucide="activity" class="icon-gpu"></i>
+                                            <div>
+                                                <h4>GPU 가동 부하율</h4>
+                                                <span class="widget-subtitle">사내 AI H100 Cluster 로드율</span>
+                                            </div>
+                                        </div>
+                                        <span class="live-blink-tag safety">SECURE</span>
+                                    </div>
+                                    <div class="widget-body">
+                                        <div class="widget-numeric">
+                                            <span class="value-num" id="live-gpu-val">84.2</span>
+                                            <span class="value-unit">%</span>
+                                        </div>
+                                        <div class="widget-bar-track">
+                                            <div class="widget-bar-fill fill-gpu" id="live-gpu-bar" style="width: 84.2%;"></div>
+                                        </div>
+                                        <div class="widget-footer-info">
+                                            <span>온도: <strong>72.5°C</strong></span>
+                                            <span class="pct-val positive">정상 범주 운용</span>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Card 2: AI Queries / QPS -->
+                                <div class="energy-widget-card qps-widget compact">
+                                    <div class="widget-head">
+                                        <div class="widget-title">
+                                            <i data-lucide="message-square" class="icon-qps"></i>
+                                            <div>
+                                                <h4>실시간 요청 수 (QPS)</h4>
+                                                <span class="widget-subtitle">사내 대화형 API 호출 속도</span>
+                                            </div>
+                                        </div>
+                                        <span class="live-blink-tag safety">NORMAL</span>
+                                    </div>
+                                    <div class="widget-body">
+                                        <div class="widget-numeric">
+                                            <span class="value-num" id="live-qps-val">18.5</span>
+                                            <span class="value-unit">req/s</span>
+                                        </div>
+                                        <div class="widget-bar-track">
+                                            <div class="widget-bar-fill fill-qps" id="live-qps-bar" style="width: 74%;"></div>
+                                        </div>
+                                        <div class="widget-footer-info">
+                                            <span>대기 시간: <strong>140ms</strong></span>
+                                            <span class="pct-val positive">지연 없음</span>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Card 3: Memory / VRAM -->
+                                <div class="energy-widget-card vram-widget compact">
+                                    <div class="widget-head">
+                                        <div class="widget-title">
+                                            <i data-lucide="database" class="icon-vram"></i>
+                                            <div>
+                                                <h4>VRAM 메모리 점유율</h4>
+                                                <span class="widget-subtitle">모델 컨텍스트 실시간 점유</span>
+                                            </div>
+                                        </div>
+                                        <span class="live-blink-tag safety-secure">SAFE</span>
+                                    </div>
+                                    <div class="widget-body">
+                                        <div class="widget-numeric">
+                                            <span class="value-num" id="live-mem-val">68.0</span>
+                                            <span class="value-unit">%</span>
+                                        </div>
+                                        <div class="widget-bar-track">
+                                            <div class="widget-bar-fill fill-vram" id="live-mem-bar" style="width: 68%;"></div>
+                                        </div>
+                                        <div class="widget-footer-info">
+                                            <span>할당: <strong>54.4 / 80 GB</strong></span>
+                                            <span class="pct-val green-text">여유 공간 충분</span>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Card 4: Total Inferences -->
+                                <div class="energy-widget-card inference-widget compact">
+                                    <div class="widget-head">
+                                        <div class="widget-title">
+                                            <i data-lucide="sparkles" class="icon-inference"></i>
+                                            <div>
+                                                <h4>누적 AI 추론 횟수</h4>
+                                                <span class="widget-subtitle">전사 AI 모델 통합 추론 카운트</span>
+                                            </div>
+                                        </div>
+                                        <span class="live-blink-tag safety">SYNCED</span>
+                                    </div>
+                                    <div class="widget-body">
+                                        <div class="widget-numeric">
+                                            <span class="value-num" id="live-inference-val">148,520</span>
+                                            <span class="value-unit">회</span>
+                                        </div>
+                                        <div class="widget-bar-track">
+                                            <div class="widget-bar-fill fill-inference" id="live-inference-bar" style="width: 78%;"></div>
+                                        </div>
+                                        <div class="widget-footer-info">
+                                            <span>일간 평균: <strong>12.4K</strong></span>
+                                            <span class="pct-val green-text">추세 지속 상승</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- Bottom Time-series AI Load Trend Chart -->
+                            <div class="glass-card energy-integrated-chart-card">
+                                <div class="chart-wrapper energy-chart-wrapper-mini">
+                                    <canvas id="ax-trend-chart"></canvas>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Sub-view 2: AI 에이전트 모니터 -->
+                    <div id="ax-agents" class="sub-view">
+                        <div class="glass-card full-height-card">
+                            <div class="card-header">
+                                <div class="card-header-title">
+                                    <i data-lucide="cpu" class="header-icon purple-text"></i>
+                                    <div>
+                                        <h3>핵심 AI 자율형 에이전트 실시간 감시</h3>
+                                        <p>CSEO 사내 인프라에서 구동 중인 주요 AI 에이전트들의 가동 상태와 추론 성능을 모니터링합니다.</p>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="facility-monitoring-grid">
+                                <!-- Agent 1 -->
+                                <div class="facility-card">
+                                    <div class="fac-status-led">
+                                        <span class="led-dot led-active-purple"></span>
+                                        <span class="led-lbl-active-purple">정상 가동</span>
+                                    </div>
+                                    <h4 class="fac-title">CSEO-GPT (사내 업무 지원 지능 비서)</h4>
+                                    <div class="fac-meta-grid">
+                                        <div class="fac-meta-item"><span>실시간 가동율:</span> <strong>95.8%</strong></div>
+                                        <div class="fac-meta-item"><span>평균 응답속도:</span> <strong>120ms</strong></div>
+                                    </div>
+                                    <div class="fac-load-track">
+                                        <div class="fac-load-bar" style="width: 95%; background: var(--primary-ax);"></div>
+                                    </div>
+                                </div>
+
+                                <!-- Agent 2 -->
+                                <div class="facility-card">
+                                    <div class="fac-status-led">
+                                        <span class="led-dot led-active-purple"></span>
+                                        <span class="led-lbl-active-purple">정상 가동</span>
+                                    </div>
+                                    <h4 class="fac-title">AI 특허 및 연구 문서 지능형 요약 엔진</h4>
+                                    <div class="fac-meta-grid">
+                                        <div class="fac-meta-item"><span>일간 처리 문서:</span> <strong>340건 완료</strong></div>
+                                        <div class="fac-meta-item"><span>인덱싱 상태:</span> <strong>Link Active</strong></div>
+                                    </div>
+                                    <div class="fac-load-track">
+                                        <div class="fac-load-bar" style="width: 100%; background: var(--primary-ax);"></div>
+                                    </div>
+                                </div>
+
+                                <!-- Agent 3 -->
+                                <div class="facility-card">
+                                    <div class="fac-status-led">
+                                        <span class="led-dot led-warning-purple"></span>
+                                        <span class="led-lbl-warning-purple">모델 튜닝중</span>
+                                    </div>
+                                    <h4 class="fac-title">B2B 분산 자원 에너지 수요 예측 ML 모델</h4>
+                                    <div class="fac-meta-grid">
+                                        <div class="fac-meta-item"><span>예측 정확도:</span> <strong>94.2%</strong></div>
+                                        <div class="fac-meta-item"><span>작동 상태:</span> <strong>파이닝 테스트</strong></div>
+                                    </div>
+                                    <div class="fac-load-track">
+                                        <div class="fac-load-bar" style="width: 48%; background: var(--blue-accent);"></div>
+                                    </div>
+                                </div>
+
+                                <!-- Agent 4 -->
+                                <div class="facility-card">
+                                    <div class="fac-status-led">
+                                        <span class="led-dot led-active-purple"></span>
+                                        <span class="led-lbl-active-purple">상시 감시</span>
+                                    </div>
+                                    <h4 class="fac-title">AI CCTV 이상 징후 (침입/낙상) 실시간 감지</h4>
+                                    <div class="fac-meta-grid">
+                                        <div class="fac-meta-item"><span>오경보율:</span> <strong>0.05% 미만</strong></div>
+                                        <div class="fac-meta-item"><span>스캔 센서:</span> <strong>128개 감시중</strong></div>
+                                    </div>
+                                    <div class="fac-load-track">
+                                        <div class="fac-load-bar" style="width: 100%; background: var(--primary-ax);"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Sub-view 3: AX 추진 과제 -->
+                    <div id="ax-tasks" class="sub-view">
+                        <div class="glass-card full-height-card">
+                            <div class="card-header">
+                                <div class="card-header-title">
+                                    <i data-lucide="check-square" class="header-icon purple-text"></i>
+                                    <div>
+                                        <h3>사내 부서별 AI 혁신 추진 과제 리스트</h3>
+                                        <p>전사 AI 전환(AX) 가속화를 위한 핵심 과제 진행 및 도입 현황입니다.</p>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="tasks-scroll-container">
+                                <div class="tasks-container">
+                                    <!-- Task 1 -->
+                                    <div class="task-item">
+                                        <div class="task-meta">
+                                            <span class="task-dept tag-planning">기획 R&R</span>
+                                            <span class="task-status status-ongoing">운영 적용</span>
+                                        </div>
+                                        <h4 class="task-title">사내 업무 효율화를 위한 GenAI 비서 챗봇 'CSEO-GPT' 도입</h4>
+                                        <div class="task-progress-section">
+                                            <div class="progress-bar-bg">
+                                                <div class="progress-bar-fill progress-ax-task" style="width: 95%;"></div>
+                                            </div>
+                                            <span class="progress-percentage">95%</span>
+                                        </div>
+                                        <div class="task-footer">
+                                            <span class="task-assignee"><i data-lucide="user-2"></i> 담당: 정서아 수석 (기획)</span>
+                                            <span class="task-deadline">전 부서 베타 릴리즈 및 피드백 반영 중</span>
+                                        </div>
+                                    </div>
+
+                                    <!-- Task 2 -->
+                                    <div class="task-item">
+                                        <div class="task-meta">
+                                            <span class="task-dept tag-rd">R&D R&R</span>
+                                            <span class="task-status status-ongoing">모델 학습</span>
+                                        </div>
+                                        <h4 class="task-title">AI 기반 글로벌 신에너지 특허 및 연구 문서 지능형 요약 엔진 개발</h4>
+                                        <div class="task-progress-section">
+                                            <div class="progress-bar-bg">
+                                                <div class="progress-bar-fill progress-ax-task" style="width: 72%;"></div>
+                                            </div>
+                                            <span class="progress-percentage">72%</span>
+                                        </div>
+                                        <div class="task-footer">
+                                            <span class="task-assignee"><i data-lucide="user-2"></i> 담당: 이진아 수석 (에너지 AI)</span>
+                                            <span class="task-deadline">LLM 파인튜닝 테스트 가동 및 정밀도 검증 (D-10)</span>
+                                        </div>
+                                    </div>
+
+                                    <!-- Task 3 -->
+                                    <div class="task-item">
+                                        <div class="task-meta">
+                                            <span class="task-dept tag-databiz">데이터본부 R&R</span>
+                                            <span class="task-status status-ongoing">인프라 구축</span>
+                                        </div>
+                                        <h4 class="task-title">B2B 분산 자원 에너지 수요 예측 지능형 머신러닝 모듈 구축</h4>
+                                        <div class="task-progress-section">
+                                            <div class="progress-bar-bg">
+                                                <div class="progress-bar-fill progress-ax-task" style="width: 48%;"></div>
+                                            </div>
+                                            <span class="progress-percentage">48%</span>
+                                        </div>
+                                        <div class="task-footer">
+                                            <span class="task-assignee"><i data-lucide="user-2"></i> 담당: 신재희 선임 (솔루션)</span>
+                                            <span class="task-deadline">데이터 피드 정제 및 학습 파이프라인 연계 중 (D-25)</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Sub-view 4: 전사 AI 적합도 -->
+                    <div id="ax-readiness" class="sub-view">
+                        <div class="glass-card full-height-card">
+                            <div class="card-header">
+                                <div class="card-header-title">
+                                    <i data-lucide="award" class="header-icon purple-text"></i>
+                                    <div>
+                                        <h3>전사 AI 전환 적합성 및 모델 평가 지표</h3>
+                                        <p>안정적인 AI 서비스 운영 및 전사 확장을 위해 검증된 주요 인프라 정합성 수치입니다.</p>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="eco-metrics-list">
+                                <!-- Metric 1: Security -->
+                                <div class="eco-metric-item">
+                                    <div class="eco-icon-container purple-bg"><i data-lucide="shield-check"></i></div>
+                                    <div class="eco-data">
+                                        <span class="eco-label">AI 개인정보 보호 및 보안 준수율</span>
+                                        <div class="eco-value-row">
+                                            <span class="eco-val">100</span>
+                                            <span class="eco-unit">%</span>
+                                        </div>
+                                        <p class="eco-desc">사내 데이터 레이크 하우스 내 비식별화 필터링 적용률</p>
+                                    </div>
+                                </div>
+
+                                <!-- Metric 2: Accuracy -->
+                                <div class="eco-metric-item">
+                                    <div class="eco-icon-container purple-bg"><i data-lucide="trending-up"></i></div>
+                                    <div class="eco-data">
+                                        <span class="eco-label">대표 AI 예측 모델 정확도 (Accuracy)</span>
+                                        <div class="eco-value-row">
+                                            <span class="eco-val">96.8</span>
+                                            <span class="eco-unit">%</span>
+                                        </div>
+                                        <p class="eco-desc">B2B 분산 에너지원 전일 수요 대비 적합 정확율</p>
+                                    </div>
+                                </div>
+
+                                <!-- Metric 3: Infrastructure Integration -->
+                                <div class="eco-metric-item">
+                                    <div class="eco-icon-container purple-bg"><i data-lucide="network"></i></div>
+                                    <div class="eco-data">
+                                        <span class="eco-label">인프라 API 정합 연동률</span>
+                                        <div class="eco-value-row">
+                                            <span class="eco-val">94.5</span>
+                                            <span class="eco-unit">%</span>
+                                        </div>
+                                        <p class="eco-desc">사내 ERP 및 통합 데이터베이스 호출 응답 연동 적합도</p>
                                     </div>
                                 </div>
                             </div>

@@ -59,7 +59,8 @@ document.addEventListener('DOMContentLoaded', () => {
         'portal-screen': document.getElementById('portal-screen'),
         'manage-screen': document.getElementById('manage-screen'),
         'energy-screen': document.getElementById('energy-screen'),
-        'safety-screen': document.getElementById('safety-screen')
+        'safety-screen': document.getElementById('safety-screen'),
+        'ax-screen': document.getElementById('ax-screen')
     };
 
     function navigateTo(screenId) {
@@ -79,19 +80,29 @@ document.addEventListener('DOMContentLoaded', () => {
             resetSidebarViews('manage-screen', 'manage-org', '조직 구성도');
             stopEnergySimulator();
             stopSafetySimulator();
+            stopAxSimulator();
         } else if (screenId === 'energy-screen') {
             resetSidebarViews('energy-screen', 'energy-overview', '실시간 전력 분석');
             stopSafetySimulator();
+            stopAxSimulator();
             startEnergySimulator();
             setTimeout(initEnergyChart, 200); /* Proactively initialize the integrated chart */
         } else if (screenId === 'safety-screen') {
             resetSidebarViews('safety-screen', 'safety-overview', '실시간 안전 모니터링');
             stopEnergySimulator();
+            stopAxSimulator();
             startSafetySimulator();
             setTimeout(initSafetyChart, 200); /* Proactively initialize the integrated safety chart */
+        } else if (screenId === 'ax-screen') {
+            resetSidebarViews('ax-screen', 'ax-overview', '실시간 AI 가동 분석');
+            stopEnergySimulator();
+            stopSafetySimulator();
+            startAxSimulator();
+            setTimeout(initAxChart, 200);
         } else {
             stopEnergySimulator();
             stopSafetySimulator();
+            stopAxSimulator();
         }
     }
 
@@ -121,6 +132,8 @@ document.addEventListener('DOMContentLoaded', () => {
             document.getElementById('energy-breadcrumb-text').textContent = breadcrumbText;
         } else if (screenId === 'safety-screen') {
             document.getElementById('safety-breadcrumb-text').textContent = breadcrumbText;
+        } else if (screenId === 'ax-screen') {
+            document.getElementById('ax-breadcrumb-text').textContent = breadcrumbText;
         }
     }
 
@@ -128,11 +141,13 @@ document.addEventListener('DOMContentLoaded', () => {
     document.getElementById('btn-go-manage')?.addEventListener('click', () => navigateTo('manage-screen'));
     document.getElementById('btn-go-safety')?.addEventListener('click', () => navigateTo('safety-screen'));
     document.getElementById('btn-go-energy')?.addEventListener('click', () => navigateTo('energy-screen'));
+    document.getElementById('btn-go-ax')?.addEventListener('click', () => navigateTo('ax-screen'));
     
     // Sidebar return buttons via Logo Click
     document.getElementById('logo-btn-manage')?.addEventListener('click', () => navigateTo('portal-screen'));
     document.getElementById('logo-btn-energy')?.addEventListener('click', () => navigateTo('portal-screen'));
     document.getElementById('logo-btn-safety')?.addEventListener('click', () => navigateTo('portal-screen'));
+    document.getElementById('logo-btn-ax')?.addEventListener('click', () => navigateTo('portal-screen'));
 
     // ==========================================================================
     // 3. Sidebar Menu Sub-view Toggle Engine (좌측 버튼 제어 & 브레드크럼 매핑)
@@ -185,6 +200,13 @@ document.addEventListener('DOMContentLoaded', () => {
                 // Lazy-load Safety Charts only when active
                 if (targetId === 'safety-overview') {
                     setTimeout(initSafetyChart, 100);
+                }
+            } else if (parentScreen.id === 'ax-screen') {
+                document.getElementById('ax-breadcrumb-text').textContent = menuText;
+                
+                // Lazy-load AX Charts only when active
+                if (targetId === 'ax-overview') {
+                    setTimeout(initAxChart, 100);
                 }
             }
         });
@@ -781,5 +803,173 @@ document.addEventListener('DOMContentLoaded', () => {
         
         if (txtOccupant) txtOccupant.textContent = liveOccupant;
         if (barOccupant) barOccupant.style.width = `${(liveOccupant / 80) * 100}%`;
+    }
+
+    // ==========================================================================
+    // 11. Chart.js Graphs (AX Trends)
+    // ==========================================================================
+    let axChartInstance = null;
+
+    function initAxChart() {
+        const ctx = document.getElementById('ax-trend-chart');
+        if (!ctx || axChartInstance) return;
+
+        const hours = ['11:00', '12:00', '13:00', '14:00', '15:00', '16:00', '17:00', '실시간'];
+        
+        const axData = {
+            labels: hours,
+            datasets: [
+                {
+                    label: 'GPU 가동 부하율 (%)',
+                    data: [78.2, 82.5, 85.0, 89.7, 84.9, 79.4, 88.8, 84.2],
+                    borderColor: '#d946ef',
+                    borderWidth: 3,
+                    backgroundColor: 'rgba(217, 70, 239, 0.05)',
+                    fill: true,
+                    tension: 0.3,
+                    pointBackgroundColor: '#d946ef',
+                    pointBorderColor: '#ffffff',
+                    pointBorderWidth: 2,
+                    pointRadius: 5,
+                    pointHoverRadius: 7
+                },
+                {
+                    label: '초당 AI 요청 부하 (req/s)',
+                    data: [12.0, 15.8, 18.2, 22.0, 16.5, 14.1, 20.4, 18.5],
+                    borderColor: '#3b82f6',
+                    borderWidth: 2,
+                    borderDash: [5, 5],
+                    backgroundColor: 'transparent',
+                    fill: false,
+                    tension: 0.3,
+                    pointBackgroundColor: '#3b82f6',
+                    pointBorderColor: '#ffffff',
+                    pointBorderWidth: 1.5,
+                    pointRadius: 4,
+                    pointHoverRadius: 6
+                }
+            ]
+        };
+
+        axChartInstance = new Chart(ctx, {
+            type: 'line',
+            data: axData,
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        position: 'top',
+                        labels: {
+                            font: { family: 'Outfit', size: 12, weight: '500' },
+                            color: '#475569'
+                        }
+                    },
+                    tooltip: {
+                        backgroundColor: 'rgba(255, 255, 255, 0.95)',
+                        titleColor: '#0f172a',
+                        bodyColor: '#475569',
+                        borderColor: 'rgba(217, 70, 239, 0.2)',
+                        borderWidth: 1,
+                        padding: 12,
+                        cornerRadius: 12,
+                        titleFont: { family: 'Outfit', weight: '700' },
+                        bodyFont: { family: 'Outfit' }
+                    }
+                },
+                scales: {
+                    x: {
+                        grid: { display: false },
+                        ticks: {
+                            font: { family: 'Outfit', size: 12, weight: '500' },
+                            color: '#475569'
+                        }
+                    },
+                    y: {
+                        grid: { color: 'rgba(226, 232, 240, 0.6)' },
+                        ticks: {
+                            font: { family: 'Outfit', size: 11 },
+                            color: '#94a3b8'
+                        }
+                    }
+                }
+            }
+        });
+    }
+
+    // ==========================================================================
+    // 12. Live AX Simulation Engine
+    // ==========================================================================
+    let axSimInterval = null;
+    
+    let liveGpu = 84.2;
+    let liveQps = 18.5;
+    let liveMem = 68.0;
+    let liveInference = 148520;
+
+    function startAxSimulator() {
+        if (axSimInterval) return;
+        
+        axSimInterval = setInterval(() => {
+            // Fluctuate GPU: 75% to 92%
+            liveGpu += (Math.random() - 0.5) * 6;
+            if (liveGpu < 70) liveGpu = 70;
+            if (liveGpu > 95) liveGpu = 95;
+            
+            // Fluctuate QPS: 12 to 25req/s
+            liveQps += (Math.random() - 0.5) * 4;
+            if (liveQps < 10) liveQps = 10;
+            if (liveQps > 30) liveQps = 30;
+            
+            // Fluctuate Memory: 65% to 75%
+            liveMem += (Math.random() - 0.5) * 1.5;
+            if (liveMem < 60) liveMem = 60;
+            if (liveMem > 80) liveMem = 80;
+            
+            // Increment Inferences
+            liveInference += Math.floor(Math.random() * 20) + 15;
+
+            // Update UI
+            updateAxUI();
+            
+            // Update Live Chart point
+            if (axChartInstance) {
+                const datasets = axChartInstance.data.datasets;
+                datasets[0].data[datasets[0].data.length - 1] = parseFloat(liveGpu.toFixed(1));
+                datasets[1].data[datasets[1].data.length - 1] = parseFloat(liveQps.toFixed(1));
+                axChartInstance.update('none');
+            }
+
+        }, 3000);
+    }
+
+    function stopAxSimulator() {
+        if (axSimInterval) {
+            clearInterval(axSimInterval);
+            axSimInterval = null;
+        }
+    }
+
+    function updateAxUI() {
+        const txtGpu = document.getElementById('live-gpu-val');
+        const barGpu = document.getElementById('live-gpu-bar');
+        const txtQps = document.getElementById('live-qps-val');
+        const barQps = document.getElementById('live-qps-bar');
+        const txtMem = document.getElementById('live-mem-val');
+        const barMem = document.getElementById('live-mem-bar');
+        const txtInference = document.getElementById('live-inference-val');
+        const barInference = document.getElementById('live-inference-bar');
+
+        if (txtGpu) txtGpu.textContent = liveGpu.toFixed(1);
+        if (barGpu) barGpu.style.width = `${liveGpu}%`;
+        
+        if (txtQps) txtQps.textContent = liveQps.toFixed(1);
+        if (barQps) barQps.style.width = `${(liveQps / 30) * 100}%`;
+        
+        if (txtMem) txtMem.textContent = liveMem.toFixed(1);
+        if (barMem) barMem.style.width = `${liveMem}%`;
+        
+        if (txtInference) txtInference.textContent = liveInference.toLocaleString();
+        if (barInference) barInference.style.width = `${((liveInference - 148520) / 5000 + 78)}%`;
     }
 });

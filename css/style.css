@@ -14,9 +14,11 @@
     --gradient-manage: linear-gradient(135deg, #6366f1, #3b82f6);
     --gradient-energy: linear-gradient(135deg, #10b981, #06b6d4);
     --gradient-safety: linear-gradient(135deg, #f97316, #ef4444);
+    --gradient-ax: linear-gradient(135deg, #d946ef, #8b5cf6);
     --gradient-accent-light: linear-gradient(135deg, rgba(99, 102, 241, 0.04), rgba(59, 130, 246, 0.04));
     --gradient-green-light: linear-gradient(135deg, rgba(16, 185, 129, 0.04), rgba(6, 182, 212, 0.04));
     --gradient-safety-light: linear-gradient(135deg, rgba(249, 115, 22, 0.04), rgba(239, 68, 68, 0.04));
+    --gradient-ax-light: linear-gradient(135deg, rgba(217, 70, 239, 0.04), rgba(139, 92, 246, 0.04));
     
     /* Text Colors */
     --text-primary: #0f172a;
@@ -31,6 +33,10 @@
     --primary-green: #10b981;
     --primary-green-light: #d1fae5;
     --primary-green-glow: rgba(16, 185, 129, 0.08);
+    
+    --primary-ax: #d946ef;
+    --primary-ax-light: #fdf4ff;
+    --primary-ax-glow: rgba(217, 70, 239, 0.08);
     
     --blue-accent: #3b82f6;
     --orange-accent: #f97316;
@@ -249,7 +255,7 @@ button {
 .portal-container {
     position: absolute;
     top: 50%;
-    left: calc(50% - 180px); /* Shifted further left to achieve perfect center alignment on user's display */
+    left: calc(50% - 90px);
     transform: translate(-50%, -50%);
     max-width: 1100px;
     width: 100%;
@@ -263,8 +269,9 @@ button {
 
 .portal-cards-grid {
     display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 3.25rem;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 2.5rem;
+    max-width: 740px;
     width: 100%;
     perspective: 1500px; /* Enhanced 3D depth perspective */
 }
@@ -357,6 +364,17 @@ button {
         0 0 40px rgba(16, 185, 129, 0.08);
 }
 
+.ax-card:hover {
+    transform: translateY(-24px) rotateX(10deg) rotateY(12deg) scale(1.04);
+    background-color: rgba(255, 255, 255, 0.95);
+    border-color: rgba(217, 70, 239, 0.65);
+    box-shadow: 
+        0 1px 0 rgba(255, 255, 255, 0.9) inset,
+        0 35px 70px -15px rgba(217, 70, 239, 0.32),                 /* Volumetric AX fuchsia neon glow */
+        0 15px 30px -10px rgba(217, 70, 239, 0.15),
+        0 0 40px rgba(217, 70, 239, 0.08);
+}
+
 /* 3D Floating Giant Centered Typography */
 .portal-card-text {
     font-size: 8.2rem;
@@ -397,6 +415,13 @@ button {
     filter: drop-shadow(0 6px 12px rgba(16, 185, 129, 0.12));
 }
 
+.text-ax {
+    background: var(--gradient-ax);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    filter: drop-shadow(0 6px 12px rgba(217, 70, 239, 0.12));
+}
+
 /* Extreme 3D Pop-out on Hover + Layered Depth shadows onto the card */
 .manage-card:hover .text-group {
     transform: translateZ(115px) scale(1.04); /* Push deep towards user */
@@ -411,6 +436,11 @@ button {
 .energy-card:hover .text-energy {
     transform: translateZ(115px) scale(1.04);
     filter: drop-shadow(0 15px 30px rgba(16, 185, 129, 0.28));
+}
+
+.ax-card:hover .text-ax {
+    transform: translateZ(115px) scale(1.04);
+    filter: drop-shadow(0 15px 30px rgba(217, 70, 239, 0.28));
 }
 
 /* ==========================================================================
@@ -1695,5 +1725,83 @@ button {
 @keyframes pulseLedActiveOrange {
     0%, 100% { transform: scale(0.9); opacity: 0.6; box-shadow: 0 0 4px var(--primary-safety); }
     50% { transform: scale(1.15); opacity: 1; box-shadow: 0 0 10px var(--primary-safety); }
+}
+
+/* ==========================================================================
+   13. AX Dashboard Specific Color and Theme Styles
+   ========================================================================== */
+
+/* AX variables */
+:root {
+    --gradient-ax: linear-gradient(135deg, #d946ef, #8b5cf6);
+    --gradient-ax-light: linear-gradient(135deg, rgba(217, 70, 239, 0.04), rgba(139, 92, 246, 0.04));
+    --primary-ax: #d946ef;
+    --primary-ax-light: #fdf4ff;
+    --primary-ax-glow: rgba(217, 70, 239, 0.08);
+}
+
+/* AX Sidebar Active Button States */
+.ax-sidebar .sidebar-btn.active {
+    background: var(--primary-ax-light);
+    color: var(--primary-ax);
+    border-color: rgba(217, 70, 239, 0.15);
+}
+
+.ax-sidebar .sidebar-btn.active::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 25%;
+    height: 50%;
+    width: 4px;
+    border-radius: 10px;
+    background: var(--primary-ax);
+}
+
+.mark-purple { background: var(--gradient-ax); }
+.purple-text { color: var(--primary-ax); }
+.purple-bg { background: var(--primary-ax-light); color: var(--primary-ax); }
+
+.pulse-dot.purple { background: var(--primary-ax); }
+
+.indicator-pill.text-purple { color: var(--primary-ax); }
+
+.live-blink-tag.purple { background: #fdf4ff; color: #d946ef; }
+
+.fill-gpu { background: #d946ef; }
+.fill-qps { background: #3b82f6; }
+.fill-vram { background: #10b981; }
+.fill-inference { background: #8b5cf6; }
+
+.icon-gpu { background: #fdf4ff; color: #d946ef; }
+.icon-qps { background: #e0f2fe; color: #0284c7; }
+.icon-vram { background: #e6fcf5; color: #059669; }
+.icon-inference { background: #f5f3ff; color: #7c3aed; }
+
+.progress-ax-task { background: var(--gradient-ax); }
+
+/* Purple LED for AX agents */
+.led-dot.led-active-purple {
+    background: var(--primary-ax);
+    box-shadow: 0 0 8px var(--primary-ax);
+    animation: pulseLedActivePurple 1.5s infinite ease-in-out;
+}
+.led-lbl-active-purple { color: var(--primary-ax); }
+
+.led-dot.led-warning-purple {
+    background: var(--blue-accent);
+    box-shadow: 0 0 8px var(--blue-accent);
+    animation: pulseLedWarningPurple 2s infinite ease-in-out;
+}
+.led-lbl-warning-purple { color: var(--blue-accent); }
+
+@keyframes pulseLedActivePurple {
+    0%, 100% { transform: scale(0.9); opacity: 0.6; box-shadow: 0 0 4px var(--primary-ax); }
+    50% { transform: scale(1.15); opacity: 1; box-shadow: 0 0 10px var(--primary-ax); }
+}
+
+@keyframes pulseLedWarningPurple {
+    0%, 100% { transform: scale(0.9); opacity: 0.6; box-shadow: 0 0 4px var(--blue-accent); }
+    50% { transform: scale(1.15); opacity: 1; box-shadow: 0 0 10px var(--blue-accent); }
 }
 
