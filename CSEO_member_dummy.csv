@@ -1,0 +1,127 @@
+﻿name,id,job_title,position,e-mail,phone_number,division,department,job
+이순신,leess,담당,담당,leess@lgdisplay.com,010-4567-1526,A담당,A담당,A담당
+김국진,kimgj,선임,Engineer,kimgj@lgdisplay.com,010-5000-0009,A담당,A팀,A담당자
+김용만,kimym,선임,Engineer,kimym@lgdisplay.com,010-5000-0010,A담당,A팀,A담당자
+남희석,namhs,선임,Engineer,namhs@lgdisplay.com,010-5000-0013,A담당,A팀,A담당자
+박수홍,parksh,선임,Engineer,parksh@lgdisplay.com,010-5000-0014,A담당,A팀,A담당자
+임창용,limcy,선임,Engineer,limcy@lgdisplay.com,010-7869-4455,A담당,A팀,A담당자
+지석진,jisj,선임,Engineer,jisj@lgdisplay.com,010-5000-0012,A담당,A팀,A담당자
+강호동,kanghd,책임,Part Leader,kanghd@lgdisplay.com,010-5000-0011,A담당,A팀,A전문가
+이경규,leekk,책임,Part Leader,leekk@lgdisplay.com,010-7869-4785,A담당,A팀,A전문가
+정약용,jungyy,팀장,팀장,jungyy@lgdisplay.com,010-7894-5648,A담당,A팀,A팀
+이병헌,leebh,선임,Engineer,leebh@lgdisplay.com,010-5000-0018,A담당,B팀,B담당자
+이정재,leejj,선임,Engineer,leejj@lgdisplay.com,010-5000-0021,A담당,B팀,B담당자
+정우성,jungws,선임,Engineer,jungws@lgdisplay.com,010-5000-0019,A담당,B팀,B담당자
+조승우,chosw,선임,Engineer,chosw@lgdisplay.com,010-5000-0023,A담당,B팀,B담당자
+하정우,hajw,선임,Engineer,hajw@lgdisplay.com,010-5000-0022,A담당,B팀,B담당자
+황정민,hwangjm,선임,Engineer,hwangjm@lgdisplay.com,010-5000-0017,A담당,B팀,B담당자
+설경구,seolkg,책임,Part Leader,seolkg@lgdisplay.com,010-5000-0020,A담당,B팀,B전문가
+최민식,choims,책임,Part Leader,choims@lgdisplay.com,010-5000-0016,A담당,B팀,B전문가
+송강호,songkh,팀장,팀장,songkh@lgdisplay.com,010-5000-0015,A담당,B팀,B팀
+김태희,kimth,선임,Engineer,kimth@lgdisplay.com,010-5000-0027,A담당,C팀,C담당자
+박신혜,parksh2,선임,Engineer,parksh2@lgdisplay.com,010-5000-0030,A담당,C팀,C담당자
+송혜교,songhg,선임,Engineer,songhg@lgdisplay.com,010-5000-0026,A담당,C팀,C담당자
+이지은,leeje,선임,Engineer,leeje@lgdisplay.com,010-5000-0032,A담당,C팀,C담당자
+임윤아,limya,선임,Engineer,limya@lgdisplay.com,010-5000-0031,A담당,C팀,C담당자
+한효주,hanhj,선임,Engineer,hanhj@lgdisplay.com,010-5000-0028,A담당,C팀,C담당자
+김혜수,kimhs,책임,Part Leader,kimhs@lgdisplay.com,010-5000-0025,A담당,C팀,C전문가
+전지현,junjh,책임,Part Leader,junjh@lgdisplay.com,010-5000-0029,A담당,C팀,C전문가
+배수지,baesj,팀장,팀장,baesj@lgdisplay.com,010-5000-0024,A담당,C팀,C팀
+세종대왕,sejdw,담당,담당,sejdw@lgdisplay.com,010-5000-0003,B담당,B담당,B담당
+김연경,kimyk,선임,Engineer,kimyk@lgdisplay.com,010-5000-0039,B담당,D팀,D담당자
+류현진,ryuhj,선임,Engineer,ryuhj@lgdisplay.com,010-5000-0035,B담당,D팀,D담당자
+박찬호,parkch,선임,Engineer,parkch@lgdisplay.com,010-5000-0037,B담당,D팀,D담당자
+선동열,sundy,선임,Engineer,sundy@lgdisplay.com,010-5000-0040,B담당,D팀,D담당자
+이강인,leeki,선임,Engineer,leeki@lgdisplay.com,010-5000-0036,B담당,D팀,D담당자
+이종범,leejb,선임,Engineer,leejb@lgdisplay.com,010-5000-0041,B담당,D팀,D담당자
+김연아,kimya,책임,Part Leader,kimya@lgdisplay.com,010-5000-0038,B담당,D팀,D전문가
+박지성,parkjs,책임,Part Leader,parkjs@lgdisplay.com,010-5000-0034,B담당,D팀,D전문가
+손흥민,sonhm,팀장,팀장,sonhm@lgdisplay.com,010-5000-0033,B담당,D팀,D팀
+김호중,kimhj,선임,Engineer,kimhj@lgdisplay.com,010-5000-0046,B담당,E팀,E담당자
+박군,parkg,선임,Engineer,parkg@lgdisplay.com,010-5000-0048,B담당,E팀,E담당자
+송가인,songgi,선임,Engineer,songgi@lgdisplay.com,010-5000-0049,B담당,E팀,E담당자
+장민호,jangmh,선임,Engineer,jangmh@lgdisplay.com,010-5000-0044,B담당,E팀,E담당자
+정동원,jungdw,선임,Engineer,jungdw@lgdisplay.com,010-5000-0045,B담당,E팀,E담당자
+홍자,hongj,선임,Engineer,hongj@lgdisplay.com,010-5000-0050,B담당,E팀,E담당자
+영탁,youngt,책임,Part Leader,youngt@lgdisplay.com,010-5000-0047,B담당,E팀,E전문가
+이찬원,leecw,책임,Part Leader,leecw@lgdisplay.com,010-5000-0043,B담당,E팀,E전문가
+임영웅,limyw,팀장,팀장,limyw@lgdisplay.com,010-5000-0042,B담당,E팀,E팀
+김수현,kimsh,선임,Engineer,kimsh@lgdisplay.com,010-5000-0053,B담당,F팀,F담당자
+남주혁,namjh,선임,Engineer,namjh@lgdisplay.com,010-5000-0055,B담당,F팀,F담당자
+박서준,parksj,선임,Engineer,parksj@lgdisplay.com,010-5000-0058,B담당,F팀,F담당자
+서강준,seokj,선임,Engineer,seokj@lgdisplay.com,010-5000-0057,B담당,F팀,F담당자
+이종석,leejs,선임,Engineer,leejs@lgdisplay.com,010-5000-0054,B담당,F팀,F담당자
+정해인,junghi,선임,Engineer,junghi@lgdisplay.com,010-5000-0059,B담당,F팀,F담당자
+박보검,parkbg,책임,Part Leader,parkbg@lgdisplay.com,010-5000-0052,B담당,F팀,F전문가
+송중기,songjk,책임,Part Leader,songjk@lgdisplay.com,010-5000-0056,B담당,F팀,F전문가
+차은우,chaew,팀장,팀장,chaew@lgdisplay.com,010-5000-0051,B담당,F팀,F팀
+홍길동,honggd,전무,CSEO,honggd@lgdisplay.com,010-1234-5678,CSEO,CSEO,CSEO
+왕조연,wangjy,책임,Engineer,wangjy@lgdisplay.com,010-1763-6988,CSEO직속,CSEO기획팀,기획
+장국영,jangky,책임,Engineer,jangky@lgdisplay.com,010-1763-5418,CSEO직속,CSEO기획팀,기획
+주윤발,jooyb,책임,Part Leader,jooyb@lgdisplay.com,010-1763-5678,CSEO직속,CSEO기획팀,기획
+장발장,jangbj,팀장,팀장,jangbj@lgdisplay.com,010-1764-5678,CSEO직속,CSEO기획팀,기획
+김구,kimg,담당,담당,kimg@lgdisplay.com,010-5000-0004,C담당,C담당,C담당
+김만중,kimmj,선임,Engineer,kimmj@lgdisplay.com,010-5000-0063,C담당,G팀,G담당자
+김정희,kimjh,선임,Engineer,kimjh@lgdisplay.com,010-5000-0066,C담당,G팀,G담당자
+박지원,parkjw,선임,Engineer,parkjw@lgdisplay.com,010-5000-0064,C담당,G팀,G담당자
+유성룡,yoosr,선임,Engineer,yoosr@lgdisplay.com,010-5000-0068,C담당,G팀,G담당자
+정도전,jungdj,선임,Engineer,jungdj@lgdisplay.com,010-5000-0067,C담당,G팀,G담당자
+허난설헌,huhnsh,선임,Engineer,huhnsh@lgdisplay.com,010-5000-0062,C담당,G팀,G담당자
+신사임당,shinsid,책임,Part Leader,shinsid@lgdisplay.com,010-5000-0065,C담당,G팀,G전문가
+이이,leei,책임,Part Leader,leei@lgdisplay.com,010-5000-0061,C담당,G팀,G전문가
+이황,leeh,팀장,팀장,leeh@lgdisplay.com,010-5000-0060,C담당,G팀,G팀
+강대성,kangds,선임,Engineer,kangds@lgdisplay.com,010-5000-0072,C담당,H팀,H담당자
+김지원,kimjw,선임,Engineer,kimjw@lgdisplay.com,010-5000-0075,C담당,H팀,H담당자
+김한빈,kimhb,선임,Engineer,kimhb@lgdisplay.com,010-5000-0076,C담당,H팀,H담당자
+송민호,songmh,선임,Engineer,songmh@lgdisplay.com,010-5000-0077,C담당,H팀,H담당자
+이승현,leesh,선임,Engineer,leesh@lgdisplay.com,010-5000-0073,C담당,H팀,H담당자
+최승현,choish,선임,Engineer,choish@lgdisplay.com,010-5000-0071,C담당,H팀,H담당자
+권지용,kwonjy,책임,Part Leader,kwonjy@lgdisplay.com,010-5000-0070,C담당,H팀,H전문가
+동영배,dongyb,책임,Part Leader,dongyb@lgdisplay.com,010-5000-0074,C담당,H팀,H전문가
+싸이,psyi,팀장,팀장,psyi@lgdisplay.com,010-5000-0069,C담당,H팀,H팀
+박지한,parkjh,선임,Engineer,parkjh@lgdisplay.com,010-5000-0080,C담당,I팀,I담당자
+송지선,songjs,선임,Engineer,songjs@lgdisplay.com,010-5000-0085,C담당,I팀,I담당자
+윤지후,yoonjh,선임,Engineer,yoonjh@lgdisplay.com,010-5000-0084,C담당,I팀,I담당자
+정서아,jungsa,선임,Engineer,jungsa@lgdisplay.com,010-5000-0082,C담당,I팀,I담당자
+한민석,hanms,선임,Engineer,hanms@lgdisplay.com,010-5000-0081,C담당,I팀,I담당자
+한준우,hanjw,선임,Engineer,hanjw@lgdisplay.com,010-5000-0086,C담당,I팀,I담당자
+이진아,leeja,책임,Part Leader,leeja@lgdisplay.com,010-5000-0079,C담당,I팀,I전문가
+최윤서,choiys,책임,Part Leader,choiys@lgdisplay.com,010-5000-0083,C담당,I팀,I전문가
+김도형,kimdh,팀장,팀장,kimdh@lgdisplay.com,010-5000-0078,C담당,I팀,I팀
+안중근,anjg,담당,담당,anjg@lgdisplay.com,010-5000-0005,D담당,D담당,D담당
+견훤,gyeonh,선임,Engineer,gyeonh@lgdisplay.com,010-5000-0094,D담당,J팀,J담당자
+궁예,gunge,선임,Engineer,gunge@lgdisplay.com,010-5000-0093,D담당,J팀,J담당자
+김알지,kimaj,선임,Engineer,kimaj@lgdisplay.com,010-5000-0090,D담당,J팀,J담당자
+박혁거세,parkhgs,선임,Engineer,parkhgs@lgdisplay.com,010-5000-0089,D담당,J팀,J담당자
+수로왕,srw,선임,Engineer,srw@lgdisplay.com,010-5000-0091,D담당,J팀,J담당자
+이사부,leesb,선임,Engineer,leesb@lgdisplay.com,010-5000-0095,D담당,J팀,J담당자
+대조영,daejy,책임,Part Leader,daejy@lgdisplay.com,010-5000-0088,D담당,J팀,J전문가
+온조,onj,책임,Part Leader,onj@lgdisplay.com,010-5000-0092,D담당,J팀,J전문가
+왕건,wangg,팀장,팀장,wangg@lgdisplay.com,010-5000-0087,D담당,J팀,J팀
+김지운,kimjw2,선임,Engineer,kimjw2@lgdisplay.com,010-5001-0104,D담당,K팀,K담당자
+류승완,ryusw,선임,Engineer,ryusw@lgdisplay.com,010-5001-0103,D담당,K팀,K담당자
+이창동,leecd,선임,Engineer,leecd@lgdisplay.com,010-5000-0099,D담당,K팀,K담당자
+최동훈,choidh,선임,Engineer,choidh@lgdisplay.com,010-5001-0102,D담당,K팀,K담당자
+허진호,huhjh,선임,Engineer,huhjh@lgdisplay.com,010-5001-0100,D담당,K팀,K담당자
+홍상수,hongss,선임,Engineer,hongss@lgdisplay.com,010-5000-0098,D담당,K팀,K담당자
+김기덕,kimkd,책임,Part Leader,kimkd@lgdisplay.com,010-5001-0101,D담당,K팀,K전문가
+봉준호,bongjh,책임,Part Leader,bongjh@lgdisplay.com,010-5000-0097,D담당,K팀,K전문가
+박찬욱,parkcw,팀장,팀장,parkcw@lgdisplay.com,010-5000-0096,D담당,K팀,K팀
+신영옥,shinyo,선임,Engineer,shinyo@lgdisplay.com,010-5001-0108,D담당,L팀,L담당자
+양인모,yangim,선임,Engineer,yangim@lgdisplay.com,010-5001-0113,D담당,L팀,L담당자
+임윤찬,limyc,선임,Engineer,limyc@lgdisplay.com,010-5001-0111,D담당,L팀,L담당자
+장영주,jangyj,선임,Engineer,jangyj@lgdisplay.com,010-5001-0107,D담당,L팀,L담당자
+조성진,chosj,선임,Engineer,chosj@lgdisplay.com,010-5001-0112,D담당,L팀,L담당자
+홍혜경,honghk,선임,Engineer,honghk@lgdisplay.com,010-5001-0109,D담당,L팀,L담당자
+백건우,baekgw,책임,Part Leader,baekgw@lgdisplay.com,010-5001-0110,D담당,L팀,L전문가
+정명훈,jungmh,책임,Part Leader,jungmh@lgdisplay.com,010-5001-0106,D담당,L팀,L전문가
+조수미,chosm,팀장,팀장,chosm@lgdisplay.com,010-5001-0105,D담당,L팀,L팀
+견자단,gyeonjd,선임,Engineer,gyeonjd@lgdisplay.com,010-5001-0117,D담당,M팀,M담당자
+원표,wonp,선임,Engineer,wonp@lgdisplay.com,010-5001-0116,D담당,M팀,M담당자
+유덕화,yoodh,선임,Engineer,yoodh@lgdisplay.com,010-5001-0122,D담당,M팀,M담당자
+이연걸,leeyg,선임,Engineer,leeyg@lgdisplay.com,010-5001-0118,D담당,M팀,M담당자
+장국영,janggy,선임,Engineer,janggy@lgdisplay.com,010-5001-0121,D담당,M팀,M담당자
+주윤발,juyb,선임,Engineer,juyb@lgdisplay.com,010-5001-0120,D담당,M팀,M담당자
+성룡,sungr,책임,Part Leader,sungr@lgdisplay.com,010-5001-0115,D담당,M팀,M전문가
+홍금보,honggb,책임,Part Leader,honggb@lgdisplay.com,010-5001-0119,D담당,M팀,M전문가
+이소룡,leesr,팀장,팀장,leesr@lgdisplay.com,010-5001-0114,D담당,M팀,M팀

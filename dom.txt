@@ -1,0 +1,1721 @@
+<!DOCTYPE html>
+<html lang="ko"><head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CSEO 데이터 및 에너지 통합 관리 시스템</title>
+    <meta name="description" content="CSEO 조직 데이터 관리 및 실시간 에너지 모니터링 시스템">
+    
+    <!-- Google Fonts: Outfit & Noto Sans KR for Premium Typography -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700;900&amp;family=Outfit:wght@300;400;500;600;700;800;900&amp;display=swap" rel="stylesheet">
+    
+    <!-- Lucide Icons for high-fidelity vector icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    
+    <!-- Chart.js for premium analytics charts -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+    <!-- Beautiful light background glowing ambient mesh spheres -->
+    <div class="ambient-mesh-glow">
+        <div class="mesh-sphere mesh-purple"></div>
+        <div class="mesh-sphere mesh-emerald"></div>
+        <div class="mesh-sphere mesh-blue"></div>
+    </div>
+
+    <!-- 1. Apple-Style Welcome Screen (Intro) -->
+    <section id="welcome-screen" class="screen active" aria-label="환영 화면">
+        <!-- Giant faint background watermark for depth effect -->
+        <div class="welcome-bg-watermark">CSEO</div>
+        
+        <div class="welcome-container">
+            <h1 class="welcome-text-container">
+                <span id="welcome-text" class="fade-text show">안녕하세요!</span>
+            </h1>
+            <p class="welcome-instruction">화면을 아무 곳이나 누르면 시작합니다</p>
+        </div>
+    </section>
+
+    <!-- 2. Multi-Portal Choice Screen -->
+    <section id="portal-screen" class="screen" aria-label="시스템 포털 선택">
+        <div class="portal-container">
+            <div class="portal-cards-grid">
+                <!-- CSEO Card (Top Left) - Simplified 3D Bevel Layout -->
+                <button type="button" class="portal-card manage-card" id="btn-go-manage" aria-label="CSEO 시스템 접속">
+                    <span class="portal-card-text text-group">CSEO</span>
+                </button>
+
+                <!-- AX Card (Top Right) - Simplified 3D Bevel Layout -->
+                <button type="button" class="portal-card ax-card" id="btn-go-ax" aria-label="AX 시스템 접속">
+                    <span class="portal-card-text text-ax">AX</span>
+                </button>
+
+                <!-- Safety Card (Bottom Left) - Simplified 3D Bevel Layout -->
+                <button type="button" class="portal-card safety-card" id="btn-go-safety" aria-label="Safety 시스템 접속">
+                    <span class="portal-card-text text-safety">Safety</span>
+                </button>
+
+                <!-- Energy Card (Bottom Right) - Simplified 3D Bevel Layout -->
+                <button type="button" class="portal-card energy-card" id="btn-go-energy" aria-label="Energy 시스템 접속">
+                    <span class="portal-card-text text-energy">Energy</span>
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- 3. Manage Dashboard (Left Sidebar Layout) -->
+    <section id="manage-screen" class="screen" aria-label="조직 및 데이터 관리 시스템">
+        <div class="dashboard-layout">
+            <!-- Left Sidebar Navigation -->
+            <aside class="sidebar">
+                <div class="sidebar-top">
+                    <button type="button" class="sidebar-logo" id="logo-btn-manage" aria-label="포털 홈으로 이동">
+                        <div class="logo-mark"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="shield-check" aria-hidden="true" class="lucide lucide-shield-check"><path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"></path><path d="m9 12 2 2 4-4"></path></svg></div>
+                        <span class="logo-text">CSEO <span>Organization</span></span>
+                    </button>
+                    
+                    <!-- Sidebar Navigation Buttons -->
+                    <nav class="sidebar-menu">
+                        <button type="button" class="sidebar-btn active" data-target="manage-org" aria-label="조직 구성도 보기">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="network" aria-hidden="true" class="lucide lucide-network"><rect x="16" y="16" width="6" height="6" rx="1"></rect><rect x="2" y="16" width="6" height="6" rx="1"></rect><rect x="9" y="2" width="6" height="6" rx="1"></rect><path d="M5 16v-3a1 1 0 0 1 1-1h12a1 1 0 0 1 1 1v3"></path><path d="M12 12V8"></path></svg>
+                            <span>조직 구성도</span>
+                        </button>
+                        <button type="button" class="sidebar-btn" data-target="manage-tasks" aria-label="실시간 업무 현황 보기">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="check-square" aria-hidden="true" class="lucide lucide-check-square"><path d="M21 10.656V19a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h12.344"></path><path d="m9 11 3 3L22 4"></path></svg>
+                            <span>실시간 업무 현황</span>
+                        </button>
+                        <button type="button" class="sidebar-btn" data-target="manage-analytics" aria-label="데이터 축적 트렌드 보기">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="bar-chart-3" aria-hidden="true" class="lucide lucide-bar-chart-3"><path d="M3 3v16a2 2 0 0 0 2 2h16"></path><path d="M18 17V9"></path><path d="M13 17V5"></path><path d="M8 17v-3"></path></svg>
+                            <span>데이터 통계 분석</span>
+                        </button>
+                        <button type="button" class="sidebar-btn" data-target="manage-ax" aria-label="AX 추진 현황 보기">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="sparkles" aria-hidden="true" class="lucide lucide-sparkles"><path d="M11.017 2.814a1 1 0 0 1 1.966 0l1.051 5.558a2 2 0 0 0 1.594 1.594l5.558 1.051a1 1 0 0 1 0 1.966l-5.558 1.051a2 2 0 0 0-1.594 1.594l-1.051 5.558a1 1 0 0 1-1.966 0l-1.051-5.558a2 2 0 0 0-1.594-1.594l-5.558-1.051a1 1 0 0 1 0-1.966l5.558-1.051a2 2 0 0 0 1.594-1.594z"></path><path d="M20 2v4"></path><path d="M22 4h-4"></path><circle cx="4" cy="20" r="2"></circle></svg>
+                            <span>AX 추진 현황</span>
+                        </button>
+                    </nav>
+                </div>
+                
+                <div class="sidebar-bottom">
+                    <div class="sidebar-status">
+                        <span class="pulse-dot"></span>
+                        <span class="status-lbl">System Active</span>
+                    </div>
+                </div>
+            </aside>
+
+            <!-- Right Main Content Area -->
+            <main class="main-content">
+                <!-- Top Minimal Header Bar -->
+                <header class="main-header">
+                    <div class="header-breadcrumb">
+                        <span class="parent-crumb">CSEO Hub</span>
+                        <span class="crumb-separator"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="chevron-right" aria-hidden="true" class="lucide lucide-chevron-right"><path d="m9 18 6-6-6-6"></path></svg></span>
+                        <span class="child-crumb" id="manage-breadcrumb-text">조직 구성도</span>
+                    </div>
+                    <div class="summary-indicators">
+                        <div class="indicator-pill"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="users" aria-hidden="true" class="lucide lucide-users"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"></path><path d="M16 3.128a4 4 0 0 1 0 7.744"></path><path d="M22 21v-2a4 4 0 0 0-3-3.87"></path><circle cx="9" cy="7" r="4"></circle></svg> 총원 48명</div>
+                        <div class="indicator-pill"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="database" aria-hidden="true" class="lucide lucide-database"><ellipse cx="12" cy="5" rx="9" ry="3"></ellipse><path d="M3 5V19A9 3 0 0 0 21 19V5"></path><path d="M3 12A9 3 0 0 0 21 12"></path></svg> 1.4 TB 관리</div>
+                    </div>
+                </header>
+
+                <!-- Sub-view Panels (Toggled dynamically by Sidebar buttons) -->
+                <div class="sub-view-container">
+                    
+                    <!-- Sub-view 1: Organization Structure (Default) -->
+                    <div id="manage-org" class="sub-view active">
+                        <div class="glass-card full-height-card">
+                            <div class="card-header">
+                                <div class="card-header-title">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="network" aria-hidden="true" class="lucide lucide-network header-icon purple-text"><rect x="16" y="16" width="6" height="6" rx="1"></rect><rect x="2" y="16" width="6" height="6" rx="1"></rect><rect x="9" y="2" width="6" height="6" rx="1"></rect><path d="M5 16v-3a1 1 0 0 1 1-1h12a1 1 0 0 1 1 1v3"></path><path d="M12 12V8"></path></svg>
+                                    <div>
+                                        <h3>조직 계층 구성도</h3>
+                                        <p>클릭하여 각 부서의 핵심 책임자, 미션 및 구성원을 실시간으로 필터링하세요.</p>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="org-tree-wrapper">
+                                <!-- CEO Node -->
+                                <div class="org-node org-node-ceo" id="node-ceo">
+                                    <div class="node-avatar"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="user" aria-hidden="true" class="lucide lucide-user"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg></div>
+                                    <div class="node-details">
+                                        <div class="node-role">대표이사 (CEO)</div>
+                                        <div class="node-name">김태영 대표</div>
+                                    </div>
+                                </div>
+
+                                <div class="org-tree-line-vertical"></div>
+
+                                <div class="org-executive-level">
+                                    <div class="org-tree-line-horizontal"></div>
+                                    <div class="org-departments-grid">
+                                        <!-- Dept 1: Planning -->
+                                        <div class="org-node dept-node" id="node-planning">
+                                            <div class="node-header-bar color-planning"></div>
+                                            <div class="node-info">
+                                                <span class="dept-tag tag-planning">기획</span>
+                                                <h4 class="dept-title">기획조정실</h4>
+                                                <span class="dept-manager">이성우 실장 (5명)</span>
+                                            </div>
+                                        </div>
+
+                                        <!-- Dept 2: R&D -->
+                                        <div class="org-node dept-node active" id="node-rd">
+                                            <div class="node-header-bar color-rd"></div>
+                                            <div class="node-info">
+                                                <span class="dept-tag tag-rd">R&amp;D</span>
+                                                <h4 class="dept-title">연구개발본부</h4>
+                                                <span class="dept-manager">최윤서 본부장 (18명)</span>
+                                            </div>
+                                        </div>
+
+                                        <!-- Dept 3: Operations -->
+                                        <div class="org-node dept-node" id="node-ops">
+                                            <div class="node-header-bar color-ops"></div>
+                                            <div class="node-info">
+                                                <span class="dept-tag tag-ops">운영</span>
+                                                <h4 class="dept-title">운영지원부</h4>
+                                                <span class="dept-manager">박지한 부장 (8명)</span>
+                                            </div>
+                                        </div>
+
+                                        <!-- Dept 4: Data Business -->
+                                        <div class="org-node dept-node" id="node-databiz">
+                                            <div class="node-header-bar color-databiz"></div>
+                                            <div class="node-info">
+                                                <span class="dept-tag tag-databiz">데이터본부</span>
+                                                <h4 class="dept-title">데이터사업부</h4>
+                                                <span class="dept-manager">한민석 부장 (15명)</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Interactive Detail Card Inside View -->
+                            <div class="org-detail-panel" id="org-detail-panel">
+                                <div class="detail-header">
+                                    <span class="detail-badge tag-rd" id="detail-dept-badge">R&amp;D</span>
+                                    <h4 class="detail-title" id="detail-dept-title">연구개발본부 주요 R&amp;R</h4>
+                                </div>
+                                <div class="detail-body-grid">
+                                    <div class="detail-meta">
+                                        <div class="meta-item">
+                                            <span class="meta-label">부서 총책임자:</span>
+                                            <span class="meta-val" id="detail-dept-leader">최윤서 본부장 (공학박사)</span>
+                                        </div>
+                                        <div class="meta-item">
+                                            <span class="meta-label">핵심 미션:</span>
+                                            <span class="meta-val" id="detail-dept-mission">인공지능 기반 데이터 수집 분석 시스템 설계 및 친환경 신에너지 계통 연계 인프라 기술 연구개발</span>
+                                        </div>
+                                    </div>
+                                    <div class="detail-members">
+                                        <span class="meta-label">핵심 구성원 및 부서 파트:</span>
+                                        <div class="member-pills-container" id="detail-dept-members">
+                                            <span class="member-pill">이진아 수석 (에너지 AI)</span>
+                                            <span class="member-pill">강도현 책임 (IoT 하드웨어)</span>
+                                            <span class="member-pill">정서율 책임 (빅데이터 파이프라인)</span>
+                                            <span class="member-pill">최유진 선임 (클라우드 플랫폼)</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Sub-view 2: Departmental Tasks (업무현황) -->
+                    <div id="manage-tasks" class="sub-view">
+                        <div class="glass-card full-height-card">
+                            <div class="card-header">
+                                <div class="card-header-title">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="check-square" aria-hidden="true" class="lucide lucide-check-square header-icon blue-text"><path d="M21 10.656V19a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h12.344"></path><path d="m9 11 3 3L22 4"></path></svg>
+                                    <div>
+                                        <h3>부서별 업무 실시간 관리판</h3>
+                                        <p>부서별 최우선 혁신 프로젝트의 리딩 담당자 및 실시간 진행 진척률을 추적합니다.</p>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="tasks-scroll-container">
+                                <div class="tasks-container" id="tasks-list">
+                                    <!-- Task 1 -->
+                                    <div class="task-item">
+                                        <div class="task-meta">
+                                            <span class="task-dept tag-rd">R&amp;D</span>
+                                            <span class="task-status status-ongoing">진행중</span>
+                                        </div>
+                                        <h4 class="task-title">IoT 에너지 실시간 계측 모듈 통신 속도 고도화</h4>
+                                        <div class="task-progress-section">
+                                            <div class="progress-bar-bg">
+                                                <div class="progress-bar-fill progress-rd" style="width: 82%;"></div>
+                                            </div>
+                                            <span class="progress-percentage">82%</span>
+                                        </div>
+                                        <div class="task-footer">
+                                            <span class="task-assignee"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="user-2" aria-hidden="true" class="lucide lucide-user-2"><circle cx="12" cy="8" r="5"></circle><path d="M20 21a8 8 0 0 0-16 0"></path></svg> 담당: 강도현 책임</span>
+                                            <span class="task-deadline">D-5일 (6/3까지)</span>
+                                        </div>
+                                    </div>
+
+                                    <!-- Task 2 -->
+                                    <div class="task-item">
+                                        <div class="task-meta">
+                                            <span class="task-dept tag-databiz">데이터사업부</span>
+                                            <span class="task-status status-ongoing">진행중</span>
+                                        </div>
+                                        <h4 class="task-title">조직 데이터 레이크하우스(Lakehouse) 1차 동기화 구축</h4>
+                                        <div class="task-progress-section">
+                                            <div class="progress-bar-bg">
+                                                <div class="progress-bar-fill progress-databiz" style="width: 45%;"></div>
+                                            </div>
+                                            <span class="progress-percentage">45%</span>
+                                        </div>
+                                        <div class="task-footer">
+                                            <span class="task-assignee"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="user-2" aria-hidden="true" class="lucide lucide-user-2"><circle cx="12" cy="8" r="5"></circle><path d="M20 21a8 8 0 0 0-16 0"></path></svg> 담당: 김선우 선임</span>
+                                            <span class="task-deadline">D-12일 (6/10까지)</span>
+                                        </div>
+                                    </div>
+
+                                    <!-- Task 3 -->
+                                    <div class="task-item">
+                                        <div class="task-meta">
+                                            <span class="task-dept tag-planning">기획조정실</span>
+                                            <span class="task-status status-completed">완료됨</span>
+                                        </div>
+                                        <h4 class="task-title">ESG 지속가능 에너지 경영 등재를 위한 종합 지표 개발</h4>
+                                        <div class="task-progress-section">
+                                            <div class="progress-bar-bg">
+                                                <div class="progress-bar-fill progress-planning" style="width: 100%;"></div>
+                                            </div>
+                                            <span class="progress-percentage">100%</span>
+                                        </div>
+                                        <div class="task-footer">
+                                            <span class="task-assignee"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="user-2" aria-hidden="true" class="lucide lucide-user-2"><circle cx="12" cy="8" r="5"></circle><path d="M20 21a8 8 0 0 0-16 0"></path></svg> 담당: 정서아 수석</span>
+                                            <span class="task-deadline">경영위원회 심사 승인</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Sub-view 3: Analytics (통계데이터) -->
+                    <div id="manage-analytics" class="sub-view">
+                        <div class="glass-card full-height-card">
+                            <div class="card-header">
+                                <div class="card-header-title">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="bar-chart-3" aria-hidden="true" class="lucide lucide-bar-chart-3 header-icon indigo-text"><path d="M3 3v16a2 2 0 0 0 2 2h16"></path><path d="M18 17V9"></path><path d="M13 17V5"></path><path d="M8 17v-3"></path></svg>
+                                    <div>
+                                        <h3>부서별 데이터 축적 및 클라우드 연계 트렌드</h3>
+                                        <p>각 핵심 부서가 로컬 서버 및 클라우드 통합 저장소에 업로드한 데이터 볼륨 수치를 시각화합니다.</p>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="analytics-content-grid">
+                                <div class="chart-wrapper">
+                                    <canvas id="manage-analytics-chart"></canvas>
+                                </div>
+                                
+                                <div class="analytics-summary-widget">
+                                    <h4 class="widget-subtitle">통합 스토리지 상태 요약</h4>
+                                    <div class="storage-progress-item">
+                                        <div class="storage-lbl"><span>로컬 총 용량</span> <strong>1,465 GB</strong></div>
+                                        <div class="progress-bar-bg"><div class="progress-bar-fill" style="width: 68%; background: var(--primary-purple);"></div></div>
+                                    </div>
+                                    <div class="storage-progress-item">
+                                        <div class="storage-lbl"><span>클라우드 연동</span> <strong>2,760 GB</strong></div>
+                                        <div class="progress-bar-bg"><div class="progress-bar-fill" style="width: 48%; background: var(--blue-accent);"></div></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Sub-view 4: 전사 AI 전환 (AX) 추진 현황판 -->
+                    <div id="manage-ax" class="sub-view">
+                        <div class="glass-card full-height-card">
+                            <div class="card-header">
+                                <div class="card-header-title">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="sparkles" aria-hidden="true" class="lucide lucide-sparkles header-icon purple-text"><path d="M11.017 2.814a1 1 0 0 1 1.966 0l1.051 5.558a2 2 0 0 0 1.594 1.594l5.558 1.051a1 1 0 0 1 0 1.966l-5.558 1.051a2 2 0 0 0-1.594 1.594l-1.051 5.558a1 1 0 0 1-1.966 0l-1.051-5.558a2 2 0 0 0-1.594-1.594l-5.558-1.051a1 1 0 0 1 0-1.966l5.558-1.051a2 2 0 0 0 1.594-1.594z"></path><path d="M20 2v4"></path><path d="M22 4h-4"></path><circle cx="4" cy="20" r="2"></circle></svg>
+                                    <div>
+                                        <h3>전사 AI 전환 (AX) 추진 현황판</h3>
+                                        <p>CSEO의 핵심 부서별 인공지능 기술 도입 로드맵과 실시간 AI 연동 진척도를 실시간 스캔합니다.</p>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="tasks-scroll-container">
+                                <div class="tasks-container">
+                                    <!-- AX Task 1 -->
+                                    <div class="task-item">
+                                        <div class="task-meta">
+                                            <span class="task-dept tag-planning">기획 R&amp;R</span>
+                                            <span class="task-status status-ongoing">운영 적용</span>
+                                        </div>
+                                        <h4 class="task-title">사내 업무 효율화를 위한 GenAI 비서 챗봇 'CSEO-GPT' 도입</h4>
+                                        <div class="task-progress-section">
+                                            <div class="progress-bar-bg">
+                                                <div class="progress-bar-fill progress-planning" style="width: 95%;"></div>
+                                            </div>
+                                            <span class="progress-percentage">95%</span>
+                                        </div>
+                                        <div class="task-footer">
+                                            <span class="task-assignee"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="user-2" aria-hidden="true" class="lucide lucide-user-2"><circle cx="12" cy="8" r="5"></circle><path d="M20 21a8 8 0 0 0-16 0"></path></svg> 담당: 정서아 수석 (기획)</span>
+                                            <span class="task-deadline">전 부서 베타 릴리즈 완료 (피드백 반영 중)</span>
+                                        </div>
+                                    </div>
+
+                                    <!-- AX Task 2 -->
+                                    <div class="task-item">
+                                        <div class="task-meta">
+                                            <span class="task-dept tag-rd">R&amp;D R&amp;R</span>
+                                            <span class="task-status status-ongoing">모델 학습</span>
+                                        </div>
+                                        <h4 class="task-title">AI 기반 글로벌 신에너지 특허 및 연구 문서 지능형 요약 엔진 개발</h4>
+                                        <div class="task-progress-section">
+                                            <div class="progress-bar-bg">
+                                                <div class="progress-bar-fill progress-rd" style="width: 72%;"></div>
+                                            </div>
+                                            <span class="progress-percentage">72%</span>
+                                        </div>
+                                        <div class="task-footer">
+                                            <span class="task-assignee"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="user-2" aria-hidden="true" class="lucide lucide-user-2"><circle cx="12" cy="8" r="5"></circle><path d="M20 21a8 8 0 0 0-16 0"></path></svg> 담당: 이진아 수석 (에너지 AI)</span>
+                                            <span class="task-deadline">LLM 파인튜닝 테스트 가동 및 정밀도 검증 (D-10)</span>
+                                        </div>
+                                    </div>
+
+                                    <!-- AX Task 3 -->
+                                    <div class="task-item">
+                                        <div class="task-meta">
+                                            <span class="task-dept tag-databiz">데이터본부 R&amp;R</span>
+                                            <span class="task-status status-ongoing">인프라 구축</span>
+                                        </div>
+                                        <h4 class="task-title">B2B 분산 자원 에너지 수요 예측 지능형 머신러닝 모듈 구축</h4>
+                                        <div class="task-progress-section">
+                                            <div class="progress-bar-bg">
+                                                <div class="progress-bar-fill progress-databiz" style="width: 48%;"></div>
+                                            </div>
+                                            <span class="progress-percentage">48%</span>
+                                        </div>
+                                        <div class="task-footer">
+                                            <span class="task-assignee"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="user-2" aria-hidden="true" class="lucide lucide-user-2"><circle cx="12" cy="8" r="5"></circle><path d="M20 21a8 8 0 0 0-16 0"></path></svg> 담당: 신재희 선임 (솔루션)</span>
+                                            <span class="task-deadline">데이터 피드 정제 및 학습 파이프라인 연계 중 (D-25)</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </main>
+        </div>
+    </section>
+
+    <!-- 4. Energy Dashboard (Left Sidebar Layout) -->
+    <section id="energy-screen" class="screen" aria-label="에너지 모니터링 시스템">
+        <div class="dashboard-layout">
+            <!-- Left Sidebar Navigation -->
+            <aside class="sidebar energy-sidebar">
+                <div class="sidebar-top">
+                    <button type="button" class="sidebar-logo" id="logo-btn-energy" aria-label="포털 홈으로 이동">
+                        <div class="logo-mark mark-green"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="zap" aria-hidden="true" class="lucide lucide-zap"><path d="M4 14a1 1 0 0 1-.78-1.63l9.9-10.2a.5.5 0 0 1 .86.46l-1.92 6.02A1 1 0 0 0 13 10h7a1 1 0 0 1 .78 1.63l-9.9 10.2a.5.5 0 0 1-.86-.46l1.92-6.02A1 1 0 0 0 11 14z"></path></svg></div>
+                        <span class="logo-text">CSEO <span>Energy</span></span>
+                    </button>
+                    
+                    <!-- Sidebar Navigation Buttons: Expanded to 5 customized operations tabs -->
+                    <nav class="sidebar-menu">
+                        <button type="button" class="sidebar-btn active" data-target="energy-overview" aria-label="실시간 전력 분석">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="activity" aria-hidden="true" class="lucide lucide-activity"><path d="M22 12h-2.48a2 2 0 0 0-1.93 1.46l-2.35 8.36a.25.25 0 0 1-.48 0L9.24 2.18a.25.25 0 0 0-.48 0l-2.35 8.36A2 2 0 0 1 4.49 12H2"></path></svg>
+                            <span>실시간 전력 분석</span>
+                        </button>
+                        <button type="button" class="sidebar-btn" data-target="energy-bill-analysis" aria-label="계정별 요금 분석">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="coins" aria-hidden="true" class="lucide lucide-coins"><path d="M13.744 17.736a6 6 0 1 1-7.48-7.48"></path><path d="M15 6h1v4"></path><path d="m6.134 14.768.866-.5 2 3.464"></path><circle cx="16" cy="8" r="6"></circle></svg>
+                            <span>계정별 요금 분석</span>
+                        </button>
+                        <button type="button" class="sidebar-btn" data-target="energy-facility-status" aria-label="설비별 에너지 현황">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="cpu" aria-hidden="true" class="lucide lucide-cpu"><path d="M12 20v2"></path><path d="M12 2v2"></path><path d="M17 20v2"></path><path d="M17 2v2"></path><path d="M2 12h2"></path><path d="M2 17h2"></path><path d="M2 7h2"></path><path d="M20 12h2"></path><path d="M20 17h2"></path><path d="M20 7h2"></path><path d="M7 20v2"></path><path d="M7 2v2"></path><rect x="4" y="4" width="16" height="16" rx="2"></rect><rect x="8" y="8" width="8" height="8" rx="1"></rect></svg>
+                            <span>설비별 에너지 현황</span>
+                        </button>
+                        <button type="button" class="sidebar-btn" data-target="energy-savings-tasks" aria-label="에너지 절감 과제">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="trending-down" aria-hidden="true" class="lucide lucide-trending-down"><path d="M16 17h6v-6"></path><path d="m22 17-8.5-8.5-5 5L2 7"></path></svg>
+                            <span>에너지 절감 과제</span>
+                        </button>
+                        <button type="button" class="sidebar-btn" data-target="energy-eco" aria-label="친환경 기여 지표">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="leaf" aria-hidden="true" class="lucide lucide-leaf"><path d="M11 20A7 7 0 0 1 9.8 6.1C15.5 5 17 4.48 19 2c1 2 2 4.18 2 8 0 5.5-4.78 10-10 10Z"></path><path d="M2 21c0-3 1.85-5.36 5.08-6C9.5 14.52 12 13 13 12"></path></svg>
+                            <span>친환경 기여 지표</span>
+                        </button>
+                    </nav>
+                </div>
+                
+                <div class="sidebar-bottom">
+                    <div class="sidebar-status">
+                        <span class="pulse-dot green"></span>
+                        <span class="status-lbl green-text">Grid Synced</span>
+                    </div>
+                </div>
+            </aside>
+
+            <!-- Right Main Content Area -->
+            <main class="main-content">
+                <!-- Top Minimal Header Bar -->
+                <header class="main-header">
+                    <div class="header-breadcrumb">
+                        <span class="parent-crumb green-text">Energy Operations</span>
+                        <span class="crumb-separator"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="chevron-right" aria-hidden="true" class="lucide lucide-chevron-right"><path d="m9 18 6-6-6-6"></path></svg></span>
+                        <span class="child-crumb" id="energy-breadcrumb-text">실시간 발전 및 소비</span>
+                    </div>
+                    <div class="summary-indicators">
+                        <div class="indicator-pill text-green"><span class="pulse-dot green"></span> ECO PLUS 달성</div>
+                        <div class="indicator-pill"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="trending-up" aria-hidden="true" class="lucide lucide-trending-up"><path d="M16 7h6v6"></path><path d="m22 7-8.5 8.5-5-5L2 17"></path></svg> 요율 안정</div>
+                    </div>
+                </header>
+
+                <!-- Sub-view Panels (Toggled dynamically by Sidebar buttons) -->
+                <div class="sub-view-container">
+                    
+                    <!-- Sub-view 1: 실시간 전력 분석 (Live Grid 2x2 + Time-series Line Chart unified layout) -->
+                    <div id="energy-overview" class="sub-view active">
+                        <div class="energy-live-unified-layout">
+                            <div class="energy-live-grid-2x2 compact-grid">
+                                <!-- Card 1: Solar Gen -->
+                                <div class="energy-widget-card solar-widget compact">
+                                    <div class="widget-head">
+                                        <div class="widget-title">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="sun" aria-hidden="true" class="lucide lucide-sun icon-solar"><circle cx="12" cy="12" r="4"></circle><path d="M12 2v2"></path><path d="M12 20v2"></path><path d="m4.93 4.93 1.41 1.41"></path><path d="m17.66 17.66 1.41 1.41"></path><path d="M2 12h2"></path><path d="M20 12h2"></path><path d="m6.34 17.66-1.41 1.41"></path><path d="m19.07 4.93-1.41 1.41"></path></svg>
+                                            <div>
+                                                <h4>태양광 발전 (Solar)</h4>
+                                                <span class="widget-subtitle">자가 친환경 발전량</span>
+                                            </div>
+                                        </div>
+                                        <span class="live-blink-tag solar">LIVE</span>
+                                    </div>
+                                    <div class="widget-body">
+                                        <div class="widget-numeric">
+                                            <span class="value-num" id="live-solar-val">342.8</span>
+                                            <span class="value-unit">kW</span>
+                                        </div>
+                                        <div class="widget-bar-track">
+                                            <div class="widget-bar-fill fill-solar" id="live-solar-bar" style="width: 72%;"></div>
+                                        </div>
+                                        <div class="widget-footer-info">
+                                            <span>누적: <strong>1.82 MWh</strong></span>
+                                            <span class="pct-val positive">+8.4% 전일비</span>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Card 2: Wind Gen -->
+                                <div class="energy-widget-card wind-widget compact">
+                                    <div class="widget-head">
+                                        <div class="widget-title">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="wind" aria-hidden="true" class="lucide lucide-wind icon-wind animate-wind-icon"><path d="M12.8 19.6A2 2 0 1 0 14 16H2"></path><path d="M17.5 8a2.5 2.5 0 1 1 2 4H2"></path><path d="M9.8 4.4A2 2 0 1 1 11 8H2"></path></svg>
+                                            <div>
+                                                <h4>풍력 발전 (Wind)</h4>
+                                                <span class="widget-subtitle">대관령 친환경 발전</span>
+                                            </div>
+                                        </div>
+                                        <span class="live-blink-tag wind">LIVE</span>
+                                    </div>
+                                    <div class="widget-body">
+                                        <div class="widget-numeric">
+                                            <span class="value-num" id="live-wind-val">124.5</span>
+                                            <span class="value-unit">kW</span>
+                                        </div>
+                                        <div class="widget-bar-track">
+                                            <div class="widget-bar-fill fill-wind" id="live-wind-bar" style="width: 41%;"></div>
+                                        </div>
+                                        <div class="widget-footer-info">
+                                            <span>풍속: <strong>6.8 m/s</strong></span>
+                                            <span class="pct-val negative">-2.1% 전일비</span>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Card 3: Storage ESS -->
+                                <div class="energy-widget-card ess-widget compact">
+                                    <div class="widget-head">
+                                        <div class="widget-title">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="battery-charging" aria-hidden="true" class="lucide lucide-battery-charging icon-ess"><path d="m11 7-3 5h4l-3 5"></path><path d="M14.856 6H16a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2h-2.935"></path><path d="M22 14v-4"></path><path d="M5.14 18H4a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h2.936"></path></svg>
+                                            <div>
+                                                <h4>ESS 배터리 뱅크</h4>
+                                                <span class="widget-subtitle">실시간 충·방전 모니터</span>
+                                            </div>
+                                        </div>
+                                        <span class="live-blink-tag ess">충전중</span>
+                                    </div>
+                                    <div class="widget-body">
+                                        <div class="widget-numeric">
+                                            <span class="value-num" id="live-ess-val">84.0</span>
+                                            <span class="value-unit">%</span>
+                                        </div>
+                                        <div class="widget-bar-track">
+                                            <div class="widget-bar-fill fill-ess" id="live-ess-bar" style="width: 84%;"></div>
+                                        </div>
+                                        <div class="widget-footer-info">
+                                            <span>잔여: <strong>14.5시간</strong></span>
+                                            <span class="pct-val positive">840 kWh 보유</span>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Card 4: Load Grid -->
+                                <div class="energy-widget-card grid-widget compact">
+                                    <div class="widget-head">
+                                        <div class="widget-title">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="building-2" aria-hidden="true" class="lucide lucide-building-2 icon-grid"><path d="M10 12h4"></path><path d="M10 8h4"></path><path d="M14 21v-3a2 2 0 0 0-4 0v3"></path><path d="M6 10H4a2 2 0 0 0-2 2v7a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2h-2"></path><path d="M6 21V5a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v16"></path></svg>
+                                            <div>
+                                                <h4>빌딩 총 소비전력</h4>
+                                                <span class="widget-subtitle">사옥 실시간 소비 부하</span>
+                                            </div>
+                                        </div>
+                                        <span class="live-blink-tag grid">계통연계</span>
+                                    </div>
+                                    <div class="widget-body">
+                                        <div class="widget-numeric">
+                                            <span class="value-num" id="live-load-val">412.3</span>
+                                            <span class="value-unit">kW</span>
+                                        </div>
+                                        <div class="widget-bar-track">
+                                            <div class="widget-bar-fill fill-grid" id="live-load-bar" style="width: 63%;"></div>
+                                        </div>
+                                        <div class="widget-footer-info">
+                                            <span>자급률: <strong>113.3%</strong></span>
+                                            <span class="pct-val green-text">에너지 흑자!</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- SCADA Real-time Database Comparison Grid (Bar Chart + Table) -->
+                            <div class="glass-card scada-db-analytics-card" style="margin-top: 0.5rem; padding: 1.25rem; flex-shrink: 0;">
+                                <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 0.75rem; border-bottom: 1px solid var(--border-color); padding-bottom: 0.5rem;">
+                                    <h4 style="font-size: 0.95rem; font-weight: 800; display: flex; align-items: center; gap: 0.5rem; color: var(--text-primary);">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="database" aria-hidden="true" style="color: var(--primary-green); width: 18px; height: 18px;" class="lucide lucide-database"><ellipse cx="12" cy="5" rx="9" ry="3"></ellipse><path d="M3 5V19A9 3 0 0 0 21 19V5"></path><path d="M3 12A9 3 0 0 0 21 12"></path></svg>
+                                        SCADA 실시간 공장 부하 비교 (DB 연동)
+                                    </h4>
+                                    <span id="scada-latest-time-badge" style="font-size: 0.72rem; font-weight: 700; color: var(--primary-green); background: var(--primary-green-light); padding: 0.2rem 0.55rem; border-radius: 6px;">
+                                        최근 수집: -
+                                    </span>
+                                </div>
+                                <div style="display: grid; grid-template-columns: 1fr 1.25fr; gap: 1.5rem; height: 200px;">
+                                    <!-- Left: Bar Chart Comparing P7, P8, P9 -->
+                                    <div class="chart-wrapper" style="position: relative; height: 100%; width: 100%;">
+                                        <canvas id="factory-compare-chart"></canvas>
+                                    </div>
+                                    <!-- Right: Line Chart Showing 24-Hour Trend for P7, P8, P9 -->
+                                    <div class="chart-wrapper" style="position: relative; height: 100%; width: 100%;">
+                                        <canvas id="factory-trend-chart"></canvas>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Bottom Time-series power supply chart integrated under live cards -->
+                            <div class="glass-card energy-integrated-chart-card">
+                                <div class="chart-wrapper energy-chart-wrapper-mini">
+                                    <canvas id="energy-trend-chart"></canvas>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Sub-view 2: 계정별 요금 분석 (신규 요금 도넛 차트 및 예상 청구액 시뮬레이터) -->
+                    <div id="energy-bill-analysis" class="sub-view">
+                        <div class="glass-card full-height-card">
+                            <div class="card-header">
+                                <div class="card-header-title">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="coins" aria-hidden="true" class="lucide lucide-coins header-icon green-text"><path d="M13.744 17.736a6 6 0 1 1-7.48-7.48"></path><path d="M15 6h1v4"></path><path d="m6.134 14.768.866-.5 2 3.464"></path><circle cx="16" cy="8" r="6"></circle></svg>
+                                    <div>
+                                        <h3>계정 및 용도별 전기요금 실시간 추세</h3>
+                                        <p>사옥 내 주요 핵심 전력 소비처별 요금 부담 비중과 한전 요금(을) 기준 당월 예상 요금을 정산합니다.</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="bill-analysis-grid">
+                                <!-- Left Billing Account List -->
+                                <div class="bill-accounts-list">
+                                    <div class="bill-account-item">
+                                        <div class="acct-info">
+                                            <span class="acct-badge acct-planning">공용 설비</span>
+                                            <span class="acct-name">HVAC 및 조명 전력</span>
+                                        </div>
+                                        <div class="acct-val">
+                                            <span class="acct-price" id="bill-price-hvac">1,425,000</span>
+                                            <span class="acct-unit">원</span>
+                                            <span class="pct-val positive">+2.1%</span>
+                                        </div>
+                                    </div>
+                                    <div class="bill-account-item">
+                                        <div class="acct-info">
+                                            <span class="acct-badge acct-rd">연구개발</span>
+                                            <span class="acct-name">실험 장비 및 인프라</span>
+                                        </div>
+                                        <div class="acct-val">
+                                            <span class="acct-price" id="bill-price-rd">1,850,000</span>
+                                            <span class="acct-unit">원</span>
+                                            <span class="pct-val negative">-4.5%</span>
+                                        </div>
+                                    </div>
+                                    <div class="bill-account-item">
+                                        <div class="acct-info">
+                                            <span class="acct-badge acct-databiz">데이터본부</span>
+                                            <span class="acct-name">전산 서버룸 IDC 냉각</span>
+                                        </div>
+                                        <div class="acct-val">
+                                            <span class="acct-price" id="bill-price-data">845,400</span>
+                                            <span class="acct-unit">원</span>
+                                            <span class="pct-val positive">+8.7%</span>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Right billing estimation simulation widget -->
+                                <div class="bill-estimate-widget">
+                                    <div class="estimate-header">
+                                        <h4>당월 실시간 예상 청구 요금</h4>
+                                        <span class="estimate-date">5/29 19시 정산 기준</span>
+                                    </div>
+                                    <div class="estimate-body">
+                                        <div class="estimate-total">
+                                            <span class="lbl">통합 누계 요금</span>
+                                            <div class="price-box">
+                                                <span class="price-val" id="eco-savings-val-billing">4,120,400</span>
+                                                <span class="price-unit">KRW</span>
+                                            </div>
+                                            <span class="desc">한전 고압(을) 전력 기본료 및 사용량 합산 요율 적용</span>
+                                        </div>
+                                        <div class="estimate-progress-bar">
+                                            <div class="bar-lbl"><span>월 목표 예산 (500만원) 대비 달성률</span> <strong>82.4%</strong></div>
+                                            <div class="progress-bar-bg">
+                                                <div class="progress-bar-fill progress-bill-estimate" style="width: 82.4%;"></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Sub-view 3: 설비별 에너지 현황 (신규 4대 설비 감시 그리드 + LED 점멸등) -->
+                    <div id="energy-facility-status" class="sub-view">
+                        <div class="glass-card full-height-card">
+                            <div class="card-header">
+                                <div class="card-header-title">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="cpu" aria-hidden="true" class="lucide lucide-cpu header-icon green-text"><path d="M12 20v2"></path><path d="M12 2v2"></path><path d="M17 20v2"></path><path d="M17 2v2"></path><path d="M2 12h2"></path><path d="M2 17h2"></path><path d="M2 7h2"></path><path d="M20 12h2"></path><path d="M20 17h2"></path><path d="M20 7h2"></path><path d="M7 20v2"></path><path d="M7 2v2"></path><rect x="4" y="4" width="16" height="16" rx="2"></rect><rect x="8" y="8" width="8" height="8" rx="1"></rect></svg>
+                                    <div>
+                                        <h3>주요 대형 전력 소비 설비 실시간 감시</h3>
+                                        <p>사옥 가동 핵심 장치들의 실시간 작동율, 소모 전력량 및 상태 LED를 추적합니다.</p>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="facility-monitoring-grid">
+                                <!-- Machine 1 -->
+                                <div class="facility-card">
+                                    <div class="fac-status-led">
+                                        <span class="led-dot led-active"></span>
+                                        <span class="led-lbl-active">가동중</span>
+                                    </div>
+                                    <h4 class="fac-title">중앙 HVAC 공조 시스템 1호기</h4>
+                                    <div class="fac-meta-grid">
+                                        <div class="fac-meta-item"><span>실시간 부하:</span> <strong>142.5 kW</strong></div>
+                                        <div class="fac-meta-item"><span>기기 효율:</span> <strong>COP 4.2</strong></div>
+                                    </div>
+                                    <div class="fac-load-track">
+                                        <div class="fac-load-bar" style="width: 71%; background: var(--primary-green);"></div>
+                                    </div>
+                                </div>
+
+                                <!-- Machine 2 -->
+                                <div class="facility-card">
+                                    <div class="fac-status-led">
+                                        <span class="led-dot led-active"></span>
+                                        <span class="led-lbl-active">가동중</span>
+                                    </div>
+                                    <h4 class="fac-title">사옥 터보 냉동기 및 빙축열 설비</h4>
+                                    <div class="fac-meta-grid">
+                                        <div class="fac-meta-item"><span>실시간 부하:</span> <strong>185.0 kW</strong></div>
+                                        <div class="fac-meta-item"><span>유량 속도:</span> <strong>3.2 m³/h</strong></div>
+                                    </div>
+                                    <div class="fac-load-track">
+                                        <div class="fac-load-bar" style="width: 82%; background: var(--primary-green);"></div>
+                                    </div>
+                                </div>
+
+                                <!-- Machine 3 -->
+                                <div class="facility-card">
+                                    <div class="fac-status-led">
+                                        <span class="led-dot led-warning"></span>
+                                        <span class="led-lbl-warning">완충대기</span>
+                                    </div>
+                                    <h4 class="fac-title">ESS 리튬 배터리 랙 및 PCS 모듈</h4>
+                                    <div class="fac-meta-grid">
+                                        <div class="fac-meta-item"><span>배터리 용량:</span> <strong>84.0%</strong></div>
+                                        <div class="fac-meta-item"><span>충·방전율:</span> <strong>0.15 C</strong></div>
+                                    </div>
+                                    <div class="fac-load-track">
+                                        <div class="fac-load-bar" style="width: 84%; background: var(--blue-accent);"></div>
+                                    </div>
+                                </div>
+
+                                <!-- Machine 4 -->
+                                <div class="facility-card">
+                                    <div class="fac-status-led">
+                                        <span class="led-dot led-standby"></span>
+                                        <span class="led-lbl-standby">발전대기</span>
+                                    </div>
+                                    <h4 class="fac-title">옥상 친환경 태양광 인버터 (100kW급)</h4>
+                                    <div class="fac-meta-grid">
+                                        <div class="fac-meta-item"><span>일사량:</span> <strong>12 W/m²</strong></div>
+                                        <div class="fac-meta-item"><span>현재 발전:</span> <strong>0 kW (야간)</strong></div>
+                                    </div>
+                                    <div class="fac-load-track">
+                                        <div class="fac-load-bar" style="width: 0%; background: var(--orange-accent);"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Sub-view 4: 에너지 절감 과제 (부서별 절감 이니셔티브 태스크 관리 보드) -->
+                    <div id="energy-savings-tasks" class="sub-view">
+                        <div class="glass-card full-height-card">
+                            <div class="card-header">
+                                <div class="card-header-title">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="trending-down" aria-hidden="true" class="lucide lucide-trending-down header-icon green-text"><path d="M16 17h6v-6"></path><path d="m22 17-8.5-8.5-5 5L2 7"></path></svg>
+                                    <div>
+                                        <h3>사옥 에너지 감축 혁신 프로젝트</h3>
+                                        <p>전사 ESG 비용 절감 활동을 위해 부서별로 주관 중인 행동강령 및 설비 지능 제어 과제를 모니터합니다.</p>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="tasks-scroll-container">
+                                <div class="tasks-container">
+                                    <!-- Task 1 -->
+                                    <div class="task-item">
+                                        <div class="task-meta">
+                                            <span class="task-dept tag-rd">R&amp;D R&amp;R</span>
+                                            <span class="task-status status-ongoing">진행중</span>
+                                        </div>
+                                        <h4 class="task-title">LED 스마트 디밍 조명 밝기 제어 프로토콜 개발</h4>
+                                        <div class="task-progress-section">
+                                            <div class="progress-bar-bg">
+                                                <div class="progress-bar-fill progress-rd" style="width: 92%;"></div>
+                                            </div>
+                                            <span class="progress-percentage">92%</span>
+                                        </div>
+                                        <div class="task-footer">
+                                            <span class="task-assignee"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="user-2" aria-hidden="true" class="lucide lucide-user-2"><circle cx="12" cy="8" r="5"></circle><path d="M20 21a8 8 0 0 0-16 0"></path></svg> 리더: 이진아 수석 (에너지 AI)</span>
+                                            <span class="task-deadline">금주 안정성 최종 테스트 (D-3)</span>
+                                        </div>
+                                    </div>
+
+                                    <!-- Task 2 -->
+                                    <div class="task-item">
+                                        <div class="task-meta">
+                                            <span class="task-dept tag-databiz">데이터사업부</span>
+                                            <span class="task-status status-ongoing">진행중</span>
+                                        </div>
+                                        <h4 class="task-title">전사 퇴근 후 미사용 대기 전력 차단 플러그 자동화 캠페인</h4>
+                                        <div class="task-progress-section">
+                                            <div class="progress-bar-bg">
+                                                <div class="progress-bar-fill progress-databiz" style="width: 70%;"></div>
+                                            </div>
+                                            <span class="progress-percentage">70%</span>
+                                        </div>
+                                        <div class="task-footer">
+                                            <span class="task-assignee"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="user-2" aria-hidden="true" class="lucide lucide-user-2"><circle cx="12" cy="8" r="5"></circle><path d="M20 21a8 8 0 0 0-16 0"></path></svg> 리더: 임하은 책임</span>
+                                            <span class="task-deadline">전 부서 사물 인터넷 스마트탭 배부 (D-7)</span>
+                                        </div>
+                                    </div>
+
+                                    <!-- Task 3 -->
+                                    <div class="task-item">
+                                        <div class="task-meta">
+                                            <span class="task-dept tag-planning">기획조정실</span>
+                                            <span class="task-status status-completed">완료됨</span>
+                                        </div>
+                                        <h4 class="task-title">중앙 HVAC 공조 설비 전력 피크 컷 (Peak Cut) 지능형 알고리즘 도입</h4>
+                                        <div class="task-progress-section">
+                                            <div class="progress-bar-bg">
+                                                <div class="progress-bar-fill progress-planning" style="width: 100%;"></div>
+                                            </div>
+                                            <span class="progress-percentage">100%</span>
+                                        </div>
+                                        <div class="task-footer">
+                                            <span class="task-assignee"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="user-2" aria-hidden="true" class="lucide lucide-user-2"><circle cx="12" cy="8" r="5"></circle><path d="M20 21a8 8 0 0 0-16 0"></path></svg> 리더: 정서아 수석</span>
+                                            <span class="task-deadline">기초 전력 요금 연 14% 절감 효과 검증</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Sub-view 5: 친환경 기여 지표 (이산화탄소 저감, 소나무 식재, 누적 경제 효과) -->
+                    <div id="energy-eco" class="sub-view">
+                        <div class="glass-card full-height-card">
+                            <div class="card-header">
+                                <div class="card-header-title">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="leaf" aria-hidden="true" class="lucide lucide-leaf header-icon green-text"><path d="M11 20A7 7 0 0 1 9.8 6.1C15.5 5 17 4.48 19 2c1 2 2 4.18 2 8 0 5.5-4.78 10-10 10Z"></path><path d="M2 21c0-3 1.85-5.36 5.08-6C9.5 14.52 12 13 13 12"></path></svg>
+                                    <div>
+                                        <h3>탄소 배출 저감 및 누적 경제 성과</h3>
+                                        <p>친환경 자가 발전을 대체 자원으로 활용하여 기여한 누적 이산화탄소 절감량 및 혜택입니다.</p>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="eco-metrics-list">
+                                <!-- Metric 1: Carbon -->
+                                <div class="eco-metric-item">
+                                    <div class="eco-icon-container"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="cloud-lightning" aria-hidden="true" class="lucide lucide-cloud-lightning"><path d="M6 16.326A7 7 0 1 1 15.71 8h1.79a4.5 4.5 0 0 1 .5 8.973"></path><path d="m13 12-3 5h4l-3 5"></path></svg></div>
+                                    <div class="eco-data">
+                                        <span class="eco-label">누적 탄소 저감량</span>
+                                        <div class="eco-value-row">
+                                            <span class="eco-val" id="eco-co2-val">24,845</span>
+                                            <span class="eco-unit">kg CO₂</span>
+                                        </div>
+                                        <p class="eco-desc">석탄 전력 대체로 감축한 이산화탄소량</p>
+                                    </div>
+                                </div>
+
+                                <!-- Metric 2: Trees -->
+                                <div class="eco-metric-item">
+                                    <div class="eco-icon-container tree-bg"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="trees" aria-hidden="true" class="lucide lucide-trees"><path d="M10 10v.2A3 3 0 0 1 8.9 16H5a3 3 0 0 1-1-5.8V10a3 3 0 0 1 6 0Z"></path><path d="M7 16v6"></path><path d="M13 19v3"></path><path d="M12 19h8.3a1 1 0 0 0 .7-1.7L18 14h.3a1 1 0 0 0 .7-1.7L16 9h.2a1 1 0 0 0 .8-1.7L13 3l-1.4 1.5"></path></svg></div>
+                                    <div class="eco-data">
+                                        <span class="eco-label">소나무 식재 기여도</span>
+                                        <div class="eco-value-row">
+                                            <span class="eco-val" id="eco-trees-val">3,764</span>
+                                            <span class="eco-unit">그루</span>
+                                        </div>
+                                        <p class="eco-desc">30년생 소나무 한 달 흡수량 기준으로 환산된 식목 성과</p>
+                                    </div>
+                                </div>
+
+                                <!-- Metric 3: Savings -->
+                                <div class="eco-metric-item">
+                                    <div class="eco-icon-container dollar-bg"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="coins" aria-hidden="true" class="lucide lucide-coins"><path d="M13.744 17.736a6 6 0 1 1-7.48-7.48"></path><path d="M15 6h1v4"></path><path d="m6.134 14.768.866-.5 2 3.464"></path><circle cx="16" cy="8" r="6"></circle></svg></div>
+                                    <div class="eco-data">
+                                        <span class="eco-label">전기 요금 누적 절감액</span>
+                                        <div class="eco-value-row">
+                                            <span class="eco-val" id="eco-savings-val">4,120,400</span>
+                                            <span class="eco-unit">원</span>
+                                        </div>
+                                        <p class="eco-desc">한전 요금 고압(을) 기준 자체 생산 에너지 절감액</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </main>
+        </div>
+    </section>
+
+    <!-- 5. Safety Dashboard (Left Sidebar Layout) -->
+    <section id="safety-screen" class="screen" aria-label="안전 통합 모니터링 시스템">
+        <div class="dashboard-layout">
+            <!-- Left Sidebar Navigation -->
+            <aside class="sidebar safety-sidebar">
+                <div class="sidebar-top">
+                    <button type="button" class="sidebar-logo" id="logo-btn-safety" aria-label="포털 홈으로 이동">
+                        <div class="logo-mark mark-orange defibrillator-logo">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="heart" aria-hidden="true" class="lucide lucide-heart heart-icon"><path d="M2 9.5a5.5 5.5 0 0 1 9.591-3.676.56.56 0 0 0 .818 0A5.49 5.49 0 0 1 22 9.5c0 2.29-1.5 4-3 5.5l-5.492 5.313a2 2 0 0 1-3 .019L5 15c-1.5-1.5-3-3.2-3-5.5"></path></svg>
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="zap" aria-hidden="true" class="lucide lucide-zap zap-icon"><path d="M4 14a1 1 0 0 1-.78-1.63l9.9-10.2a.5.5 0 0 1 .86.46l-1.92 6.02A1 1 0 0 0 13 10h7a1 1 0 0 1 .78 1.63l-9.9 10.2a.5.5 0 0 1-.86-.46l1.92-6.02A1 1 0 0 0 11 14z"></path></svg>
+                        </div>
+                        <span class="logo-text">CSEO <span>Safety</span></span>
+                    </button>
+                    
+                    <!-- Sidebar Navigation Buttons: 4 customized operations tabs -->
+                    <nav class="sidebar-menu">
+                        <button type="button" class="sidebar-btn active" data-target="safety-overview" aria-label="실시간 안전 모니터링">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="shield-check" aria-hidden="true" class="lucide lucide-shield-check"><path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"></path><path d="m9 12 2 2 4-4"></path></svg>
+                            <span>실시간 안전 모니터링</span>
+                        </button>
+                        <button type="button" class="sidebar-btn" data-target="safety-risk-factors" aria-label="설비 위험 요인 감시">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="radio" aria-hidden="true" class="lucide lucide-radio"><path d="M16.247 7.761a6 6 0 0 1 0 8.478"></path><path d="M19.075 4.933a10 10 0 0 1 0 14.134"></path><path d="M4.925 19.067a10 10 0 0 1 0-14.134"></path><path d="M7.753 16.239a6 6 0 0 1 0-8.478"></path><circle cx="12" cy="12" r="2"></circle></svg>
+                            <span>설비 위험 요인 감시</span>
+                        </button>
+                        <button type="button" class="sidebar-btn" data-target="safety-tasks" aria-label="안전 규정 및 캠페인">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="shield-alert" aria-hidden="true" class="lucide lucide-shield-alert"><path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"></path><path d="M12 8v4"></path><path d="M12 16h.01"></path></svg>
+                            <span>안전 규정 및 캠페인</span>
+                        </button>
+                        <button type="button" class="sidebar-btn" data-target="safety-eco-metrics" aria-label="무재해 기여 지표">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="award" aria-hidden="true" class="lucide lucide-award"><path d="m15.477 12.89 1.515 8.526a.5.5 0 0 1-.81.47l-3.58-2.687a1 1 0 0 0-1.197 0l-3.586 2.686a.5.5 0 0 1-.81-.469l1.514-8.526"></path><circle cx="12" cy="8" r="6"></circle></svg>
+                            <span>무재해 기여 지표</span>
+                        </button>
+                    </nav>
+                </div>
+                
+                <div class="sidebar-bottom">
+                    <div class="sidebar-status">
+                        <span class="pulse-dot orange"></span>
+                        <span class="status-lbl orange-text">Safe Operations</span>
+                    </div>
+                </div>
+            </aside>
+
+            <!-- Right Main Content Area -->
+            <main class="main-content">
+                <!-- Top Minimal Header Bar -->
+                <header class="main-header">
+                    <div class="header-breadcrumb">
+                        <span class="parent-crumb orange-text">Safety Operations</span>
+                        <span class="crumb-separator"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="chevron-right" aria-hidden="true" class="lucide lucide-chevron-right"><path d="m9 18 6-6-6-6"></path></svg></span>
+                        <span class="child-crumb" id="safety-breadcrumb-text">실시간 안전 모니터링</span>
+                    </div>
+                    <div class="summary-indicators">
+                        <div class="indicator-pill text-orange"><span class="pulse-dot orange"></span> ZERO ACCIDENT</div>
+                        <div class="indicator-pill"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="alert-triangle" aria-hidden="true" class="lucide lucide-alert-triangle"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3"></path><path d="M12 9v4"></path><path d="M12 17h.01"></path></svg> 위험 경보 무</div>
+                    </div>
+                </header>
+
+                <!-- Sub-view Panels (Toggled dynamically by Sidebar buttons) -->
+                <div class="sub-view-container">
+                    
+                    <!-- Sub-view 1: 실시간 안전 모니터링 (Live Sensors grid + Line Chart) -->
+                    <div id="safety-overview" class="sub-view active">
+                        <div class="energy-live-unified-layout">
+                            <div class="energy-live-grid-2x2 compact-grid">
+                                <!-- Card 1: Safety Score -->
+                                <div class="energy-widget-card safety-widget compact">
+                                    <div class="widget-head">
+                                        <div class="widget-title">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="heart" aria-hidden="true" class="lucide lucide-heart icon-safety-score"><path d="M2 9.5a5.5 5.5 0 0 1 9.591-3.676.56.56 0 0 0 .818 0A5.49 5.49 0 0 1 22 9.5c0 2.29-1.5 4-3 5.5l-5.492 5.313a2 2 0 0 1-3 .019L5 15c-1.5-1.5-3-3.2-3-5.5"></path></svg>
+                                            <div>
+                                                <h4>종합 안전지수 (Index)</h4>
+                                                <span class="widget-subtitle">실시간 사옥 안전 쾌적율</span>
+                                            </div>
+                                        </div>
+                                        <span class="live-blink-tag safety">SECURE</span>
+                                    </div>
+                                    <div class="widget-body">
+                                        <div class="widget-numeric">
+                                            <span class="value-num" id="live-safety-val">98.6</span>
+                                            <span class="value-unit">%</span>
+                                        </div>
+                                        <div class="widget-bar-track">
+                                            <div class="widget-bar-fill fill-safety" id="live-safety-bar" style="width: 98.6%;"></div>
+                                        </div>
+                                        <div class="widget-footer-info">
+                                            <span>등급: <strong>최고 우수</strong></span>
+                                            <span class="pct-val positive">오차 0.2% 안정</span>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Card 2: Oxygen -->
+                                <div class="energy-widget-card oxygen-widget compact">
+                                    <div class="widget-head">
+                                        <div class="widget-title">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="wind" aria-hidden="true" class="lucide lucide-wind icon-oxygen"><path d="M12.8 19.6A2 2 0 1 0 14 16H2"></path><path d="M17.5 8a2.5 2.5 0 1 1 2 4H2"></path><path d="M9.8 4.4A2 2 0 1 1 11 8H2"></path></svg>
+                                            <div>
+                                                <h4>실내 산소 농도 (O₂)</h4>
+                                                <span class="widget-subtitle">사내 대기 환경 산소 센서</span>
+                                            </div>
+                                        </div>
+                                        <span class="live-blink-tag safety">NORMAL</span>
+                                    </div>
+                                    <div class="widget-body">
+                                        <div class="widget-numeric">
+                                            <span class="value-num" id="live-oxygen-val">20.9</span>
+                                            <span class="value-unit">%</span>
+                                        </div>
+                                        <div class="widget-bar-track">
+                                            <div class="widget-bar-fill fill-oxygen" id="live-oxygen-bar" style="width: 83.6%;"></div>
+                                        </div>
+                                        <div class="widget-footer-info">
+                                            <span>적정 기준: <strong>18~21%</strong></span>
+                                            <span class="pct-val positive">적정 수준 유지</span>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Card 3: Gas/CO -->
+                                <div class="energy-widget-card gas-widget compact">
+                                    <div class="widget-head">
+                                        <div class="widget-title">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="activity" aria-hidden="true" class="lucide lucide-activity icon-gas"><path d="M22 12h-2.48a2 2 0 0 0-1.93 1.46l-2.35 8.36a.25.25 0 0 1-.48 0L9.24 2.18a.25.25 0 0 0-.48 0l-2.35 8.36A2 2 0 0 1 4.49 12H2"></path></svg>
+                                            <div>
+                                                <h4>유해가스 감지 (CO)</h4>
+                                                <span class="widget-subtitle">일산화탄소 미세 센서</span>
+                                            </div>
+                                        </div>
+                                        <span class="live-blink-tag safety-secure">SAFE</span>
+                                    </div>
+                                    <div class="widget-body">
+                                        <div class="widget-numeric">
+                                            <span class="value-num" id="live-gas-val">0</span>
+                                            <span class="value-unit">ppm</span>
+                                        </div>
+                                        <div class="widget-bar-track">
+                                            <div class="widget-bar-fill fill-gas" id="live-gas-bar" style="width: 0%;"></div>
+                                        </div>
+                                        <div class="widget-footer-info">
+                                            <span>임계치: <strong>10 ppm</strong></span>
+                                            <span class="pct-val green-text">감지된 위협 없음</span>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Card 4: Occupancy -->
+                                <div class="energy-widget-card occupant-widget compact">
+                                    <div class="widget-head">
+                                        <div class="widget-title">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="users" aria-hidden="true" class="lucide lucide-users icon-occupant"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"></path><path d="M16 3.128a4 4 0 0 1 0 7.744"></path><path d="M22 21v-2a4 4 0 0 0-3-3.87"></path><circle cx="9" cy="7" r="4"></circle></svg>
+                                            <div>
+                                                <h4>사옥 내 상주 인원</h4>
+                                                <span class="widget-subtitle">스마트 출입문 실시간 체크</span>
+                                            </div>
+                                        </div>
+                                        <span class="live-blink-tag safety">SYNCED</span>
+                                    </div>
+                                    <div class="widget-body">
+                                        <div class="widget-numeric">
+                                            <span class="value-num" id="live-occupant-val">48</span>
+                                            <span class="value-unit">명</span>
+                                        </div>
+                                        <div class="widget-bar-track">
+                                            <div class="widget-bar-fill fill-occupant" id="live-occupant-bar" style="width: 68%;"></div>
+                                        </div>
+                                        <div class="widget-footer-info">
+                                            <span>재실률: <strong>68%</strong></span>
+                                            <span class="pct-val green-text">비상 대피 완벽 통제</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- Bottom Time-series safety index chart -->
+                            <div class="glass-card energy-integrated-chart-card">
+                                <div class="chart-wrapper energy-chart-wrapper-mini">
+                                    <canvas id="safety-trend-chart"></canvas>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Sub-view 2: 설비 위험 요인 감시 (4대 설비 감시 그리드 + LED 점멸등) -->
+                    <div id="safety-risk-factors" class="sub-view">
+                        <div class="glass-card full-height-card">
+                            <div class="card-header">
+                                <div class="card-header-title">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="radio" aria-hidden="true" class="lucide lucide-radio header-icon orange-text"><path d="M16.247 7.761a6 6 0 0 1 0 8.478"></path><path d="M19.075 4.933a10 10 0 0 1 0 14.134"></path><path d="M4.925 19.067a10 10 0 0 1 0-14.134"></path><path d="M7.753 16.239a6 6 0 0 1 0-8.478"></path><circle cx="12" cy="12" r="2"></circle></svg>
+                                    <div>
+                                        <h3>주요 핵심 안전 제어 기기 실시간 감시</h3>
+                                        <p>사옥 안전과 소방을 담보하는 필수 장치들의 실시간 작동율 및 상태 LED를 추적합니다.</p>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="facility-monitoring-grid">
+                                <!-- Machine 1 -->
+                                <div class="facility-card">
+                                    <div class="fac-status-led">
+                                        <span class="led-dot led-active-orange"></span>
+                                        <span class="led-lbl-active-orange">정상 가동</span>
+                                    </div>
+                                    <h4 class="fac-title">중앙 대형 급·배기 환기팬 (1층~8층)</h4>
+                                    <div class="fac-meta-grid">
+                                        <div class="fac-meta-item"><span>공기 순환율:</span> <strong>94.2%</strong></div>
+                                        <div class="fac-meta-item"><span>팬 속도:</span> <strong>1240 RPM</strong></div>
+                                    </div>
+                                    <div class="fac-load-track">
+                                        <div class="fac-load-bar" style="width: 94%; background: var(--primary-safety);"></div>
+                                    </div>
+                                </div>
+
+                                <!-- Machine 2 -->
+                                <div class="facility-card">
+                                    <div class="fac-status-led">
+                                        <span class="led-dot led-active-orange"></span>
+                                        <span class="led-lbl-active-orange">정상 대기</span>
+                                    </div>
+                                    <h4 class="fac-title">사옥 비상 방화 셔터 제어반 및 인버터</h4>
+                                    <div class="fac-meta-grid">
+                                        <div class="fac-meta-item"><span>셔터 대기수:</span> <strong>24개 완료</strong></div>
+                                        <div class="fac-meta-item"><span>제어 신호:</span> <strong>Link Active</strong></div>
+                                    </div>
+                                    <div class="fac-load-track">
+                                        <div class="fac-load-bar" style="width: 100%; background: var(--primary-safety);"></div>
+                                    </div>
+                                </div>
+
+                                <!-- Machine 3 -->
+                                <div class="facility-card">
+                                    <div class="fac-status-led">
+                                        <span class="led-dot led-warning"></span>
+                                        <span class="led-lbl-warning">정밀 점검중</span>
+                                    </div>
+                                    <h4 class="fac-title">지하 보일러실 가동 및 가스 차단 밸브</h4>
+                                    <div class="fac-meta-grid">
+                                        <div class="fac-meta-item"><span>가스 감지:</span> <strong>0.02% 미만</strong></div>
+                                        <div class="fac-meta-item"><span>작동 상태:</span> <strong>점검 중 (정상)</strong></div>
+                                    </div>
+                                    <div class="fac-load-track">
+                                        <div class="fac-load-bar" style="width: 30%; background: var(--blue-accent);"></div>
+                                    </div>
+                                </div>
+
+                                <!-- Machine 4 -->
+                                <div class="facility-card">
+                                    <div class="fac-status-led">
+                                        <span class="led-dot led-active-orange"></span>
+                                        <span class="led-lbl-active-orange">상시 대기</span>
+                                    </div>
+                                    <h4 class="fac-title">옥상 소방 펌프실 및 고압 스프링클러</h4>
+                                    <div class="fac-meta-grid">
+                                        <div class="fac-meta-item"><span>압력 레벨:</span> <strong>1.2 MPa (정상)</strong></div>
+                                        <div class="fac-meta-item"><span>수원 보유량:</span> <strong>100%</strong></div>
+                                    </div>
+                                    <div class="fac-load-track">
+                                        <div class="fac-load-bar" style="width: 100%; background: var(--primary-safety);"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Sub-view 3: 안전 규정 및 캠페인 (부서별 태스크 관리 보드) -->
+                    <div id="safety-tasks" class="sub-view">
+                        <div class="glass-card full-height-card">
+                            <div class="card-header">
+                                <div class="card-header-title">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="shield-alert" aria-hidden="true" class="lucide lucide-shield-alert header-icon orange-text"><path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"></path><path d="M12 8v4"></path><path d="M12 16h.01"></path></svg>
+                                    <div>
+                                        <h3>사내 부서별 안전 실무 활동 리스트</h3>
+                                        <p>전사 임직원의 건강과 사고 없는 사업장 조성을 위한 부서별 안전 프로젝트 진행률입니다.</p>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="tasks-scroll-container">
+                                <div class="tasks-container">
+                                    <!-- Task 1 -->
+                                    <div class="task-item">
+                                        <div class="task-meta">
+                                            <span class="task-dept tag-ops">운영지원부</span>
+                                            <span class="task-status status-ongoing">진행중</span>
+                                        </div>
+                                        <h4 class="task-title">전직원 분기별 안전 소방 훈련 및 CPR 교육 이수</h4>
+                                        <div class="task-progress-section">
+                                            <div class="progress-bar-bg">
+                                                <div class="progress-bar-fill progress-safety-task" style="width: 85%;"></div>
+                                            </div>
+                                            <span class="progress-percentage">85%</span>
+                                        </div>
+                                        <div class="task-footer">
+                                            <span class="task-assignee"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="user-2" aria-hidden="true" class="lucide lucide-user-2"><circle cx="12" cy="8" r="5"></circle><path d="M20 21a8 8 0 0 0-16 0"></path></svg> 담당: 박지한 부장</span>
+                                            <span class="task-deadline">금주 내 잔여 인원 이수 (6/2까지)</span>
+                                        </div>
+                                    </div>
+
+                                    <!-- Task 2 -->
+                                    <div class="task-item">
+                                        <div class="task-meta">
+                                            <span class="task-dept tag-planning">기획조정실</span>
+                                            <span class="task-status status-completed">완료됨</span>
+                                        </div>
+                                        <h4 class="task-title">사옥 비상 계단 피난 유도선 및 미끄럼 방지 타일 전면 리뉴얼</h4>
+                                        <div class="task-progress-section">
+                                            <div class="progress-bar-bg">
+                                                <div class="progress-bar-fill progress-safety-task" style="width: 100%;"></div>
+                                            </div>
+                                            <span class="progress-percentage">100%</span>
+                                        </div>
+                                        <div class="task-footer">
+                                            <span class="task-assignee"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="user-2" aria-hidden="true" class="lucide lucide-user-2"><circle cx="12" cy="8" r="5"></circle><path d="M20 21a8 8 0 0 0-16 0"></path></svg> 담당: 정서아 수석</span>
+                                            <span class="task-deadline">전 층 시공 및 감리 승인 완료</span>
+                                        </div>
+                                    </div>
+
+                                    <!-- Task 3 -->
+                                    <div class="task-item">
+                                        <div class="task-meta">
+                                            <span class="task-dept tag-rd">R&amp;D 본부</span>
+                                            <span class="task-status status-ongoing">진행중</span>
+                                        </div>
+                                        <h4 class="task-title">인공지능 CCTV 기반 사옥 침입 및 낙상 이상 탐지 알고리즘 적용</h4>
+                                        <div class="task-progress-section">
+                                            <div class="progress-bar-bg">
+                                                <div class="progress-bar-fill progress-safety-task" style="width: 62%;"></div>
+                                            </div>
+                                            <span class="progress-percentage">62%</span>
+                                        </div>
+                                        <div class="task-footer">
+                                            <span class="task-assignee"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="user-2" aria-hidden="true" class="lucide lucide-user-2"><circle cx="12" cy="8" r="5"></circle><path d="M20 21a8 8 0 0 0-16 0"></path></svg> 담당: 이진아 수석</span>
+                                            <span class="task-deadline">베타 알고리즘 성능 튜닝 중 (6/15까지)</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Sub-view 4: 무재해 기여 지표 (누적 무재해일/시간, 적합도) -->
+                    <div id="safety-eco-metrics" class="sub-view">
+                        <div class="glass-card full-height-card">
+                            <div class="card-header">
+                                <div class="card-header-title">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="award" aria-hidden="true" class="lucide lucide-award header-icon orange-text"><path d="m15.477 12.89 1.515 8.526a.5.5 0 0 1-.81.47l-3.58-2.687a1 1 0 0 0-1.197 0l-3.586 2.686a.5.5 0 0 1-.81-.469l1.514-8.526"></path><circle cx="12" cy="8" r="6"></circle></svg>
+                                    <div>
+                                        <h3>무재해 누적 성과 및 사내 쾌적 지수</h3>
+                                        <p>체계적 예방 점검으로 단 한 건의 유해 사고 없이 연속 달성 중인 무재해 기록입니다.</p>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="eco-metrics-list">
+                                <!-- Metric 1: Days -->
+                                <div class="eco-metric-item">
+                                    <div class="eco-icon-container orange-bg"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="calendar" aria-hidden="true" class="lucide lucide-calendar"><path d="M8 2v4"></path><path d="M16 2v4"></path><rect width="18" height="18" x="3" y="4" rx="2"></rect><path d="M3 10h18"></path></svg></div>
+                                    <div class="eco-data">
+                                        <span class="eco-label">무재해 연속 가동일</span>
+                                        <div class="eco-value-row">
+                                            <span class="eco-val">412</span>
+                                            <span class="eco-unit">일 연속</span>
+                                        </div>
+                                        <p class="eco-desc">무사고/무재해 통합 관제 연속 달성 일수</p>
+                                    </div>
+                                </div>
+
+                                <!-- Metric 2: Hours -->
+                                <div class="eco-metric-item">
+                                    <div class="eco-icon-container orange-bg"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="clock" aria-hidden="true" class="lucide lucide-clock"><circle cx="12" cy="12" r="10"></circle><path d="M12 6v6l4 2"></path></svg></div>
+                                    <div class="eco-data">
+                                        <span class="eco-label">무재해 실시간 누적 시간</span>
+                                        <div class="eco-value-row">
+                                            <span class="eco-val" id="safety-hours-val">9,888</span>
+                                            <span class="eco-unit" id="safety-time-suffix">시간 24분 35초</span>
+                                        </div>
+                                        <p class="eco-desc">안전 센서 및 출입문 기준 누적 무사고 운영 초시간</p>
+                                    </div>
+                                </div>
+
+                                <!-- Metric 3: Compliance -->
+                                <div class="eco-metric-item">
+                                    <div class="eco-icon-container orange-bg"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="shield-check" aria-hidden="true" class="lucide lucide-shield-check"><path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"></path><path d="m9 12 2 2 4-4"></path></svg></div>
+                                    <div class="eco-data">
+                                        <span class="eco-label">산업 안전 규정 적합도 (Compliance)</span>
+                                        <div class="eco-value-row">
+                                            <span class="eco-val">99.8</span>
+                                            <span class="eco-unit">%</span>
+                                        </div>
+                                        <p class="eco-desc">고용노동부 안전보건관리 지침 준수 적합 판정율</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </main>
+        </div>
+    </section>
+
+    <!-- 6. AX Dashboard (Left Sidebar Layout) -->
+    <section id="ax-screen" class="screen" aria-label="AX 통합 모니터링 시스템">
+        <div class="dashboard-layout">
+            <!-- Left Sidebar Navigation -->
+            <aside class="sidebar ax-sidebar">
+                <div class="sidebar-top">
+                    <button type="button" class="sidebar-logo" id="logo-btn-ax" aria-label="포털 홈으로 이동">
+                        <div class="logo-mark mark-purple"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="sparkles" aria-hidden="true" class="lucide lucide-sparkles"><path d="M11.017 2.814a1 1 0 0 1 1.966 0l1.051 5.558a2 2 0 0 0 1.594 1.594l5.558 1.051a1 1 0 0 1 0 1.966l-5.558 1.051a2 2 0 0 0-1.594 1.594l-1.051 5.558a1 1 0 0 1-1.966 0l-1.051-5.558a2 2 0 0 0-1.594-1.594l-5.558-1.051a1 1 0 0 1 0-1.966l5.558-1.051a2 2 0 0 0 1.594-1.594z"></path><path d="M20 2v4"></path><path d="M22 4h-4"></path><circle cx="4" cy="20" r="2"></circle></svg></div>
+                        <span class="logo-text">CSEO <span>AX</span></span>
+                    </button>
+                    
+                    <!-- Sidebar Navigation Buttons: 4 customized operations tabs -->
+                    <nav class="sidebar-menu">
+                        <button type="button" class="sidebar-btn active" data-target="ax-overview" aria-label="실시간 AI 가동 분석">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="activity" aria-hidden="true" class="lucide lucide-activity"><path d="M22 12h-2.48a2 2 0 0 0-1.93 1.46l-2.35 8.36a.25.25 0 0 1-.48 0L9.24 2.18a.25.25 0 0 0-.48 0l-2.35 8.36A2 2 0 0 1 4.49 12H2"></path></svg>
+                            <span>실시간 AI 가동 분석</span>
+                        </button>
+                        <button type="button" class="sidebar-btn" data-target="ax-agents" aria-label="AI 에이전트 모니터">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="cpu" aria-hidden="true" class="lucide lucide-cpu"><path d="M12 20v2"></path><path d="M12 2v2"></path><path d="M17 20v2"></path><path d="M17 2v2"></path><path d="M2 12h2"></path><path d="M2 17h2"></path><path d="M2 7h2"></path><path d="M20 12h2"></path><path d="M20 17h2"></path><path d="M20 7h2"></path><path d="M7 20v2"></path><path d="M7 2v2"></path><rect x="4" y="4" width="16" height="16" rx="2"></rect><rect x="8" y="8" width="8" height="8" rx="1"></rect></svg>
+                            <span>AI 에이전트 모니터</span>
+                        </button>
+                        <button type="button" class="sidebar-btn" data-target="ax-tasks" aria-label="AX 추진 과제">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="check-square" aria-hidden="true" class="lucide lucide-check-square"><path d="M21 10.656V19a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h12.344"></path><path d="m9 11 3 3L22 4"></path></svg>
+                            <span>AX 추진 과제</span>
+                        </button>
+                        <button type="button" class="sidebar-btn" data-target="ax-readiness" aria-label="전사 AI 적합도">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="award" aria-hidden="true" class="lucide lucide-award"><path d="m15.477 12.89 1.515 8.526a.5.5 0 0 1-.81.47l-3.58-2.687a1 1 0 0 0-1.197 0l-3.586 2.686a.5.5 0 0 1-.81-.469l1.514-8.526"></path><circle cx="12" cy="8" r="6"></circle></svg>
+                            <span>전사 AI 적합도</span>
+                        </button>
+                    </nav>
+                </div>
+                
+                <div class="sidebar-bottom">
+                    <div class="sidebar-status">
+                        <span class="pulse-dot purple"></span>
+                        <span class="status-lbl purple-text">AI Engine Online</span>
+                    </div>
+                </div>
+            </aside>
+
+            <!-- Right Main Content Area -->
+            <main class="main-content">
+                <!-- Top Minimal Header Bar -->
+                <header class="main-header">
+                    <div class="header-breadcrumb">
+                        <span class="parent-crumb purple-text">AX Operations</span>
+                        <span class="crumb-separator"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="chevron-right" aria-hidden="true" class="lucide lucide-chevron-right"><path d="m9 18 6-6-6-6"></path></svg></span>
+                        <span class="child-crumb" id="ax-breadcrumb-text">실시간 AI 가동 분석</span>
+                    </div>
+                    <div class="summary-indicators">
+                        <div class="indicator-pill text-purple"><span class="pulse-dot purple"></span> GPU RUNNING</div>
+                        <div class="indicator-pill"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="cpu" aria-hidden="true" class="lucide lucide-cpu"><path d="M12 20v2"></path><path d="M12 2v2"></path><path d="M17 20v2"></path><path d="M17 2v2"></path><path d="M2 12h2"></path><path d="M2 17h2"></path><path d="M2 7h2"></path><path d="M20 12h2"></path><path d="M20 17h2"></path><path d="M20 7h2"></path><path d="M7 20v2"></path><path d="M7 2v2"></path><rect x="4" y="4" width="16" height="16" rx="2"></rect><rect x="8" y="8" width="8" height="8" rx="1"></rect></svg> CSEO-GPT Active</div>
+                    </div>
+                </header>
+
+                <!-- Sub-view Panels (Toggled dynamically by Sidebar buttons) -->
+                <div class="sub-view-container">
+                    
+                    <!-- Sub-view 1: 실시간 AI 가동 분석 -->
+                    <div id="ax-overview" class="sub-view active">
+                        <div class="energy-live-unified-layout">
+                            <div class="energy-live-grid-2x2 compact-grid">
+                                <!-- Card 1: GPU Load -->
+                                <div class="energy-widget-card gpu-widget compact">
+                                    <div class="widget-head">
+                                        <div class="widget-title">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="activity" aria-hidden="true" class="lucide lucide-activity icon-gpu"><path d="M22 12h-2.48a2 2 0 0 0-1.93 1.46l-2.35 8.36a.25.25 0 0 1-.48 0L9.24 2.18a.25.25 0 0 0-.48 0l-2.35 8.36A2 2 0 0 1 4.49 12H2"></path></svg>
+                                            <div>
+                                                <h4>GPU 가동 부하율</h4>
+                                                <span class="widget-subtitle">사내 AI H100 Cluster 로드율</span>
+                                            </div>
+                                        </div>
+                                        <span class="live-blink-tag safety">SECURE</span>
+                                    </div>
+                                    <div class="widget-body">
+                                        <div class="widget-numeric">
+                                            <span class="value-num" id="live-gpu-val">84.2</span>
+                                            <span class="value-unit">%</span>
+                                        </div>
+                                        <div class="widget-bar-track">
+                                            <div class="widget-bar-fill fill-gpu" id="live-gpu-bar" style="width: 84.2%;"></div>
+                                        </div>
+                                        <div class="widget-footer-info">
+                                            <span>온도: <strong>72.5°C</strong></span>
+                                            <span class="pct-val positive">정상 범주 운용</span>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Card 2: AI Queries / QPS -->
+                                <div class="energy-widget-card qps-widget compact">
+                                    <div class="widget-head">
+                                        <div class="widget-title">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="message-square" aria-hidden="true" class="lucide lucide-message-square icon-qps"><path d="M22 17a2 2 0 0 1-2 2H6.828a2 2 0 0 0-1.414.586l-2.202 2.202A.71.71 0 0 1 2 21.286V5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2z"></path></svg>
+                                            <div>
+                                                <h4>실시간 요청 수 (QPS)</h4>
+                                                <span class="widget-subtitle">사내 대화형 API 호출 속도</span>
+                                            </div>
+                                        </div>
+                                        <span class="live-blink-tag safety">NORMAL</span>
+                                    </div>
+                                    <div class="widget-body">
+                                        <div class="widget-numeric">
+                                            <span class="value-num" id="live-qps-val">18.5</span>
+                                            <span class="value-unit">req/s</span>
+                                        </div>
+                                        <div class="widget-bar-track">
+                                            <div class="widget-bar-fill fill-qps" id="live-qps-bar" style="width: 74%;"></div>
+                                        </div>
+                                        <div class="widget-footer-info">
+                                            <span>대기 시간: <strong>140ms</strong></span>
+                                            <span class="pct-val positive">지연 없음</span>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Card 3: Memory / VRAM -->
+                                <div class="energy-widget-card vram-widget compact">
+                                    <div class="widget-head">
+                                        <div class="widget-title">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="database" aria-hidden="true" class="lucide lucide-database icon-vram"><ellipse cx="12" cy="5" rx="9" ry="3"></ellipse><path d="M3 5V19A9 3 0 0 0 21 19V5"></path><path d="M3 12A9 3 0 0 0 21 12"></path></svg>
+                                            <div>
+                                                <h4>VRAM 메모리 점유율</h4>
+                                                <span class="widget-subtitle">모델 컨텍스트 실시간 점유</span>
+                                            </div>
+                                        </div>
+                                        <span class="live-blink-tag safety-secure">SAFE</span>
+                                    </div>
+                                    <div class="widget-body">
+                                        <div class="widget-numeric">
+                                            <span class="value-num" id="live-mem-val">68.0</span>
+                                            <span class="value-unit">%</span>
+                                        </div>
+                                        <div class="widget-bar-track">
+                                            <div class="widget-bar-fill fill-vram" id="live-mem-bar" style="width: 68%;"></div>
+                                        </div>
+                                        <div class="widget-footer-info">
+                                            <span>할당: <strong>54.4 / 80 GB</strong></span>
+                                            <span class="pct-val green-text">여유 공간 충분</span>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Card 4: Total Inferences -->
+                                <div class="energy-widget-card inference-widget compact">
+                                    <div class="widget-head">
+                                        <div class="widget-title">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="sparkles" aria-hidden="true" class="lucide lucide-sparkles icon-inference"><path d="M11.017 2.814a1 1 0 0 1 1.966 0l1.051 5.558a2 2 0 0 0 1.594 1.594l5.558 1.051a1 1 0 0 1 0 1.966l-5.558 1.051a2 2 0 0 0-1.594 1.594l-1.051 5.558a1 1 0 0 1-1.966 0l-1.051-5.558a2 2 0 0 0-1.594-1.594l-5.558-1.051a1 1 0 0 1 0-1.966l5.558-1.051a2 2 0 0 0 1.594-1.594z"></path><path d="M20 2v4"></path><path d="M22 4h-4"></path><circle cx="4" cy="20" r="2"></circle></svg>
+                                            <div>
+                                                <h4>누적 AI 추론 횟수</h4>
+                                                <span class="widget-subtitle">전사 AI 모델 통합 추론 카운트</span>
+                                            </div>
+                                        </div>
+                                        <span class="live-blink-tag safety">SYNCED</span>
+                                    </div>
+                                    <div class="widget-body">
+                                        <div class="widget-numeric">
+                                            <span class="value-num" id="live-inference-val">148,520</span>
+                                            <span class="value-unit">회</span>
+                                        </div>
+                                        <div class="widget-bar-track">
+                                            <div class="widget-bar-fill fill-inference" id="live-inference-bar" style="width: 78%;"></div>
+                                        </div>
+                                        <div class="widget-footer-info">
+                                            <span>일간 평균: <strong>12.4K</strong></span>
+                                            <span class="pct-val green-text">추세 지속 상승</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- Bottom Time-series AI Load Trend Chart -->
+                            <div class="glass-card energy-integrated-chart-card">
+                                <div class="chart-wrapper energy-chart-wrapper-mini">
+                                    <canvas id="ax-trend-chart"></canvas>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Sub-view 2: AI 에이전트 모니터 -->
+                    <div id="ax-agents" class="sub-view">
+                        <div class="glass-card full-height-card">
+                            <div class="card-header">
+                                <div class="card-header-title">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="cpu" aria-hidden="true" class="lucide lucide-cpu header-icon purple-text"><path d="M12 20v2"></path><path d="M12 2v2"></path><path d="M17 20v2"></path><path d="M17 2v2"></path><path d="M2 12h2"></path><path d="M2 17h2"></path><path d="M2 7h2"></path><path d="M20 12h2"></path><path d="M20 17h2"></path><path d="M20 7h2"></path><path d="M7 20v2"></path><path d="M7 2v2"></path><rect x="4" y="4" width="16" height="16" rx="2"></rect><rect x="8" y="8" width="8" height="8" rx="1"></rect></svg>
+                                    <div>
+                                        <h3>핵심 AI 자율형 에이전트 실시간 감시</h3>
+                                        <p>CSEO 사내 인프라에서 구동 중인 주요 AI 에이전트들의 가동 상태와 추론 성능을 모니터링합니다.</p>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="facility-monitoring-grid">
+                                <!-- Agent 1 -->
+                                <div class="facility-card">
+                                    <div class="fac-status-led">
+                                        <span class="led-dot led-active-purple"></span>
+                                        <span class="led-lbl-active-purple">정상 가동</span>
+                                    </div>
+                                    <h4 class="fac-title">CSEO-GPT (사내 업무 지원 지능 비서)</h4>
+                                    <div class="fac-meta-grid">
+                                        <div class="fac-meta-item"><span>실시간 가동율:</span> <strong>95.8%</strong></div>
+                                        <div class="fac-meta-item"><span>평균 응답속도:</span> <strong>120ms</strong></div>
+                                    </div>
+                                    <div class="fac-load-track">
+                                        <div class="fac-load-bar" style="width: 95%; background: var(--primary-ax);"></div>
+                                    </div>
+                                </div>
+
+                                <!-- Agent 2 -->
+                                <div class="facility-card">
+                                    <div class="fac-status-led">
+                                        <span class="led-dot led-active-purple"></span>
+                                        <span class="led-lbl-active-purple">정상 가동</span>
+                                    </div>
+                                    <h4 class="fac-title">AI 특허 및 연구 문서 지능형 요약 엔진</h4>
+                                    <div class="fac-meta-grid">
+                                        <div class="fac-meta-item"><span>일간 처리 문서:</span> <strong>340건 완료</strong></div>
+                                        <div class="fac-meta-item"><span>인덱싱 상태:</span> <strong>Link Active</strong></div>
+                                    </div>
+                                    <div class="fac-load-track">
+                                        <div class="fac-load-bar" style="width: 100%; background: var(--primary-ax);"></div>
+                                    </div>
+                                </div>
+
+                                <!-- Agent 3 -->
+                                <div class="facility-card">
+                                    <div class="fac-status-led">
+                                        <span class="led-dot led-warning-purple"></span>
+                                        <span class="led-lbl-warning-purple">모델 튜닝중</span>
+                                    </div>
+                                    <h4 class="fac-title">B2B 분산 자원 에너지 수요 예측 ML 모델</h4>
+                                    <div class="fac-meta-grid">
+                                        <div class="fac-meta-item"><span>예측 정확도:</span> <strong>94.2%</strong></div>
+                                        <div class="fac-meta-item"><span>작동 상태:</span> <strong>파이닝 테스트</strong></div>
+                                    </div>
+                                    <div class="fac-load-track">
+                                        <div class="fac-load-bar" style="width: 48%; background: var(--blue-accent);"></div>
+                                    </div>
+                                </div>
+
+                                <!-- Agent 4 -->
+                                <div class="facility-card">
+                                    <div class="fac-status-led">
+                                        <span class="led-dot led-active-purple"></span>
+                                        <span class="led-lbl-active-purple">상시 감시</span>
+                                    </div>
+                                    <h4 class="fac-title">AI CCTV 이상 징후 (침입/낙상) 실시간 감지</h4>
+                                    <div class="fac-meta-grid">
+                                        <div class="fac-meta-item"><span>오경보율:</span> <strong>0.05% 미만</strong></div>
+                                        <div class="fac-meta-item"><span>스캔 센서:</span> <strong>128개 감시중</strong></div>
+                                    </div>
+                                    <div class="fac-load-track">
+                                        <div class="fac-load-bar" style="width: 100%; background: var(--primary-ax);"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Sub-view 3: AX 추진 과제 -->
+                    <div id="ax-tasks" class="sub-view">
+                        <div class="glass-card full-height-card">
+                            <div class="card-header">
+                                <div class="card-header-title">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="check-square" aria-hidden="true" class="lucide lucide-check-square header-icon purple-text"><path d="M21 10.656V19a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h12.344"></path><path d="m9 11 3 3L22 4"></path></svg>
+                                    <div>
+                                        <h3>사내 부서별 AI 혁신 추진 과제 리스트</h3>
+                                        <p>전사 AI 전환(AX) 가속화를 위한 핵심 과제 진행 및 도입 현황입니다.</p>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="tasks-scroll-container">
+                                <div class="tasks-container">
+                                    <!-- Task 1 -->
+                                    <div class="task-item">
+                                        <div class="task-meta">
+                                            <span class="task-dept tag-planning">기획 R&amp;R</span>
+                                            <span class="task-status status-ongoing">운영 적용</span>
+                                        </div>
+                                        <h4 class="task-title">사내 업무 효율화를 위한 GenAI 비서 챗봇 'CSEO-GPT' 도입</h4>
+                                        <div class="task-progress-section">
+                                            <div class="progress-bar-bg">
+                                                <div class="progress-bar-fill progress-ax-task" style="width: 95%;"></div>
+                                            </div>
+                                            <span class="progress-percentage">95%</span>
+                                        </div>
+                                        <div class="task-footer">
+                                            <span class="task-assignee"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="user-2" aria-hidden="true" class="lucide lucide-user-2"><circle cx="12" cy="8" r="5"></circle><path d="M20 21a8 8 0 0 0-16 0"></path></svg> 담당: 정서아 수석 (기획)</span>
+                                            <span class="task-deadline">전 부서 베타 릴리즈 및 피드백 반영 중</span>
+                                        </div>
+                                    </div>
+
+                                    <!-- Task 2 -->
+                                    <div class="task-item">
+                                        <div class="task-meta">
+                                            <span class="task-dept tag-rd">R&amp;D R&amp;R</span>
+                                            <span class="task-status status-ongoing">모델 학습</span>
+                                        </div>
+                                        <h4 class="task-title">AI 기반 글로벌 신에너지 특허 및 연구 문서 지능형 요약 엔진 개발</h4>
+                                        <div class="task-progress-section">
+                                            <div class="progress-bar-bg">
+                                                <div class="progress-bar-fill progress-ax-task" style="width: 72%;"></div>
+                                            </div>
+                                            <span class="progress-percentage">72%</span>
+                                        </div>
+                                        <div class="task-footer">
+                                            <span class="task-assignee"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="user-2" aria-hidden="true" class="lucide lucide-user-2"><circle cx="12" cy="8" r="5"></circle><path d="M20 21a8 8 0 0 0-16 0"></path></svg> 담당: 이진아 수석 (에너지 AI)</span>
+                                            <span class="task-deadline">LLM 파인튜닝 테스트 가동 및 정밀도 검증 (D-10)</span>
+                                        </div>
+                                    </div>
+
+                                    <!-- Task 3 -->
+                                    <div class="task-item">
+                                        <div class="task-meta">
+                                            <span class="task-dept tag-databiz">데이터본부 R&amp;R</span>
+                                            <span class="task-status status-ongoing">인프라 구축</span>
+                                        </div>
+                                        <h4 class="task-title">B2B 분산 자원 에너지 수요 예측 지능형 머신러닝 모듈 구축</h4>
+                                        <div class="task-progress-section">
+                                            <div class="progress-bar-bg">
+                                                <div class="progress-bar-fill progress-ax-task" style="width: 48%;"></div>
+                                            </div>
+                                            <span class="progress-percentage">48%</span>
+                                        </div>
+                                        <div class="task-footer">
+                                            <span class="task-assignee"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="user-2" aria-hidden="true" class="lucide lucide-user-2"><circle cx="12" cy="8" r="5"></circle><path d="M20 21a8 8 0 0 0-16 0"></path></svg> 담당: 신재희 선임 (솔루션)</span>
+                                            <span class="task-deadline">데이터 피드 정제 및 학습 파이프라인 연계 중 (D-25)</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Sub-view 4: 전사 AI 적합도 -->
+                    <div id="ax-readiness" class="sub-view">
+                        <div class="glass-card full-height-card">
+                            <div class="card-header">
+                                <div class="card-header-title">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="award" aria-hidden="true" class="lucide lucide-award header-icon purple-text"><path d="m15.477 12.89 1.515 8.526a.5.5 0 0 1-.81.47l-3.58-2.687a1 1 0 0 0-1.197 0l-3.586 2.686a.5.5 0 0 1-.81-.469l1.514-8.526"></path><circle cx="12" cy="8" r="6"></circle></svg>
+                                    <div>
+                                        <h3>전사 AI 전환 적합성 및 모델 평가 지표</h3>
+                                        <p>안정적인 AI 서비스 운영 및 전사 확장을 위해 검증된 주요 인프라 정합성 수치입니다.</p>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="eco-metrics-list">
+                                <!-- Metric 1: Security -->
+                                <div class="eco-metric-item">
+                                    <div class="eco-icon-container purple-bg"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="shield-check" aria-hidden="true" class="lucide lucide-shield-check"><path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"></path><path d="m9 12 2 2 4-4"></path></svg></div>
+                                    <div class="eco-data">
+                                        <span class="eco-label">AI 개인정보 보호 및 보안 준수율</span>
+                                        <div class="eco-value-row">
+                                            <span class="eco-val">100</span>
+                                            <span class="eco-unit">%</span>
+                                        </div>
+                                        <p class="eco-desc">사내 데이터 레이크 하우스 내 비식별화 필터링 적용률</p>
+                                    </div>
+                                </div>
+
+                                <!-- Metric 2: Accuracy -->
+                                <div class="eco-metric-item">
+                                    <div class="eco-icon-container purple-bg"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="trending-up" aria-hidden="true" class="lucide lucide-trending-up"><path d="M16 7h6v6"></path><path d="m22 7-8.5 8.5-5-5L2 17"></path></svg></div>
+                                    <div class="eco-data">
+                                        <span class="eco-label">대표 AI 예측 모델 정확도 (Accuracy)</span>
+                                        <div class="eco-value-row">
+                                            <span class="eco-val">96.8</span>
+                                            <span class="eco-unit">%</span>
+                                        </div>
+                                        <p class="eco-desc">B2B 분산 에너지원 전일 수요 대비 적합 정확율</p>
+                                    </div>
+                                </div>
+
+                                <!-- Metric 3: Infrastructure Integration -->
+                                <div class="eco-metric-item">
+                                    <div class="eco-icon-container purple-bg"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="network" aria-hidden="true" class="lucide lucide-network"><rect x="16" y="16" width="6" height="6" rx="1"></rect><rect x="2" y="16" width="6" height="6" rx="1"></rect><rect x="9" y="2" width="6" height="6" rx="1"></rect><path d="M5 16v-3a1 1 0 0 1 1-1h12a1 1 0 0 1 1 1v3"></path><path d="M12 12V8"></path></svg></div>
+                                    <div class="eco-data">
+                                        <span class="eco-label">인프라 API 정합 연동률</span>
+                                        <div class="eco-value-row">
+                                            <span class="eco-val">94.5</span>
+                                            <span class="eco-unit">%</span>
+                                        </div>
+                                        <p class="eco-desc">사내 ERP 및 통합 데이터베이스 호출 응답 연동 적합도</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </main>
+        </div>
+    </section>
+
+    <!-- Shared application script -->
+    <script src="js/app.js"></script>
+
+
+</body></html>

@@ -45,9 +45,9 @@
     <section id="portal-screen" class="screen" aria-label="시스템 포털 선택">
         <div class="portal-container">
             <div class="portal-cards-grid">
-                <!-- Group Card (Top Left) - Simplified 3D Bevel Layout -->
-                <button type="button" class="portal-card manage-card" id="btn-go-manage" aria-label="Group 시스템 접속">
-                    <span class="portal-card-text text-group">Group</span>
+                <!-- CSEO Card (Top Left) - Simplified 3D Bevel Layout -->
+                <button type="button" class="portal-card manage-card" id="btn-go-manage" aria-label="CSEO 시스템 접속">
+                    <span class="portal-card-text text-group">CSEO</span>
                 </button>
 
                 <!-- AX Card (Top Right) - Simplified 3D Bevel Layout -->
@@ -76,7 +76,7 @@
                 <div class="sidebar-top">
                     <button type="button" class="sidebar-logo" id="logo-btn-manage" aria-label="포털 홈으로 이동">
                         <div class="logo-mark"><i data-lucide="shield-check"></i></div>
-                        <span class="logo-text">CSEO <span>Group</span></span>
+                        <span class="logo-text">CSEO <span>Organization</span></span>
                     </button>
                     
                     <!-- Sidebar Navigation Buttons -->
@@ -93,9 +93,9 @@
                             <i data-lucide="bar-chart-3"></i>
                             <span>데이터 통계 분석</span>
                         </button>
-                        <button type="button" class="sidebar-btn" data-target="manage-ax" aria-label="AX 추진 현황 보기">
-                            <i data-lucide="sparkles"></i>
-                            <span>AX 추진 현황</span>
+                        <button type="button" class="sidebar-btn" data-target="manage-admin" aria-label="임직원 관리 모드">
+                            <i data-lucide="settings"></i>
+                            <span>임직원 관리</span>
                         </button>
                     </nav>
                 </div>
@@ -113,7 +113,7 @@
                 <!-- Top Minimal Header Bar -->
                 <header class="main-header">
                     <div class="header-breadcrumb">
-                        <span class="parent-crumb">Group Hub</span>
+                        <span class="parent-crumb">CSEO Hub</span>
                         <span class="crumb-separator"><i data-lucide="chevron-right"></i></span>
                         <span class="child-crumb" id="manage-breadcrumb-text">조직 구성도</span>
                     </div>
@@ -129,23 +129,13 @@
                     <!-- Sub-view 1: Organization Structure (Default) -->
                     <div id="manage-org" class="sub-view active">
                         <div class="glass-card full-height-card">
-                            <div class="card-header">
-                                <div class="card-header-title">
-                                    <i data-lucide="network" class="header-icon purple-text"></i>
-                                    <div>
-                                        <h3>조직 계층 구성도</h3>
-                                        <p>클릭하여 각 부서의 핵심 책임자, 미션 및 구성원을 실시간으로 필터링하세요.</p>
-                                    </div>
-                                </div>
-                            </div>
-                            
                             <div class="org-tree-wrapper">
-                                <!-- CEO Node -->
+                                <!-- CSEO Node (replaced CEO) -->
                                 <div class="org-node org-node-ceo" id="node-ceo">
                                     <div class="node-avatar"><i data-lucide="user"></i></div>
                                     <div class="node-details">
-                                        <div class="node-role">대표이사 (CEO)</div>
-                                        <div class="node-name">김태영 대표</div>
+                                        <div class="node-role" id="cseo-role-text">CSEO (전무)</div>
+                                        <div class="node-name" id="cseo-leader-name">홍길동 전무</div>
                                     </div>
                                 </div>
 
@@ -154,43 +144,48 @@
                                 <div class="org-executive-level">
                                     <div class="org-tree-line-horizontal"></div>
                                     <div class="org-departments-grid">
-                                        <!-- Dept 1: Planning -->
+                                        <!-- CSEO직속: CSEO기획팀 -->
+                                        <div class="org-node dept-node" id="node-cseo-direct">
+                                            <div class="node-header-bar color-cseo-direct"></div>
+                                            <div class="node-info">
+                                                <span class="dept-tag tag-cseo-direct">CSEO직속</span>
+                                                <span class="dept-manager" id="mgr-cseo-direct-text">장발장 팀장 (CSEO기획팀)</span>
+                                            </div>
+                                        </div>
+
+                                        <!-- Dept 1: A담당 -->
                                         <div class="org-node dept-node" id="node-planning">
                                             <div class="node-header-bar color-planning"></div>
                                             <div class="node-info">
-                                                <span class="dept-tag tag-planning">기획</span>
-                                                <h4 class="dept-title">기획조정실</h4>
-                                                <span class="dept-manager">이성우 실장 (5명)</span>
+                                                <span class="dept-tag tag-planning">A담당</span>
+                                                <span class="dept-manager" id="mgr-a-text">이순신 담당 (3개 팀)</span>
                                             </div>
                                         </div>
 
-                                        <!-- Dept 2: R&D -->
+                                        <!-- Dept 2: B담당 -->
                                         <div class="org-node dept-node active" id="node-rd">
                                             <div class="node-header-bar color-rd"></div>
                                             <div class="node-info">
-                                                <span class="dept-tag tag-rd">R&D</span>
-                                                <h4 class="dept-title">연구개발본부</h4>
-                                                <span class="dept-manager">최윤서 본부장 (18명)</span>
+                                                <span class="dept-tag tag-rd">B담당</span>
+                                                <span class="dept-manager" id="mgr-b-text">세종대왕 담당 (3개 팀)</span>
                                             </div>
                                         </div>
 
-                                        <!-- Dept 3: Operations -->
+                                        <!-- Dept 3: C담당 -->
                                         <div class="org-node dept-node" id="node-ops">
                                             <div class="node-header-bar color-ops"></div>
                                             <div class="node-info">
-                                                <span class="dept-tag tag-ops">운영</span>
-                                                <h4 class="dept-title">운영지원부</h4>
-                                                <span class="dept-manager">박지한 부장 (8명)</span>
+                                                <span class="dept-tag tag-ops">C담당</span>
+                                                <span class="dept-manager" id="mgr-c-text">김구 담당 (3개 팀)</span>
                                             </div>
                                         </div>
 
-                                        <!-- Dept 4: Data Business -->
+                                        <!-- Dept 4: D담당 -->
                                         <div class="org-node dept-node" id="node-databiz">
                                             <div class="node-header-bar color-databiz"></div>
                                             <div class="node-info">
-                                                <span class="dept-tag tag-databiz">데이터본부</span>
-                                                <h4 class="dept-title">데이터사업부</h4>
-                                                <span class="dept-manager">한민석 부장 (15명)</span>
+                                                <span class="dept-tag tag-databiz">D담당</span>
+                                                <span class="dept-manager" id="mgr-d-text">안중근 담당 (4개 팀)</span>
                                             </div>
                                         </div>
                                     </div>
@@ -200,28 +195,28 @@
                             <!-- Interactive Detail Card Inside View -->
                             <div class="org-detail-panel" id="org-detail-panel">
                                 <div class="detail-header">
-                                    <span class="detail-badge tag-rd" id="detail-dept-badge">R&D</span>
-                                    <h4 class="detail-title" id="detail-dept-title">연구개발본부 주요 R&R</h4>
-                                </div>
-                                <div class="detail-body-grid">
-                                    <div class="detail-meta">
-                                        <div class="meta-item">
-                                            <span class="meta-label">부서 총책임자:</span>
-                                            <span class="meta-val" id="detail-dept-leader">최윤서 본부장 (공학박사)</span>
+                                    <div class="detail-header-left">
+                                        <span class="detail-badge tag-rd" id="detail-dept-badge">R&D</span>
+                                        <h4 class="detail-title" id="detail-dept-title">연구개발본부 주요 R&R</h4>
+                                    </div>
+                                    <div class="detail-header-right">
+                                        <div class="meta-item manager-contact-box">
+                                            <span class="manager-name" id="detail-dept-leader-name">최윤서 본부장 (공학박사)</span>
+                                            <span class="manager-detail-line" id="detail-dept-leader-email">- e-mail : choy@lgdisplay.com</span>
+                                            <span class="manager-detail-line" id="detail-dept-leader-tel">- Tel : 010-1234-5678</span>
                                         </div>
                                         <div class="meta-item">
                                             <span class="meta-label">핵심 미션:</span>
                                             <span class="meta-val" id="detail-dept-mission">인공지능 기반 데이터 수집 분석 시스템 설계 및 친환경 신에너지 계통 연계 인프라 기술 연구개발</span>
                                         </div>
                                     </div>
-                                    <div class="detail-members">
-                                        <span class="meta-label">핵심 구성원 및 부서 파트:</span>
-                                        <div class="member-pills-container" id="detail-dept-members">
-                                            <span class="member-pill">이진아 수석 (에너지 AI)</span>
-                                            <span class="member-pill">강도현 책임 (IoT 하드웨어)</span>
-                                            <span class="member-pill">정서율 책임 (빅데이터 파이프라인)</span>
-                                            <span class="member-pill">최유진 선임 (클라우드 플랫폼)</span>
-                                        </div>
+                                </div>
+                                <div class="detail-body-full">
+                                    <div id="detail-dept-members" class="member-pills-container">
+                                        <span class="member-pill">이진아 수석 (에너지 AI)</span>
+                                        <span class="member-pill">강도현 책임 (IoT 하드웨어)</span>
+                                        <span class="member-pill">정서율 책임 (빅데이터 파이프라인)</span>
+                                        <span class="member-pill">최유진 선임 (클라우드 플랫폼)</span>
                                     </div>
                                 </div>
                             </div>
@@ -337,81 +332,89 @@
                         </div>
                     </div>
 
-                    <!-- Sub-view 4: 전사 AI 전환 (AX) 추진 현황판 -->
-                    <div id="manage-ax" class="sub-view">
-                        <div class="glass-card full-height-card">
-                            <div class="card-header">
-                                <div class="card-header-title">
-                                    <i data-lucide="sparkles" class="header-icon purple-text"></i>
-                                    <div>
-                                        <h3>전사 AI 전환 (AX) 추진 현황판</h3>
-                                        <p>CSEO의 핵심 부서별 인공지능 기술 도입 로드맵과 실시간 AI 연동 진척도를 실시간 스캔합니다.</p>
+                    <!-- Sub-view 4: 임직원 관리 모드 (Admin Mode) -->
+                    <div id="manage-admin" class="sub-view">
+                        <!-- 1) Authentication Gate Panel (Locked state) -->
+                        <div id="admin-auth-panel" class="glass-card full-height-card" style="display: flex; align-items: center; justify-content: center; padding: 2rem;">
+                            <div class="auth-box glass-card" style="width: 100%; max-width: 400px; padding: 2.5rem; text-align: center; background: rgba(255, 255, 255, 0.75); border: 1px solid rgba(255, 255, 255, 0.5); box-shadow: var(--shadow-lg);">
+                                <div class="auth-icon" style="width: 60px; height: 60px; border-radius: 50%; background: var(--primary-purple-light); color: var(--primary-purple); display: flex; align-items: center; justify-content: center; margin: 0 auto 1.5rem;">
+                                    <i data-lucide="lock" style="width: 28px; height: 28px;"></i>
+                                </div>
+                                <h3 style="font-size: 1.25rem; font-weight: 800; color: var(--text-primary); margin-bottom: 0.5rem;">관리자 인증 필요</h3>
+                                <p style="font-size: 0.85rem; color: var(--text-secondary); margin-bottom: 1.5rem; line-height: 1.4;">임직원 정보를 관리하려면 관리자 비밀번호를 입력해주세요.</p>
+                                <form id="admin-login-form" style="display: flex; flex-direction: column; gap: 1rem;">
+                                    <div class="form-group" style="text-align: left;">
+                                        <input type="password" id="admin-password-input" required placeholder="비밀번호 입력..." style="width: 100%; padding: 0.75rem 1rem; border: 1px solid var(--border-color); border-radius: 10px; font-family: inherit; font-size: 0.95rem; background: var(--bg-surface-solid); outline: none; text-align: center; transition: var(--transition-quick);" />
                                     </div>
+                                    <button type="submit" class="btn-sidebar-home" style="width: 100%; padding: 0.75rem; border-radius: 10px; font-weight: 700; font-size: 0.95rem; display: flex; align-items: center; justify-content: center; gap: 0.5rem;">
+                                        <i data-lucide="key-round" style="width: 16px; height: 16px;"></i> 잠금 해제
+                                    </button>
+                                </form>
+                            </div>
+                        </div>
+
+                        <!-- 2) Admin Main Management Dashboard (Unlocked state) -->
+                        <div id="admin-main-panel" class="glass-card full-height-card" style="display: none;">
+                            <div class="card-header" style="display: flex; justify-content: space-between; align-items: center; padding: 1.5rem 2rem; flex-wrap: wrap; gap: 1rem;">
+                                <div class="card-header-title">
+                                    <i data-lucide="settings" class="header-icon purple-text"></i>
+                                    <div>
+                                        <h3>임직원 정보 관리 (관리자 모드)</h3>
+                                        <p>PostgreSQL DB 및 CSV 파일과 연동되어 실시간으로 임직원을 등록, 수정, 삭제할 수 있습니다.</p>
+                                    </div>
+                                </div>
+                                <div style="display: flex; gap: 0.6rem; flex-wrap: wrap;">
+                                    <button type="button" class="btn-sidebar-home btn-cancel" id="btn-change-password" style="width: auto; padding: 0.6rem 1.1rem; display: flex; align-items: center; gap: 0.4rem; background: rgba(99, 102, 241, 0.05); color: var(--primary-purple); border: 1px solid rgba(99, 102, 241, 0.15);">
+                                        <i data-lucide="key"></i> 비밀번호 변경
+                                    </button>
+                                    <button type="button" class="btn-sidebar-home btn-green" id="btn-add-member" style="width: auto; padding: 0.6rem 1.1rem; display: flex; align-items: center; gap: 0.4rem; border: 1px solid rgba(16, 185, 129, 0.15);">
+                                        <i data-lucide="user-plus"></i> 신규 등록
+                                    </button>
+                                    <button type="button" class="btn-sidebar-home" id="btn-admin-logout" style="width: auto; padding: 0.6rem 1.1rem; display: flex; align-items: center; gap: 0.4rem; background: rgba(239, 68, 68, 0.05); color: #ef4444; border: 1px solid rgba(239, 68, 68, 0.15);">
+                                        <i data-lucide="log-out"></i> 로그아웃
+                                    </button>
                                 </div>
                             </div>
                             
-                            <div class="tasks-scroll-container">
-                                <div class="tasks-container">
-                                    <!-- AX Task 1 -->
-                                    <div class="task-item">
-                                        <div class="task-meta">
-                                            <span class="task-dept tag-planning">기획 R&R</span>
-                                            <span class="task-status status-ongoing">운영 적용</span>
-                                        </div>
-                                        <h4 class="task-title">사내 업무 효율화를 위한 GenAI 비서 챗봇 'CSEO-GPT' 도입</h4>
-                                        <div class="task-progress-section">
-                                            <div class="progress-bar-bg">
-                                                <div class="progress-bar-fill progress-planning" style="width: 95%;"></div>
-                                            </div>
-                                            <span class="progress-percentage">95%</span>
-                                        </div>
-                                        <div class="task-footer">
-                                            <span class="task-assignee"><i data-lucide="user-2"></i> 담당: 정서아 수석 (기획)</span>
-                                            <span class="task-deadline">전 부서 베타 릴리즈 완료 (피드백 반영 중)</span>
-                                        </div>
-                                    </div>
+                            <div class="tasks-scroll-container" style="padding: 1.25rem 2rem; overflow-y: auto; display: flex; flex-direction: column; gap: 1rem; height: calc(100% - 85px);">
+                                <!-- Search and Filter Bar -->
+                                <div style="display: flex; gap: 1rem;">
+                                    <input type="text" id="admin-search-input" placeholder="이름, ID, 부서로 검색..." style="flex-grow: 1; padding: 0.65rem 1rem; border: 1px solid var(--border-color); border-radius: 10px; font-family: inherit; font-size: 0.9rem; background: var(--bg-surface-solid); outline: none; transition: var(--transition-quick);" />
+                                    <select id="admin-filter-division" style="padding: 0.65rem 1rem; border: 1px solid var(--border-color); border-radius: 10px; font-family: inherit; font-size: 0.9rem; background: var(--bg-surface-solid); outline: none; cursor: pointer;">
+                                        <option value="">모든 소속</option>
+                                        <option value="CSEO">CSEO</option>
+                                        <option value="CSEO직속">CSEO직속</option>
+                                        <option value="A담당">A담당</option>
+                                        <option value="B담당">B담당</option>
+                                        <option value="C담당">C담당</option>
+                                        <option value="D담당">D담당</option>
+                                    </select>
+                                </div>
 
-                                    <!-- AX Task 2 -->
-                                    <div class="task-item">
-                                        <div class="task-meta">
-                                            <span class="task-dept tag-rd">R&D R&R</span>
-                                            <span class="task-status status-ongoing">모델 학습</span>
-                                        </div>
-                                        <h4 class="task-title">AI 기반 글로벌 신에너지 특허 및 연구 문서 지능형 요약 엔진 개발</h4>
-                                        <div class="task-progress-section">
-                                            <div class="progress-bar-bg">
-                                                <div class="progress-bar-fill progress-rd" style="width: 72%;"></div>
-                                            </div>
-                                            <span class="progress-percentage">72%</span>
-                                        </div>
-                                        <div class="task-footer">
-                                            <span class="task-assignee"><i data-lucide="user-2"></i> 담당: 이진아 수석 (에너지 AI)</span>
-                                            <span class="task-deadline">LLM 파인튜닝 테스트 가동 및 정밀도 검증 (D-10)</span>
-                                        </div>
-                                    </div>
-
-                                    <!-- AX Task 3 -->
-                                    <div class="task-item">
-                                        <div class="task-meta">
-                                            <span class="task-dept tag-databiz">데이터본부 R&R</span>
-                                            <span class="task-status status-ongoing">인프라 구축</span>
-                                        </div>
-                                        <h4 class="task-title">B2B 분산 자원 에너지 수요 예측 지능형 머신러닝 모듈 구축</h4>
-                                        <div class="task-progress-section">
-                                            <div class="progress-bar-bg">
-                                                <div class="progress-bar-fill progress-databiz" style="width: 48%;"></div>
-                                            </div>
-                                            <span class="progress-percentage">48%</span>
-                                        </div>
-                                        <div class="task-footer">
-                                            <span class="task-assignee"><i data-lucide="user-2"></i> 담당: 신재희 선임 (솔루션)</span>
-                                            <span class="task-deadline">데이터 피드 정제 및 학습 파이프라인 연계 중 (D-25)</span>
-                                        </div>
-                                    </div>
+                                <!-- Admin Members Table Container -->
+                                <div style="overflow-x: auto; background: var(--bg-surface-solid); border-radius: 14px; border: 1px solid var(--border-color); box-shadow: var(--shadow-sm); flex-grow: 1; min-height: 250px;">
+                                    <table style="width: 100%; border-collapse: collapse; text-align: left; font-size: 0.88rem; min-width: 800px;">
+                                        <thead>
+                                            <tr style="background: #f8fafc; border-bottom: 1px solid var(--border-color); font-weight: 700; color: var(--text-secondary);">
+                                                <th style="padding: 0.85rem 1.1rem;">이름</th>
+                                                <th style="padding: 0.85rem 1.1rem;">ID</th>
+                                                <th style="padding: 0.85rem 1.1rem;">직급</th>
+                                                <th style="padding: 0.85rem 1.1rem;">소속</th>
+                                                <th style="padding: 0.85rem 1.1rem;">부서</th>
+                                                <th style="padding: 0.85rem 1.1rem;">이메일</th>
+                                                <th style="padding: 0.85rem 1.1rem;">전화번호</th>
+                                                <th style="padding: 0.85rem 1.1rem; text-align: center; width: 140px;">관리</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="admin-members-tbody">
+                                            <!-- Dynamic content built by js/app.js -->
+                                        </tbody>
+                                    </table>
                                 </div>
                             </div>
                         </div>
                     </div>
+
                 </div>
             </main>
         </div>
@@ -592,6 +595,29 @@
                                 </div>
                             </div>
                             
+                            <!-- SCADA Real-time Database Comparison Grid (Bar Chart + Table) -->
+                            <div class="glass-card scada-db-analytics-card" style="margin-top: 0.5rem; padding: 1.25rem; flex-shrink: 0;">
+                                <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 0.75rem; border-bottom: 1px solid var(--border-color); padding-bottom: 0.5rem;">
+                                    <h4 style="font-size: 0.95rem; font-weight: 800; display: flex; align-items: center; gap: 0.5rem; color: var(--text-primary);">
+                                        <i data-lucide="database" style="color: var(--primary-green); width: 18px; height: 18px;"></i>
+                                        SCADA 실시간 공장 부하 비교 (DB 연동)
+                                    </h4>
+                                    <span id="scada-latest-time-badge" style="font-size: 0.72rem; font-weight: 700; color: var(--primary-green); background: var(--primary-green-light); padding: 0.2rem 0.55rem; border-radius: 6px;">
+                                        최근 수집: -
+                                    </span>
+                                </div>
+                                <div style="display: grid; grid-template-columns: 1fr 2fr; gap: 1.5rem; height: 200px;">
+                                    <!-- Left: Bar Chart Comparing P7, P8, P9 -->
+                                    <div class="chart-wrapper" style="position: relative; height: 100%; width: 100%;">
+                                        <canvas id="factory-compare-chart"></canvas>
+                                    </div>
+                                    <!-- Right: Line Chart Showing 24-Hour Trend for P7, P8, P9 -->
+                                    <div class="chart-wrapper" style="position: relative; height: 100%; width: 100%;">
+                                        <canvas id="factory-trend-chart"></canvas>
+                                    </div>
+                                </div>
+                            </div>
+
                             <!-- Bottom Time-series power supply chart integrated under live cards -->
                             <div class="glass-card energy-integrated-chart-card">
                                 <div class="chart-wrapper energy-chart-wrapper-mini">
@@ -1691,6 +1717,103 @@
             </main>
         </div>
     </section>
+
+    <!-- 5. Admin Member Register/Modify Glass Modal Overlay -->
+    <div id="admin-member-modal" class="modal-overlay" style="display: none;">
+        <div class="modal-card glass-card">
+            <div class="modal-header">
+                <h3 id="modal-title">임직원 신규 등록</h3>
+                <button type="button" class="btn-close-modal" id="btn-close-modal-x"><i data-lucide="x"></i></button>
+            </div>
+            <form id="admin-member-form">
+                <div class="modal-form-grid">
+                    <div class="form-group">
+                        <label for="member-name">이름</label>
+                        <input type="text" id="member-name" required placeholder="예: 홍길동">
+                    </div>
+                    <div class="form-group">
+                        <label for="member-id">ID</label>
+                        <input type="text" id="member-id" required placeholder="예: honggd">
+                    </div>
+                    <div class="form-group">
+                        <label for="member-job-title">직급</label>
+                        <input type="text" id="member-job-title" required placeholder="예: 책임, 선임">
+                    </div>
+                    <div class="form-group">
+                        <label for="member-position">직책</label>
+                        <select id="member-position" required>
+                            <option value="">-- 선택 --</option>
+                            <option value="CSEO">CSEO</option>
+                            <option value="담당">담당</option>
+                            <option value="팀장">팀장</option>
+                            <option value="Part Leader">Part Leader</option>
+                            <option value="Engineer">Engineer</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="member-division">소속</label>
+                        <select id="member-division" required>
+                            <option value="">-- 선택 --</option>
+                            <option value="CSEO">CSEO</option>
+                            <option value="CSEO직속">CSEO직속</option>
+                            <option value="A담당">A담당</option>
+                            <option value="B담당">B담당</option>
+                            <option value="C담당">C담당</option>
+                            <option value="D담당">D담당</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="member-department">부서 (팀)</label>
+                        <input type="text" id="member-department" required placeholder="예: A팀, CSEO기획팀">
+                    </div>
+                    <div class="form-group">
+                        <label for="member-email">이메일</label>
+                        <input type="email" id="member-email" required placeholder="예: user@lgdisplay.com">
+                    </div>
+                    <div class="form-group">
+                        <label for="member-phone">전화번호</label>
+                        <input type="text" id="member-phone" required placeholder="예: 010-1234-5678">
+                    </div>
+                    <div class="form-group" style="grid-column: span 2;">
+                        <label for="member-job">담당 업무</label>
+                        <input type="text" id="member-job" required placeholder="예: A전문가, 기획, 안전관리">
+                    </div>
+                </div>
+                <div class="modal-actions">
+                    <button type="button" class="btn-cancel" id="btn-close-modal">취소</button>
+                    <button type="submit" class="btn-submit" id="btn-submit-member">저장</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- 6. Admin Password Change Glass Modal Overlay -->
+    <div id="admin-password-modal" class="modal-overlay" style="display: none;">
+        <div class="modal-card glass-card" style="max-width: 420px;">
+            <div class="modal-header">
+                <h3>관리자 비밀번호 변경</h3>
+                <button type="button" class="btn-close-modal" id="btn-close-password-modal-x"><i data-lucide="x"></i></button>
+            </div>
+            <form id="admin-password-form" style="padding: 2rem; display: flex; flex-direction: column; gap: 1.2rem;">
+                <div class="form-group">
+                    <label for="pwd-current">현재 비밀번호</label>
+                    <input type="password" id="pwd-current" required placeholder="현재 비밀번호 입력">
+                </div>
+                <div class="form-group">
+                    <label for="pwd-new">새 비밀번호</label>
+                    <input type="password" id="pwd-new" required placeholder="새 비밀번호 입력">
+                </div>
+                <div class="form-group">
+                    <label for="pwd-confirm">새 비밀번호 확인</label>
+                    <input type="password" id="pwd-confirm" required placeholder="새 비밀번호 다시 입력">
+                </div>
+                <div class="modal-actions" style="margin-top: 0.5rem;">
+                    <button type="button" class="btn-cancel" id="btn-close-password-modal">취소</button>
+                    <button type="submit" class="btn-submit" id="btn-submit-password">변경</button>
+                </div>
+            </form>
+        </div>
+    </div>
 
     <!-- Shared application script -->
     <script src="js/app.js"></script>

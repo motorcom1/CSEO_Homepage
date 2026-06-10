@@ -1,0 +1,6 @@
+name, id, job_title, position, e-mail, phone_number, division, department, job
+홍길동, honggd, 전무, CSEO, honggd@lgdisplay.com, 010-1234-5678, CSEO, CSEO, CSEO
+이순신, leess, 담당, 담당, leess@lgdisplay.com, 010-4567-1526, A담당, A담당, A담당
+정약용, jungyy, 팀장, 팀장, jungyy@lgdisplay.com, 010-7894-5648, A담당, A팀, A팀
+이경규, leekk, 책임, Part Leader, leekk@lgdisplay.com, 010-7869-4785, A담당, A팀, A전문가
+임창용, leecy, 책임, Engineer, leekk@lgdisplay.com, 010-7869-4455, A담당, A팀, A담당자
