@@ -193,6 +193,9 @@ document.addEventListener('DOMContentLoaded', () => {
                 // Lazy-load Energy Charts only when active
                 if (targetId === 'energy-overview') {
                     setTimeout(initEnergyChart, 100);
+                } else if (targetId === 'energy-weather-analysis') {
+                    setTimeout(initWeatherChart, 100);
+                    setTimeout(initDailyForecast, 100);
                 }
             } else if (parentScreen.id === 'safety-screen') {
                 document.getElementById('safety-breadcrumb-text').textContent = menuText;
@@ -607,10 +610,89 @@ document.addEventListener('DOMContentLoaded', () => {
     let priceYeongnamGas = 680000;
     let selectedKepcoSeason = null;
 
+    // Weather simulation state variables
+    let livePajuTemp = 24.5;
+    let livePajuHumi = 68;
+    let liveGumiTemp = 25.8;
+    let liveGumiHumi = 62;
+    let liveGuangzhouTemp = 30.2;
+    let liveGuangzhouHumi = 82;
+    let liveHaiphongTemp = 29.5;
+    let liveHaiphongHumi = 85;
+    
+    // Persistent random walk drifts to simulate natural fluctuations
+    let pajuTempDrift = 0;
+    let gumiTempDrift = 0;
+    let guangzhouTempDrift = 0;
+    let haiphongTempDrift = 0;
+    let pajuHumiDrift = 0;
+    let gumiHumiDrift = 0;
+    let guangzhouHumiDrift = 0;
+    let haiphongHumiDrift = 0;
+
     function startEnergySimulator() {
         if (energySimInterval) return;
         
         energySimInterval = setInterval(() => {
+            // Fluctuate weather parameters
+            const timeVal = (new Date().getHours() + new Date().getMinutes() / 60 + new Date().getSeconds() / 3600);
+            const sineTemp = Math.sin((timeVal - 8) * Math.PI / 12);
+            const sineHumi = -sineTemp;
+            
+            pajuTempDrift += (Math.random() - 0.5) * 0.15;
+            if (pajuTempDrift < -0.8) pajuTempDrift = -0.8;
+            if (pajuTempDrift > 0.8) pajuTempDrift = 0.8;
+            
+            gumiTempDrift += (Math.random() - 0.5) * 0.15;
+            if (gumiTempDrift < -0.8) gumiTempDrift = -0.8;
+            if (gumiTempDrift > 0.8) gumiTempDrift = 0.8;
+
+            guangzhouTempDrift += (Math.random() - 0.5) * 0.15;
+            if (guangzhouTempDrift < -0.8) guangzhouTempDrift = -0.8;
+            if (guangzhouTempDrift > 0.8) guangzhouTempDrift = 0.8;
+
+            haiphongTempDrift += (Math.random() - 0.5) * 0.15;
+            if (haiphongTempDrift < -0.8) haiphongTempDrift = -0.8;
+            if (haiphongTempDrift > 0.8) haiphongTempDrift = 0.8;
+            
+            pajuHumiDrift += (Math.random() - 0.5) * 0.4;
+            if (pajuHumiDrift < -2.0) pajuHumiDrift = -2.0;
+            if (pajuHumiDrift > 2.0) pajuHumiDrift = 2.0;
+            
+            gumiHumiDrift += (Math.random() - 0.5) * 0.4;
+            if (gumiHumiDrift < -2.0) gumiHumiDrift = -2.0;
+            if (gumiHumiDrift > 2.0) gumiHumiDrift = 2.0;
+
+            guangzhouHumiDrift += (Math.random() - 0.5) * 0.4;
+            if (guangzhouHumiDrift < -2.0) guangzhouHumiDrift = -2.0;
+            if (guangzhouHumiDrift > 2.0) guangzhouHumiDrift = 2.0;
+
+            haiphongHumiDrift += (Math.random() - 0.5) * 0.4;
+            if (haiphongHumiDrift < -2.0) haiphongHumiDrift = -2.0;
+            if (haiphongHumiDrift > 2.0) haiphongHumiDrift = 2.0;
+            
+            // Summer base profiles: Paju 18.0~28.0 (midpoint 23.0, amp 5.0), Gumi 19.5~29.5 (midpoint 24.5, amp 5.0), Guangzhou 26.0~34.0 (midpoint 30.0, amp 4.0), Haiphong 26.0~33.0 (midpoint 29.5, amp 3.5)
+            livePajuTemp = 23.0 + 5.0 * sineTemp + pajuTempDrift;
+            livePajuHumi = 72.5 + 12.5 * sineHumi + pajuHumiDrift;
+            
+            liveGumiTemp = 24.5 + 5.0 * sineTemp + gumiTempDrift;
+            liveGumiHumi = 67.5 + 12.5 * sineHumi + gumiHumiDrift;
+
+            liveGuangzhouTemp = 30.0 + 4.0 * sineTemp + guangzhouTempDrift;
+            liveGuangzhouHumi = 80.0 + 10.0 * sineHumi + guangzhouHumiDrift;
+
+            liveHaiphongTemp = 29.5 + 3.5 * sineTemp + haiphongTempDrift;
+            liveHaiphongHumi = 85.0 + 10.0 * sineHumi + haiphongHumiDrift;
+            
+            // Constrain humidity within realistic range
+            if (livePajuHumi < 0) livePajuHumi = 0;
+            if (livePajuHumi > 100) livePajuHumi = 100;
+            if (liveGumiHumi < 0) liveGumiHumi = 0;
+            if (liveGumiHumi > 100) liveGumiHumi = 100;
+            if (liveGuangzhouHumi < 0) liveGuangzhouHumi = 0;
+            if (liveGuangzhouHumi > 100) liveGuangzhouHumi = 100;
+            if (liveHaiphongHumi < 0) liveHaiphongHumi = 0;
+            if (liveHaiphongHumi > 100) liveHaiphongHumi = 100;
             // Fluctuate Solar: 320 to 365 kW
             liveSolar += (Math.random() - 0.5) * 8;
             if (liveSolar < 310) liveSolar = 310;
@@ -732,6 +814,113 @@ document.addEventListener('DOMContentLoaded', () => {
 
         // KEPCO Industrial Rates UI
         updateKepcoRatesUI();
+
+        // Weather UI updates
+        const txtTempPaju = document.getElementById('weather-temp-paju');
+        const txtHumiPaju = document.getElementById('weather-humi-paju');
+        const barHumiPaju = document.getElementById('weather-humi-bar-paju');
+        const txtStatusPaju = document.getElementById('weather-status-text-paju');
+        const iconPaju = document.getElementById('weather-icon-paju');
+
+        const txtTempGumi = document.getElementById('weather-temp-gumi');
+        const txtHumiGumi = document.getElementById('weather-humi-gumi');
+        const barHumiGumi = document.getElementById('weather-humi-bar-gumi');
+        const txtStatusGumi = document.getElementById('weather-status-text-gumi');
+        const iconGumi = document.getElementById('weather-icon-gumi');
+
+        const txtTempGuangzhou = document.getElementById('weather-temp-guangzhou');
+        const txtHumiGuangzhou = document.getElementById('weather-humi-guangzhou');
+        const barHumiGuangzhou = document.getElementById('weather-humi-bar-guangzhou');
+        const txtStatusGuangzhou = document.getElementById('weather-status-text-guangzhou');
+        const iconGuangzhou = document.getElementById('weather-icon-guangzhou');
+
+        const txtTempHaiphong = document.getElementById('weather-temp-haiphong');
+        const txtHumiHaiphong = document.getElementById('weather-humi-haiphong');
+        const barHumiHaiphong = document.getElementById('weather-humi-bar-haiphong');
+        const txtStatusHaiphong = document.getElementById('weather-status-text-haiphong');
+        const iconHaiphong = document.getElementById('weather-icon-haiphong');
+
+        if (txtTempPaju) txtTempPaju.textContent = livePajuTemp.toFixed(1);
+        if (txtHumiPaju) txtHumiPaju.textContent = Math.round(livePajuHumi);
+        if (barHumiPaju) barHumiPaju.style.width = `${Math.round(livePajuHumi)}%`;
+        
+        if (txtTempGumi) txtTempGumi.textContent = liveGumiTemp.toFixed(1);
+        if (txtHumiGumi) txtHumiGumi.textContent = Math.round(liveGumiHumi);
+        if (barHumiGumi) barHumiGumi.style.width = `${Math.round(liveGumiHumi)}%`;
+
+        if (txtTempGuangzhou) txtTempGuangzhou.textContent = liveGuangzhouTemp.toFixed(1);
+        if (txtHumiGuangzhou) txtHumiGuangzhou.textContent = Math.round(liveGuangzhouHumi);
+        if (barHumiGuangzhou) barHumiGuangzhou.style.width = `${Math.round(liveGuangzhouHumi)}%`;
+
+        if (txtTempHaiphong) txtTempHaiphong.textContent = liveHaiphongTemp.toFixed(1);
+        if (txtHumiHaiphong) txtHumiHaiphong.textContent = Math.round(liveHaiphongHumi);
+        if (barHumiHaiphong) barHumiHaiphong.style.width = `${Math.round(liveHaiphongHumi)}%`;
+
+        let lucideNeedsRefresh = false;
+
+        const pajuStatus = getWeatherStatus(livePajuTemp, livePajuHumi);
+        if (txtStatusPaju) txtStatusPaju.textContent = pajuStatus.text;
+        if (iconPaju) {
+            const currentIcon = iconPaju.querySelector('i')?.getAttribute('data-lucide');
+            if (currentIcon !== pajuStatus.icon) {
+                let iconColor = '#f59e0b';
+                if (pajuStatus.icon === 'cloud-rain') iconColor = '#3b82f6';
+                else if (pajuStatus.icon === 'cloud') iconColor = '#94a3b8';
+                else if (pajuStatus.icon === 'cloud-sun') iconColor = '#f59e0b';
+                iconPaju.style.color = iconColor;
+                iconPaju.innerHTML = `<i data-lucide="${pajuStatus.icon}"></i>`;
+                lucideNeedsRefresh = true;
+            }
+        }
+
+        const gumiStatus = getWeatherStatus(liveGumiTemp, liveGumiHumi);
+        if (txtStatusGumi) txtStatusGumi.textContent = gumiStatus.text;
+        if (iconGumi) {
+            const currentIcon = iconGumi.querySelector('i')?.getAttribute('data-lucide');
+            if (currentIcon !== gumiStatus.icon) {
+                let iconColor = '#f59e0b';
+                if (gumiStatus.icon === 'cloud-rain') iconColor = '#3b82f6';
+                else if (gumiStatus.icon === 'cloud') iconColor = '#94a3b8';
+                else if (gumiStatus.icon === 'cloud-sun') iconColor = '#f59e0b';
+                iconGumi.style.color = iconColor;
+                iconGumi.innerHTML = `<i data-lucide="${gumiStatus.icon}"></i>`;
+                lucideNeedsRefresh = true;
+            }
+        }
+
+        const guangzhouStatus = getWeatherStatus(liveGuangzhouTemp, liveGuangzhouHumi);
+        if (txtStatusGuangzhou) txtStatusGuangzhou.textContent = guangzhouStatus.text;
+        if (iconGuangzhou) {
+            const currentIcon = iconGuangzhou.querySelector('i')?.getAttribute('data-lucide');
+            if (currentIcon !== guangzhouStatus.icon) {
+                let iconColor = '#f59e0b';
+                if (guangzhouStatus.icon === 'cloud-rain') iconColor = '#3b82f6';
+                else if (guangzhouStatus.icon === 'cloud') iconColor = '#94a3b8';
+                else if (guangzhouStatus.icon === 'cloud-sun') iconColor = '#f59e0b';
+                iconGuangzhou.style.color = iconColor;
+                iconGuangzhou.innerHTML = `<i data-lucide="${guangzhouStatus.icon}"></i>`;
+                lucideNeedsRefresh = true;
+            }
+        }
+
+        const haiphongStatus = getWeatherStatus(liveHaiphongTemp, liveHaiphongHumi);
+        if (txtStatusHaiphong) txtStatusHaiphong.textContent = haiphongStatus.text;
+        if (iconHaiphong) {
+            const currentIcon = iconHaiphong.querySelector('i')?.getAttribute('data-lucide');
+            if (currentIcon !== haiphongStatus.icon) {
+                let iconColor = '#8b5cf6';
+                if (haiphongStatus.icon === 'cloud-rain') iconColor = '#3b82f6';
+                else if (haiphongStatus.icon === 'cloud') iconColor = '#94a3b8';
+                else if (haiphongStatus.icon === 'cloud-sun') iconColor = '#8b5cf6';
+                iconHaiphong.style.color = iconColor;
+                iconHaiphong.innerHTML = `<i data-lucide="${haiphongStatus.icon}"></i>`;
+                lucideNeedsRefresh = true;
+            }
+        }
+
+        if (lucideNeedsRefresh && typeof lucide !== 'undefined') {
+            lucide.createIcons();
+        }
     }
 
     function updateKepcoRatesUI() {
@@ -1331,5 +1520,397 @@ document.addEventListener('DOMContentLoaded', () => {
         
         if (txtInference) txtInference.textContent = liveInference.toLocaleString();
         if (barInference) barInference.style.width = `${((liveInference - 148520) / 5000 + 78)}%`;
+    }
+
+    // ==========================================================================
+    // 9. Weather Forecast Comparison Chart and Helper Logic
+    // ==========================================================================
+    let weatherChartInstance = null;
+
+    function getWeatherStatus(temp, humi) {
+        if (humi > 80) return { text: "비", icon: "cloud-rain" };
+        if (humi > 72) return { text: "흐림", icon: "cloud" };
+        if (humi > 63) return { text: "구름 조금", icon: "cloud-sun" };
+        return { text: "맑음", icon: "sun" };
+    }
+
+    function initWeatherChart() {
+        const ctx = document.getElementById('weather-forecast-chart');
+        if (!ctx || weatherChartInstance) return;
+
+        const hoursLabels = ['00:00', '01:00', '02:00', '03:00', '04:00', '05:00', '06:00', '07:00', '08:00', '09:00', '10:00', '11:00', '12:00', '13:00', '14:00', '15:00', '16:00', '17:00', '18:00', '19:00', '20:00', '21:00', '22:00', '23:00', '24:00'];
+        const hoursValues = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24];
+        
+        const pajuTempData = hoursValues.map(h => parseFloat((23.0 + 5.0 * Math.sin((h - 8) * Math.PI / 12)).toFixed(1)));
+        const pajuHumiData = hoursValues.map(h => parseFloat((72.5 - 12.5 * Math.sin((h - 8) * Math.PI / 12)).toFixed(1)));
+        const gumiTempData = hoursValues.map(h => parseFloat((24.5 + 5.0 * Math.sin((h - 8) * Math.PI / 12)).toFixed(1)));
+        const gumiHumiData = hoursValues.map(h => parseFloat((67.5 - 12.5 * Math.sin((h - 8) * Math.PI / 12)).toFixed(1)));
+        const guangzhouTempData = hoursValues.map(h => parseFloat((30.0 + 4.0 * Math.sin((h - 8) * Math.PI / 12)).toFixed(1)));
+        const guangzhouHumiData = hoursValues.map(h => parseFloat((80.0 - 10.0 * Math.sin((h - 8) * Math.PI / 12)).toFixed(1)));
+        const haiphongTempData = hoursValues.map(h => parseFloat((29.5 + 3.5 * Math.sin((h - 8) * Math.PI / 12)).toFixed(1)));
+        const haiphongHumiData = hoursValues.map(h => parseFloat((85.0 - 10.0 * Math.sin((h - 8) * Math.PI / 12)).toFixed(1)));
+
+        const weatherData = {
+            labels: hoursLabels,
+            datasets: [
+                {
+                    label: '파주 기온 (°C)',
+                    data: pajuTempData,
+                    borderColor: '#10b981',
+                    borderWidth: 2.5,
+                    backgroundColor: 'transparent',
+                    fill: false,
+                    tension: 0.4,
+                    pointBackgroundColor: '#10b981',
+                    pointBorderColor: '#ffffff',
+                    pointBorderWidth: 1.5,
+                    pointRadius: 4,
+                    pointHoverRadius: 6,
+                    yAxisID: 'y'
+                },
+                {
+                    label: '파주 습도 (%)',
+                    data: pajuHumiData,
+                    borderColor: '#14b8a6',
+                    borderWidth: 2.0,
+                    borderDash: [5, 5],
+                    backgroundColor: 'transparent',
+                    fill: false,
+                    tension: 0.4,
+                    pointBackgroundColor: '#14b8a6',
+                    pointBorderColor: '#ffffff',
+                    pointBorderWidth: 1.0,
+                    pointRadius: 3,
+                    pointHoverRadius: 5,
+                    yAxisID: 'y1'
+                },
+                {
+                    label: '구미 기온 (°C)',
+                    data: gumiTempData,
+                    borderColor: '#3b82f6',
+                    borderWidth: 2.5,
+                    backgroundColor: 'transparent',
+                    fill: false,
+                    tension: 0.4,
+                    pointBackgroundColor: '#3b82f6',
+                    pointBorderColor: '#ffffff',
+                    pointBorderWidth: 1.5,
+                    pointRadius: 4,
+                    pointHoverRadius: 6,
+                    yAxisID: 'y'
+                },
+                {
+                    label: '구미 습도 (%)',
+                    data: gumiHumiData,
+                    borderColor: '#60a5fa',
+                    borderWidth: 2.0,
+                    borderDash: [5, 5],
+                    backgroundColor: 'transparent',
+                    fill: false,
+                    tension: 0.4,
+                    pointBackgroundColor: '#60a5fa',
+                    pointBorderColor: '#ffffff',
+                    pointBorderWidth: 1.0,
+                    pointRadius: 3,
+                    pointHoverRadius: 5,
+                    yAxisID: 'y1'
+                },
+                {
+                    label: '광저우 기온 (°C)',
+                    data: guangzhouTempData,
+                    borderColor: '#ef4444',
+                    borderWidth: 2.5,
+                    backgroundColor: 'transparent',
+                    fill: false,
+                    tension: 0.4,
+                    pointBackgroundColor: '#ef4444',
+                    pointBorderColor: '#ffffff',
+                    pointBorderWidth: 1.5,
+                    pointRadius: 4,
+                    pointHoverRadius: 6,
+                    yAxisID: 'y'
+                },
+                {
+                    label: '광저우 습도 (%)',
+                    data: guangzhouHumiData,
+                    borderColor: '#f87171',
+                    borderWidth: 2.0,
+                    borderDash: [5, 5],
+                    backgroundColor: 'transparent',
+                    fill: false,
+                    tension: 0.4,
+                    pointBackgroundColor: '#f87171',
+                    pointBorderColor: '#ffffff',
+                    pointBorderWidth: 1.0,
+                    pointRadius: 3,
+                    pointHoverRadius: 5,
+                    yAxisID: 'y1'
+                },
+                {
+                    label: '하이퐁 기온 (°C)',
+                    data: haiphongTempData,
+                    borderColor: '#8b5cf6',
+                    borderWidth: 2.5,
+                    backgroundColor: 'transparent',
+                    fill: false,
+                    tension: 0.4,
+                    pointBackgroundColor: '#8b5cf6',
+                    pointBorderColor: '#ffffff',
+                    pointBorderWidth: 1.5,
+                    pointRadius: 4,
+                    pointHoverRadius: 6,
+                    yAxisID: 'y'
+                },
+                {
+                    label: '하이퐁 습도 (%)',
+                    data: haiphongHumiData,
+                    borderColor: '#a78bfa',
+                    borderWidth: 2.0,
+                    borderDash: [5, 5],
+                    backgroundColor: 'transparent',
+                    fill: false,
+                    tension: 0.4,
+                    pointBackgroundColor: '#a78bfa',
+                    pointBorderColor: '#ffffff',
+                    pointBorderWidth: 1.0,
+                    pointRadius: 3,
+                    pointHoverRadius: 5,
+                    yAxisID: 'y1'
+                }
+            ]
+        };
+
+        weatherChartInstance = new Chart(ctx, {
+            type: 'line',
+            data: weatherData,
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        position: 'top',
+                        labels: {
+                            font: { family: 'Outfit', size: 10, weight: '600' },
+                            color: '#475569',
+                            boxWidth: 12,
+                            padding: 8
+                        }
+                    },
+                    tooltip: {
+                        backgroundColor: 'rgba(255, 255, 255, 0.95)',
+                        titleColor: '#0f172a',
+                        bodyColor: '#475569',
+                        borderColor: 'rgba(16, 185, 129, 0.2)',
+                        borderWidth: 1,
+                        padding: 10,
+                        cornerRadius: 10,
+                        titleFont: { family: 'Outfit', weight: '700' },
+                        bodyFont: { family: 'Outfit' },
+                        callbacks: {
+                            label: function(context) {
+                                let label = context.dataset.label || '';
+                                if (label) {
+                                    label += ': ';
+                                }
+                                if (context.parsed.y !== null) {
+                                    label += context.parsed.y;
+                                    if (context.dataset.yAxisID === 'y') {
+                                        label += '°C';
+                                    } else {
+                                        label += '%';
+                                    }
+                                }
+                                return label;
+                            }
+                        }
+                    }
+                },
+                scales: {
+                    x: {
+                        grid: { display: false },
+                        ticks: {
+                            font: { family: 'Outfit', size: 10, weight: '500' },
+                            color: '#475569',
+                            autoSkip: true,
+                            maxTicksLimit: 13,
+                            maxRotation: 0,
+                            minRotation: 0
+                        }
+                    },
+                    y: {
+                        type: 'linear',
+                        position: 'left',
+                        grid: { color: 'rgba(226, 232, 240, 0.5)' },
+                        title: {
+                            display: true,
+                            text: '기온 (°C)',
+                            font: { family: 'Outfit', size: 10, weight: '700' },
+                            color: '#475569'
+                        },
+                        ticks: {
+                            font: { family: 'Outfit', size: 10 },
+                            color: '#94a3b8',
+                            callback: function(value) {
+                                return value + '°C';
+                            }
+                        }
+                    },
+                    y1: {
+                        type: 'linear',
+                        position: 'right',
+                        grid: { display: false },
+                        title: {
+                            display: true,
+                            text: '습도 (%)',
+                            font: { family: 'Outfit', size: 10, weight: '700' },
+                            color: '#475569'
+                        },
+                        ticks: {
+                            font: { family: 'Outfit', size: 10 },
+                            color: '#94a3b8',
+                            callback: function(value) {
+                                return value + '%';
+                            }
+                        },
+                        min: 0,
+                        max: 100
+                    }
+                }
+            }
+        });
+    }
+
+    function initDailyForecast() {
+        const containerPaju = document.getElementById('weather-forecast-list-paju');
+        const containerGumi = document.getElementById('weather-forecast-list-gumi');
+        const containerGuangzhou = document.getElementById('weather-forecast-list-guangzhou');
+        const containerHaiphong = document.getElementById('weather-forecast-list-haiphong');
+        if (!containerPaju || !containerGumi || !containerGuangzhou || !containerHaiphong) return;
+
+        // Clear previous list if any
+        containerPaju.innerHTML = '';
+        containerGumi.innerHTML = '';
+        containerGuangzhou.innerHTML = '';
+        containerHaiphong.innerHTML = '';
+
+        const dayNames = ['일', '월', '화', '수', '목', '금', '토'];
+        
+        // Define weather forecast data structures
+        const pajuForecast = [
+            { status: "맑음", icon: "sun", iconColor: "#f59e0b", temp: "18 ~ 28°C", humi: "65%" },
+            { status: "구름 조금", icon: "cloud-sun", iconColor: "#f59e0b", temp: "19 ~ 29°C", humi: "68%" },
+            { status: "흐림", icon: "cloud", iconColor: "#94a3b8", temp: "20 ~ 27°C", humi: "75%" },
+            { status: "비", icon: "cloud-rain", iconColor: "#3b82f6", temp: "18 ~ 24°C", humi: "85%" },
+            { status: "구름 조금", icon: "cloud-sun", iconColor: "#f59e0b", temp: "19 ~ 26°C", humi: "70%" }
+        ];
+
+        const gumiForecast = [
+            { status: "맑음", icon: "sun", iconColor: "#f59e0b", temp: "20 ~ 30°C", humi: "60%" },
+            { status: "구름 조금", icon: "cloud-sun", iconColor: "#f59e0b", temp: "21 ~ 31°C", humi: "63%" },
+            { status: "흐림", icon: "cloud", iconColor: "#94a3b8", temp: "22 ~ 29°C", humi: "70%" },
+            { status: "비", icon: "cloud-rain", iconColor: "#3b82f6", temp: "20 ~ 26°C", humi: "80%" },
+            { status: "구름 조금", icon: "cloud-sun", iconColor: "#f59e0b", temp: "21 ~ 28°C", humi: "65%" }
+        ];
+
+        const guangzhouForecast = [
+            { status: "비", icon: "cloud-rain", iconColor: "#3b82f6", temp: "25 ~ 31°C", humi: "82%" },
+            { status: "비", icon: "cloud-rain", iconColor: "#3b82f6", temp: "26 ~ 32°C", humi: "85%" },
+            { status: "흐림", icon: "cloud", iconColor: "#94a3b8", temp: "27 ~ 33°C", humi: "78%" },
+            { status: "구름 조금", icon: "cloud-sun", iconColor: "#f59e0b", temp: "28 ~ 34°C", humi: "70%" },
+            { status: "맑음", icon: "sun", iconColor: "#f59e0b", temp: "27 ~ 35°C", humi: "65%" }
+        ];
+
+        const haiphongForecast = [
+            { status: "비", icon: "cloud-rain", iconColor: "#3b82f6", temp: "26 ~ 32°C", humi: "85%" },
+            { status: "흐림", icon: "cloud", iconColor: "#94a3b8", temp: "27 ~ 33°C", humi: "80%" },
+            { status: "비", icon: "cloud-rain", iconColor: "#3b82f6", temp: "26 ~ 31°C", humi: "88%" },
+            { status: "구름 조금", icon: "cloud-sun", iconColor: "#8b5cf6", temp: "28 ~ 34°C", humi: "75%" },
+            { status: "맑음", icon: "sun", iconColor: "#8b5cf6", temp: "28 ~ 35°C", humi: "70%" }
+        ];
+
+        for (let i = 0; i < 5; i++) {
+            const date = new Date();
+            date.setDate(date.getDate() + i + 1); // tomorrow onwards
+            const month = date.getMonth() + 1;
+            const day = date.getDate();
+            const dayName = dayNames[date.getDay()];
+            const dateStr = `${month}/${day} (${dayName})`;
+
+            // Paju item
+            const pData = pajuForecast[i];
+            const pRow = document.createElement('div');
+            pRow.className = 'forecast-row';
+            pRow.style.cssText = 'display: flex; align-items: center; justify-content: space-between; padding: 0.45rem 0.75rem; border-radius: 10px; background: rgba(0,0,0,0.02); font-size: 0.8rem; border: 1px solid transparent; transition: background 0.2s; cursor: default;';
+            pRow.onmouseover = () => { pRow.style.background = 'rgba(16, 185, 129, 0.05)'; pRow.style.borderColor = 'rgba(16, 185, 129, 0.15)'; };
+            pRow.onmouseout = () => { pRow.style.background = 'rgba(0,0,0,0.02)'; pRow.style.borderColor = 'transparent'; };
+            pRow.innerHTML = `
+                <span style="font-weight: 700; color: var(--text-secondary); width: 80px;">${dateStr}</span>
+                <div style="display: flex; align-items: center; gap: 0.4rem; width: 95px;">
+                    <i data-lucide="${pData.icon}" style="width: 15px; height: 15px; color: ${pData.iconColor};"></i>
+                    <span style="font-weight: 700; color: var(--text-primary);">${pData.status}</span>
+                </div>
+                <span style="font-weight: 800; color: var(--text-primary); text-align: right; width: 105px;">${pData.temp}</span>
+                <span style="font-weight: 700; color: #10b981; text-align: right; width: 65px;">${pData.humi}</span>
+            `;
+            containerPaju.appendChild(pRow);
+
+            // Gumi item
+            const gData = gumiForecast[i];
+            const gRow = document.createElement('div');
+            gRow.className = 'forecast-row';
+            gRow.style.cssText = 'display: flex; align-items: center; justify-content: space-between; padding: 0.45rem 0.75rem; border-radius: 10px; background: rgba(0,0,0,0.02); font-size: 0.8rem; border: 1px solid transparent; transition: background 0.2s; cursor: default;';
+            gRow.onmouseover = () => { gRow.style.background = 'rgba(59, 130, 246, 0.05)'; gRow.style.borderColor = 'rgba(59, 130, 246, 0.15)'; };
+            gRow.onmouseout = () => { gRow.style.background = 'rgba(0,0,0,0.02)'; gRow.style.borderColor = 'transparent'; };
+            gRow.innerHTML = `
+                <span style="font-weight: 700; color: var(--text-secondary); width: 80px;">${dateStr}</span>
+                <div style="display: flex; align-items: center; gap: 0.4rem; width: 95px;">
+                    <i data-lucide="${gData.icon}" style="width: 15px; height: 15px; color: ${gData.iconColor};"></i>
+                    <span style="font-weight: 700; color: var(--text-primary);">${gData.status}</span>
+                </div>
+                <span style="font-weight: 800; color: var(--text-primary); text-align: right; width: 105px;">${gData.temp}</span>
+                <span style="font-weight: 700; color: #3b82f6; text-align: right; width: 65px;">${gData.humi}</span>
+            `;
+            containerGumi.appendChild(gRow);
+
+            // Guangzhou item
+            const gzData = guangzhouForecast[i];
+            const gzRow = document.createElement('div');
+            gzRow.className = 'forecast-row';
+            gzRow.style.cssText = 'display: flex; align-items: center; justify-content: space-between; padding: 0.45rem 0.75rem; border-radius: 10px; background: rgba(0,0,0,0.02); font-size: 0.8rem; border: 1px solid transparent; transition: background 0.2s; cursor: default;';
+            gzRow.onmouseover = () => { gzRow.style.background = 'rgba(239, 68, 68, 0.05)'; gzRow.style.borderColor = 'rgba(239, 68, 68, 0.15)'; };
+            gzRow.onmouseout = () => { gzRow.style.background = 'rgba(0,0,0,0.02)'; gzRow.style.borderColor = 'transparent'; };
+            gzRow.innerHTML = `
+                <span style="font-weight: 700; color: var(--text-secondary); width: 80px;">${dateStr}</span>
+                <div style="display: flex; align-items: center; gap: 0.4rem; width: 95px;">
+                    <i data-lucide="${gzData.icon}" style="width: 15px; height: 15px; color: ${gzData.iconColor};"></i>
+                    <span style="font-weight: 700; color: var(--text-primary);">${gzData.status}</span>
+                </div>
+                <span style="font-weight: 800; color: var(--text-primary); text-align: right; width: 105px;">${gzData.temp}</span>
+                <span style="font-weight: 700; color: #ef4444; text-align: right; width: 65px;">${gzData.humi}</span>
+            `;
+            containerGuangzhou.appendChild(gzRow);
+
+            // Haiphong item
+            const hpData = haiphongForecast[i];
+            const hpRow = document.createElement('div');
+            hpRow.className = 'forecast-row';
+            hpRow.style.cssText = 'display: flex; align-items: center; justify-content: space-between; padding: 0.45rem 0.75rem; border-radius: 10px; background: rgba(0,0,0,0.02); font-size: 0.8rem; border: 1px solid transparent; transition: background 0.2s; cursor: default;';
+            hpRow.onmouseover = () => { hpRow.style.background = 'rgba(139, 92, 246, 0.05)'; hpRow.style.borderColor = 'rgba(139, 92, 246, 0.15)'; };
+            hpRow.onmouseout = () => { hpRow.style.background = 'rgba(0,0,0,0.02)'; hpRow.style.borderColor = 'transparent'; };
+            hpRow.innerHTML = `
+                <span style="font-weight: 700; color: var(--text-secondary); width: 80px;">${dateStr}</span>
+                <div style="display: flex; align-items: center; gap: 0.4rem; width: 95px;">
+                    <i data-lucide="${hpData.icon}" style="width: 15px; height: 15px; color: ${hpData.iconColor};"></i>
+                    <span style="font-weight: 700; color: var(--text-primary);">${hpData.status}</span>
+                </div>
+                <span style="font-weight: 800; color: var(--text-primary); text-align: right; width: 105px;">${hpData.temp}</span>
+                <span style="font-weight: 700; color: #8b5cf6; text-align: right; width: 65px;">${hpData.humi}</span>
+            `;
+            containerHaiphong.appendChild(hpRow);
+        }
+
+        if (typeof lucide !== 'undefined') {
+            lucide.createIcons();
+        }
     }
 });

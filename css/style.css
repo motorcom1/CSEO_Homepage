@@ -456,13 +456,13 @@ button {
 
 /* Sidebar Structure styling */
 .sidebar {
-    width: 260px;
+    width: 210px;
     height: 100vh;
     background: var(--bg-sidebar);
     backdrop-filter: blur(24px);
     -webkit-backdrop-filter: blur(24px);
     border-right: 1px solid var(--border-color);
-    padding: 2.25rem 1.25rem;
+    padding: 2.25rem 0.75rem;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
@@ -514,7 +514,7 @@ button {
 .mark-green { background: var(--gradient-energy); }
 
 .logo-text {
-    font-size: 1.2rem;
+    font-size: 1.08rem;
     font-weight: 800;
     letter-spacing: -0.5px;
     color: var(--text-primary);
@@ -538,7 +538,7 @@ button {
     gap: 0.85rem;
     padding: 0.9rem 1.1rem;
     border-radius: 14px;
-    font-size: 0.95rem;
+    font-size: 0.85rem;
     font-weight: 600;
     color: var(--text-secondary);
     transition: var(--transition-quick);
@@ -601,7 +601,7 @@ button {
     display: flex;
     align-items: center;
     gap: 0.5rem;
-    font-size: 0.8rem;
+    font-size: 0.75rem;
     font-weight: 700;
 }
 
@@ -686,7 +686,7 @@ button {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding: 0 2.5rem;
+    padding: 0 1rem;
     flex-shrink: 0;
 }
 
@@ -740,16 +740,16 @@ button {
 .sub-view-container {
     flex-grow: 1;
     position: relative;
-    padding: 2rem 2.5rem;
+    padding: 1.5rem 1rem;
     background: transparent;
 }
 
 .sub-view {
     position: absolute;
-    top: 2rem;
-    left: 2.5rem;
-    right: 2.5rem;
-    bottom: 2.5rem;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
     opacity: 0;
     pointer-events: none;
     transform: translateY(12px) scale(0.995);
@@ -1814,9 +1814,9 @@ button {
     .sidebar-status .status-lbl { display: none; }
     .sidebar-status { justify-content: center; }
     
-    .main-header { padding: 0 1.5rem; }
-    .sub-view-container { padding: 1.5rem; }
-    .sub-view { top: 1.5rem; left: 1.5rem; right: 1.5rem; bottom: 1.5rem; }
+    .main-header { padding: 0 1rem; }
+    .sub-view-container { padding: 1rem; }
+    .sub-view { top: 0; left: 0; right: 0; bottom: 0; }
 }
 
 @media (max-width: 640px) {
@@ -2010,5 +2010,56 @@ button {
     top: 52% !important; /* Optical adjustment inside heart */
     left: 50% !important;
     transform: translate(-50%, -50%) !important;
+}
+
+/* Weather Analysis sub-view styles */
+#energy-weather-analysis {
+    overflow-y: auto !important;
+}
+.weather-location-card {
+    min-height: 220px;
+    transition: transform 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
+}
+.weather-location-card:hover {
+    transform: translateY(-4px) !important;
+    border-color: rgba(16, 185, 129, 0.4) !important;
+    box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1) !important;
+}
+
+/* Dynamic Weather Icon Animations */
+.weather-icon-box i[data-lucide="sun"] {
+    animation: weather-spin 20s linear infinite;
+}
+
+.weather-icon-box i[data-lucide="cloud-sun"] {
+    animation: weather-bounce 4s ease-in-out infinite;
+}
+
+.weather-icon-box i[data-lucide="cloud-rain"] {
+    animation: weather-drizzle 2s ease-in-out infinite;
+}
+
+.weather-icon-box i[data-lucide="cloud"] {
+    animation: weather-float 6s ease-in-out infinite;
+}
+
+@keyframes weather-spin {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+}
+
+@keyframes weather-bounce {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-3px); }
+}
+
+@keyframes weather-drizzle {
+    0%, 100% { transform: translateY(0) scale(1); }
+    50% { transform: translateY(2px) scale(0.95); }
+}
+
+@keyframes weather-float {
+    0%, 100% { transform: translateX(0); }
+    50% { transform: translateX(3px); }
 }
 

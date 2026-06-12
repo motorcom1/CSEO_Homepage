@@ -231,7 +231,6 @@
                                     <i data-lucide="check-square" class="header-icon blue-text"></i>
                                     <div>
                                         <h3>부서별 업무 실시간 관리판</h3>
-                                        <p>부서별 최우선 혁신 프로젝트의 리딩 담당자 및 실시간 진행 진척률을 추적합니다.</p>
                                     </div>
                                 </div>
                             </div>
@@ -307,7 +306,6 @@
                                     <i data-lucide="bar-chart-3" class="header-icon indigo-text"></i>
                                     <div>
                                         <h3>부서별 데이터 축적 및 클라우드 연계 트렌드</h3>
-                                        <p>각 핵심 부서가 로컬 서버 및 클라우드 통합 저장소에 업로드한 데이터 볼륨 수치를 시각화합니다.</p>
                                     </div>
                                 </div>
                             </div>
@@ -360,7 +358,6 @@
                                     <i data-lucide="settings" class="header-icon purple-text"></i>
                                     <div>
                                         <h3>임직원 정보 관리 (관리자 모드)</h3>
-                                        <p>PostgreSQL DB 및 CSV 파일과 연동되어 실시간으로 임직원을 등록, 수정, 삭제할 수 있습니다.</p>
                                     </div>
                                 </div>
                                 <div style="display: flex; gap: 0.6rem; flex-wrap: wrap;">
@@ -452,6 +449,10 @@
                         <button type="button" class="sidebar-btn" data-target="energy-eco" aria-label="친환경 기여 지표">
                             <i data-lucide="leaf"></i>
                             <span>친환경 기여 지표</span>
+                        </button>
+                        <button type="button" class="sidebar-btn" data-target="energy-weather-analysis" aria-label="기상청 외기 분석">
+                            <i data-lucide="cloud-sun"></i>
+                            <span>기상청 외기 분석</span>
                         </button>
                     </nav>
                 </div>
@@ -634,7 +635,6 @@
                                     <i data-lucide="coins" class="header-icon green-text"></i>
                                     <div>
                                         <h3>계정 및 용도별 유틸리티 요금 실시간 추세</h3>
-                                        <p>사옥 내 주요 핵심 전력 및 용수 소비처별 요금 부담 비중과 실시간 단가 기준 당월 예상 요금을 정산합니다.</p>
                                     </div>
                                 </div>
                             </div>
@@ -960,7 +960,6 @@
                                     <i data-lucide="cpu" class="header-icon green-text"></i>
                                     <div>
                                         <h3>주요 대형 전력 소비 설비 실시간 감시</h3>
-                                        <p>사옥 가동 핵심 장치들의 실시간 작동율, 소모 전력량 및 상태 LED를 추적합니다.</p>
                                     </div>
                                 </div>
                             </div>
@@ -1041,7 +1040,6 @@
                                     <i data-lucide="trending-down" class="header-icon green-text"></i>
                                     <div>
                                         <h3>사옥 에너지 감축 혁신 프로젝트</h3>
-                                        <p>전사 ESG 비용 절감 활동을 위해 부서별로 주관 중인 행동강령 및 설비 지능 제어 과제를 모니터합니다.</p>
                                     </div>
                                 </div>
                             </div>
@@ -1117,7 +1115,6 @@
                                     <i data-lucide="leaf" class="header-icon green-text"></i>
                                     <div>
                                         <h3>탄소 배출 저감 및 누적 경제 성과</h3>
-                                        <p>친환경 자가 발전을 대체 자원으로 활용하여 기여한 누적 이산화탄소 절감량 및 혜택입니다.</p>
                                     </div>
                                 </div>
                             </div>
@@ -1163,6 +1160,294 @@
                                 </div>
                             </div>
                         </div>
+                    </div>
+
+                    <!-- Sub-view 6: 기상청 외기 분석 (파주시 월롱면, 구미시 시미동 기온 및 습도 실시간 모니터링) -->
+                    <div id="energy-weather-analysis" class="sub-view">
+                        <div class="glass-card" style="display: flex; flex-direction: column; min-height: 100%; height: auto; padding-bottom: 2rem; flex-shrink: 0;">
+                            <div class="card-header" style="flex-shrink: 0; padding: 1.25rem 1.75rem 0.75rem 1.75rem; display: flex; justify-content: space-between; align-items: center;">
+                                <div class="card-header-title">
+                                    <i data-lucide="cloud-sun" class="header-icon green-text"></i>
+                                    <div>
+                                        <h3>기상청 지역별 실시간 외기 분석</h3>
+                                    </div>
+                                </div>
+                                <span class="indicator-pill" style="font-size: 0.72rem; padding: 0.3rem 0.6rem; border-radius: 8px; background: rgba(16, 185, 129, 0.05); color: var(--primary-green); border: 1px solid rgba(16, 185, 129, 0.15); font-weight: 700; display: inline-flex; align-items: center; gap: 0.3rem; margin-left: auto;">
+                                    <i data-lucide="database" style="width: 11px; height: 11px;"></i>
+                                    데이터 출처: 기상청 단기예보 API
+                                </span>
+                            </div>
+                            
+                            <!-- Grid with Location Cards -->
+                            <div class="weather-analysis-grid" style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 1rem; padding: 0.5rem 1.75rem 1.25rem 1.75rem; flex-shrink: 0;">
+                                <!-- Location 1: Paju -->
+                                <div class="weather-location-card glass-card" style="padding: 1.15rem; display: flex; flex-direction: column; justify-content: space-between; border-radius: 20px; background: var(--bg-surface-solid); border: 1px solid var(--border-color); box-shadow: var(--shadow-sm);">
+                                    <div class="weather-card-head" style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 0.75rem;">
+                                        <div>
+                                            <span class="location-badge" style="background: rgba(16, 185, 129, 0.1); color: var(--primary-green); padding: 0.25rem 0.6rem; border-radius: 8px; font-size: 0.75rem; font-weight: 700; display: inline-block; margin-bottom: 0.4rem;">수도권 사업소</span>
+                                            <h4 style="font-size: 1.15rem; font-weight: 800; color: var(--text-primary); margin: 0;">경기도 파주시 월롱면</h4>
+                                        </div>
+                                        <div class="weather-icon-box" id="weather-icon-paju" style="font-size: 2rem; color: #f59e0b; display: flex; align-items: center; justify-content: center; width: 40px; height: 40px;">
+                                            <i data-lucide="sun"></i>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="weather-card-body" style="margin-bottom: 0.8rem;">
+                                        <!-- Temperature Dial representation -->
+                                        <div class="weather-metric-row" style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 0.8rem;">
+                                            <div style="display: flex; align-items: center; gap: 0.5rem;">
+                                                 <i data-lucide="thermometer" style="color: #ef4444; width: 20px; height: 20px;"></i>
+                                                <span style="font-size: 0.9rem; font-weight: 700; color: var(--text-secondary);">외기 온도</span>
+                                            </div>
+                                            <div style="display: flex; align-items: baseline; gap: 0.2rem;">
+                                                <span id="weather-temp-paju" style="font-size: 2rem; font-weight: 800; color: var(--text-primary);">24.5</span>
+                                                <span style="font-size: 1rem; font-weight: 700; color: var(--text-secondary);">°C</span>
+                                            </div>
+                                        </div>
+                                        
+                                        <!-- Humidity Bar representation -->
+                                        <div class="weather-metric-row" style="display: flex; flex-direction: column; gap: 0.35rem;">
+                                            <div style="display: flex; align-items: center; justify-content: space-between;">
+                                                <div style="display: flex; align-items: center; gap: 0.5rem;">
+                                                    <i data-lucide="droplet" style="color: #3b82f6; width: 18px; height: 18px;"></i>
+                                                    <span style="font-size: 0.9rem; font-weight: 700; color: var(--text-secondary);">상대 습도</span>
+                                                </div>
+                                                <div style="display: flex; align-items: baseline; gap: 0.15rem;">
+                                                    <span id="weather-humi-paju" style="font-size: 1.25rem; font-weight: 800; color: var(--text-primary);">68</span>
+                                                    <span style="font-size: 0.8rem; font-weight: 700; color: var(--text-secondary);">%</span>
+                                                </div>
+                                            </div>
+                                            <div class="weather-progress-bg" style="width: 100%; height: 6px; background: rgba(0,0,0,0.05); border-radius: 4px; overflow: hidden;">
+                                                <div class="weather-progress-fill" id="weather-humi-bar-paju" style="width: 68%; height: 100%; background: #3b82f6; border-radius: 4px; transition: width 0.5s ease;"></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="weather-card-foot" style="border-top: 1px solid var(--border-color); padding-top: 0.6rem; display: flex; justify-content: space-between; align-items: center;">
+                                        <div class="weather-sync-status" style="display: flex; align-items: center; gap: 0.4rem;">
+                                            <span class="pulse-dot green" style="width: 6px; height: 6px;"></span>
+                                            <span style="font-size: 0.72rem; font-weight: 700; color: var(--primary-green);">기상청 정보 연동 중</span>
+                                        </div>
+                                        <span id="weather-status-text-paju" style="font-size: 0.76rem; font-weight: 800; color: var(--text-primary);">맑음</span>
+                                    </div>
+                                </div>
+
+                                <!-- Location 2: Gumi -->
+                                <div class="weather-location-card glass-card" style="padding: 1.15rem; display: flex; flex-direction: column; justify-content: space-between; border-radius: 20px; background: var(--bg-surface-solid); border: 1px solid var(--border-color); box-shadow: var(--shadow-sm);">
+                                    <div class="weather-card-head" style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 0.75rem;">
+                                        <div>
+                                            <span class="location-badge" style="background: rgba(59, 130, 246, 0.1); color: #2563eb; padding: 0.25rem 0.6rem; border-radius: 8px; font-size: 0.75rem; font-weight: 700; display: inline-block; margin-bottom: 0.4rem;">영남권 사업소</span>
+                                            <h4 style="font-size: 1.15rem; font-weight: 800; color: var(--text-primary); margin: 0;">경상북도 구미시 시미동</h4>
+                                        </div>
+                                        <div class="weather-icon-box" id="weather-icon-gumi" style="font-size: 2rem; color: #94a3b8; display: flex; align-items: center; justify-content: center; width: 40px; height: 40px;">
+                                            <i data-lucide="cloud-sun"></i>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="weather-card-body" style="margin-bottom: 0.8rem;">
+                                        <!-- Temperature Dial representation -->
+                                        <div class="weather-metric-row" style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 0.8rem;">
+                                            <div style="display: flex; align-items: center; gap: 0.5rem;">
+                                                 <i data-lucide="thermometer" style="color: #ef4444; width: 20px; height: 20px;"></i>
+                                                <span style="font-size: 0.9rem; font-weight: 700; color: var(--text-secondary);">외기 온도</span>
+                                            </div>
+                                            <div style="display: flex; align-items: baseline; gap: 0.2rem;">
+                                                <span id="weather-temp-gumi" style="font-size: 2rem; font-weight: 800; color: var(--text-primary);">25.8</span>
+                                                <span style="font-size: 1rem; font-weight: 700; color: var(--text-secondary);">°C</span>
+                                            </div>
+                                        </div>
+                                        
+                                        <!-- Humidity Bar representation -->
+                                        <div class="weather-metric-row" style="display: flex; flex-direction: column; gap: 0.35rem;">
+                                            <div style="display: flex; align-items: center; justify-content: space-between;">
+                                                <div style="display: flex; align-items: center; gap: 0.5rem;">
+                                                    <i data-lucide="droplet" style="color: #3b82f6; width: 18px; height: 18px;"></i>
+                                                    <span style="font-size: 0.9rem; font-weight: 700; color: var(--text-secondary);">상대 습도</span>
+                                                </div>
+                                                <div style="display: flex; align-items: baseline; gap: 0.15rem;">
+                                                    <span id="weather-humi-gumi" style="font-size: 1.25rem; font-weight: 800; color: var(--text-primary);">62</span>
+                                                    <span style="font-size: 0.8rem; font-weight: 700; color: var(--text-secondary);">%</span>
+                                                </div>
+                                            </div>
+                                            <div class="weather-progress-bg" style="width: 100%; height: 6px; background: rgba(0,0,0,0.05); border-radius: 4px; overflow: hidden;">
+                                                <div class="weather-progress-fill" id="weather-humi-bar-gumi" style="width: 62%; height: 100%; background: #3b82f6; border-radius: 4px; transition: width 0.5s ease;"></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="weather-card-foot" style="border-top: 1px solid var(--border-color); padding-top: 0.6rem; display: flex; justify-content: space-between; align-items: center;">
+                                        <div class="weather-sync-status" style="display: flex; align-items: center; gap: 0.4rem;">
+                                            <span class="pulse-dot green" style="width: 6px; height: 6px;"></span>
+                                            <span style="font-size: 0.72rem; font-weight: 700; color: var(--primary-green);">기상청 정보 연동 중</span>
+                                        </div>
+                                        <span id="weather-status-text-gumi" style="font-size: 0.76rem; font-weight: 800; color: var(--text-primary);">구름 조금</span>
+                                    </div>
+                                </div>
+
+                                <!-- Location 3: Guangzhou -->
+                                <div class="weather-location-card glass-card" style="padding: 1.15rem; display: flex; flex-direction: column; justify-content: space-between; border-radius: 20px; background: var(--bg-surface-solid); border: 1px solid var(--border-color); box-shadow: var(--shadow-sm);">
+                                    <div class="weather-card-head" style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 0.75rem;">
+                                        <div>
+                                            <span class="location-badge" style="background: rgba(239, 68, 68, 0.1); color: #ef4444; padding: 0.25rem 0.6rem; border-radius: 8px; font-size: 0.75rem; font-weight: 700; display: inline-block; margin-bottom: 0.4rem;">해외 사업소</span>
+                                            <h4 style="font-size: 1.15rem; font-weight: 800; color: var(--text-primary); margin: 0;">중국 광저우</h4>
+                                        </div>
+                                        <div class="weather-icon-box" id="weather-icon-guangzhou" style="font-size: 2rem; color: #ef4444; display: flex; align-items: center; justify-content: center; width: 40px; height: 40px;">
+                                            <i data-lucide="cloud-rain"></i>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="weather-card-body" style="margin-bottom: 0.8rem;">
+                                        <!-- Temperature Dial representation -->
+                                        <div class="weather-metric-row" style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 0.8rem;">
+                                            <div style="display: flex; align-items: center; gap: 0.5rem;">
+                                                 <i data-lucide="thermometer" style="color: #ef4444; width: 20px; height: 20px;"></i>
+                                                <span style="font-size: 0.9rem; font-weight: 700; color: var(--text-secondary);">외기 온도</span>
+                                            </div>
+                                            <div style="display: flex; align-items: baseline; gap: 0.2rem;">
+                                                <span id="weather-temp-guangzhou" style="font-size: 2rem; font-weight: 800; color: var(--text-primary);">30.2</span>
+                                                <span style="font-size: 1rem; font-weight: 700; color: var(--text-secondary);">°C</span>
+                                            </div>
+                                        </div>
+                                        
+                                        <!-- Humidity Bar representation -->
+                                        <div class="weather-metric-row" style="display: flex; flex-direction: column; gap: 0.35rem;">
+                                            <div style="display: flex; align-items: center; justify-content: space-between;">
+                                                <div style="display: flex; align-items: center; gap: 0.5rem;">
+                                                    <i data-lucide="droplet" style="color: #3b82f6; width: 18px; height: 18px;"></i>
+                                                    <span style="font-size: 0.9rem; font-weight: 700; color: var(--text-secondary);">상대 습도</span>
+                                                </div>
+                                                <div style="display: flex; align-items: baseline; gap: 0.15rem;">
+                                                    <span id="weather-humi-guangzhou" style="font-size: 1.25rem; font-weight: 800; color: var(--text-primary);">82</span>
+                                                    <span style="font-size: 0.8rem; font-weight: 700; color: var(--text-secondary);">%</span>
+                                                </div>
+                                            </div>
+                                            <div class="weather-progress-bg" style="width: 100%; height: 6px; background: rgba(0,0,0,0.05); border-radius: 4px; overflow: hidden;">
+                                                <div class="weather-progress-fill" id="weather-humi-bar-guangzhou" style="width: 82%; height: 100%; background: #3b82f6; border-radius: 4px; transition: width 0.5s ease;"></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="weather-card-foot" style="border-top: 1px solid var(--border-color); padding-top: 0.6rem; display: flex; justify-content: space-between; align-items: center;">
+                                        <div class="weather-sync-status" style="display: flex; align-items: center; gap: 0.4rem;">
+                                            <span class="pulse-dot green" style="width: 6px; height: 6px;"></span>
+                                            <span style="font-size: 0.72rem; font-weight: 700; color: var(--primary-green);">기상청 정보 연동 중</span>
+                                        </div>
+                                        <span id="weather-status-text-guangzhou" style="font-size: 0.76rem; font-weight: 800; color: var(--text-primary);">비</span>
+                                    </div>
+                                </div>
+
+                                <!-- Location 4: Haiphong -->
+                                <div class="weather-location-card glass-card" style="padding: 1.15rem; display: flex; flex-direction: column; justify-content: space-between; border-radius: 20px; background: var(--bg-surface-solid); border: 1px solid var(--border-color); box-shadow: var(--shadow-sm);">
+                                    <div class="weather-card-head" style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 0.75rem;">
+                                        <div>
+                                            <span class="location-badge" style="background: rgba(139, 92, 246, 0.1); color: #8b5cf6; padding: 0.25rem 0.6rem; border-radius: 8px; font-size: 0.75rem; font-weight: 700; display: inline-block; margin-bottom: 0.4rem;">해외 사업소</span>
+                                            <h4 style="font-size: 1.15rem; font-weight: 800; color: var(--text-primary); margin: 0;">베트남 하이퐁</h4>
+                                        </div>
+                                        <div class="weather-icon-box" id="weather-icon-haiphong" style="font-size: 2rem; color: #8b5cf6; display: flex; align-items: center; justify-content: center; width: 40px; height: 40px;">
+                                            <i data-lucide="cloud-rain"></i>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="weather-card-body" style="margin-bottom: 0.8rem;">
+                                        <!-- Temperature Dial representation -->
+                                        <div class="weather-metric-row" style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 0.8rem;">
+                                            <div style="display: flex; align-items: center; gap: 0.5rem;">
+                                                 <i data-lucide="thermometer" style="color: #ef4444; width: 20px; height: 20px;"></i>
+                                                <span style="font-size: 0.9rem; font-weight: 700; color: var(--text-secondary);">외기 온도</span>
+                                            </div>
+                                            <div style="display: flex; align-items: baseline; gap: 0.2rem;">
+                                                <span id="weather-temp-haiphong" style="font-size: 2rem; font-weight: 800; color: var(--text-primary);">29.5</span>
+                                                <span style="font-size: 1rem; font-weight: 700; color: var(--text-secondary);">°C</span>
+                                            </div>
+                                        </div>
+                                        
+                                        <!-- Humidity Bar representation -->
+                                        <div class="weather-metric-row" style="display: flex; flex-direction: column; gap: 0.35rem;">
+                                            <div style="display: flex; align-items: center; justify-content: space-between;">
+                                                <div style="display: flex; align-items: center; gap: 0.5rem;">
+                                                    <i data-lucide="droplet" style="color: #3b82f6; width: 18px; height: 18px;"></i>
+                                                    <span style="font-size: 0.9rem; font-weight: 700; color: var(--text-secondary);">상대 습도</span>
+                                                </div>
+                                                <div style="display: flex; align-items: baseline; gap: 0.15rem;">
+                                                    <span id="weather-humi-haiphong" style="font-size: 1.25rem; font-weight: 800; color: var(--text-primary);">85</span>
+                                                    <span style="font-size: 0.8rem; font-weight: 700; color: var(--text-secondary);">%</span>
+                                                </div>
+                                            </div>
+                                            <div class="weather-progress-bg" style="width: 100%; height: 6px; background: rgba(0,0,0,0.05); border-radius: 4px; overflow: hidden;">
+                                                <div class="weather-progress-fill" id="weather-humi-bar-haiphong" style="width: 85%; height: 100%; background: #3b82f6; border-radius: 4px; transition: width 0.5s ease;"></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="weather-card-foot" style="border-top: 1px solid var(--border-color); padding-top: 0.6rem; display: flex; justify-content: space-between; align-items: center;">
+                                        <div class="weather-sync-status" style="display: flex; align-items: center; gap: 0.4rem;">
+                                            <span class="pulse-dot green" style="width: 6px; height: 6px;"></span>
+                                            <span style="font-size: 0.72rem; font-weight: 700; color: var(--primary-green);">기상청 정보 연동 중</span>
+                                        </div>
+                                        <span id="weather-status-text-haiphong" style="font-size: 0.76rem; font-weight: 800; color: var(--text-primary);">비</span>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- 24h Temperature Comparison Chart -->
+                            <div class="glass-card weather-chart-card" style="grid-column: span 4; padding: 1.25rem 1.75rem; display: flex; flex-direction: column; height: 480px; background: var(--bg-surface-solid); border: 1px solid var(--border-color); border-radius: 20px; margin: 0 1.75rem 1.25rem 1.75rem; flex-shrink: 0;">
+                                <h4 style="font-size: 0.9rem; font-weight: 800; display: flex; align-items: center; gap: 0.5rem; color: var(--text-primary); margin: 0 0 0.5rem 0; border-bottom: 1px solid var(--border-color); padding-bottom: 0.4rem;">
+                                    <i data-lucide="trending-up" style="color: var(--primary-green); width: 16px; height: 16px;"></i>
+                                    파주 vs 구미 vs 광저우 vs 하이퐁 24시간 외기 기온 & 습도 추세 예측 (일일 사이클 대비)
+                                </h4>
+                                <div class="chart-wrapper" style="position: relative; height: 400px; width: 100%;">
+                                    <canvas id="weather-forecast-chart"></canvas>
+                                </div>
+                            </div>
+                            
+                            <!-- 5-Day Forecast Grid -->
+                            <div style="grid-column: span 4; display: grid; grid-template-columns: repeat(4, 1fr); gap: 1rem; margin: 0.5rem 1.75rem 1.25rem 1.75rem; flex-shrink: 0;">
+                                <!-- Paju 5-Day Forecast -->
+                                <div class="glass-card" style="padding: 1.15rem; background: var(--bg-surface-solid); border: 1px solid var(--border-color); border-radius: 20px; display: flex; flex-direction: column;">
+                                    <h4 style="font-size: 0.9rem; font-weight: 800; display: flex; align-items: center; gap: 0.5rem; color: var(--text-primary); margin: 0 0 0.75rem 0; border-bottom: 1px solid var(--border-color); padding-bottom: 0.4rem;">
+                                        <i data-lucide="calendar-range" style="color: var(--primary-green); width: 16px; height: 16px;"></i>
+                                        파주 월롱면 주간 예보
+                                    </h4>
+                                    <div id="weather-forecast-list-paju" style="display: flex; flex-direction: column; gap: 0.5rem; flex-grow: 1;">
+                                        <!-- Dynamic entries loaded via JS -->
+                                    </div>
+                                </div>
+
+                                <!-- Gumi 5-Day Forecast -->
+                                <div class="glass-card" style="padding: 1.15rem; background: var(--bg-surface-solid); border: 1px solid var(--border-color); border-radius: 20px; display: flex; flex-direction: column;">
+                                    <h4 style="font-size: 0.9rem; font-weight: 800; display: flex; align-items: center; gap: 0.5rem; color: var(--text-primary); margin: 0 0 0.75rem 0; border-bottom: 1px solid var(--border-color); padding-bottom: 0.4rem;">
+                                        <i data-lucide="calendar-range" style="color: #3b82f6; width: 16px; height: 16px;"></i>
+                                        구미 시미동 주간 예보
+                                    </h4>
+                                    <div id="weather-forecast-list-gumi" style="display: flex; flex-direction: column; gap: 0.5rem; flex-grow: 1;">
+                                        <!-- Dynamic entries loaded via JS -->
+                                    </div>
+                                </div>
+
+                                <!-- Guangzhou 5-Day Forecast -->
+                                <div class="glass-card" style="padding: 1.15rem; background: var(--bg-surface-solid); border: 1px solid var(--border-color); border-radius: 20px; display: flex; flex-direction: column;">
+                                    <h4 style="font-size: 0.9rem; font-weight: 800; display: flex; align-items: center; gap: 0.5rem; color: var(--text-primary); margin: 0 0 0.75rem 0; border-bottom: 1px solid var(--border-color); padding-bottom: 0.4rem;">
+                                        <i data-lucide="calendar-range" style="color: #ef4444; width: 16px; height: 16px;"></i>
+                                        중국 광저우 주간 예보
+                                    </h4>
+                                    <div id="weather-forecast-list-guangzhou" style="display: flex; flex-direction: column; gap: 0.5rem; flex-grow: 1;">
+                                        <!-- Dynamic entries loaded via JS -->
+                                    </div>
+                                </div>
+
+                                <!-- Haiphong 5-Day Forecast -->
+                                <div class="glass-card" style="padding: 1.15rem; background: var(--bg-surface-solid); border: 1px solid var(--border-color); border-radius: 20px; display: flex; flex-direction: column;">
+                                    <h4 style="font-size: 0.9rem; font-weight: 800; display: flex; align-items: center; gap: 0.5rem; color: var(--text-primary); margin: 0 0 0.75rem 0; border-bottom: 1px solid var(--border-color); padding-bottom: 0.4rem;">
+                                        <i data-lucide="calendar-range" style="color: #8b5cf6; width: 16px; height: 16px;"></i>
+                                        베트남 하이퐁 주간 예보
+                                    </h4>
+                                    <div id="weather-forecast-list-haiphong" style="display: flex; flex-direction: column; gap: 0.5rem; flex-grow: 1;">
+                                        <!-- Dynamic entries loaded via JS -->
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                     </div>
                 </div>
             </main>
@@ -1360,7 +1645,6 @@
                                     <i data-lucide="radio" class="header-icon orange-text"></i>
                                     <div>
                                         <h3>주요 핵심 안전 제어 기기 실시간 감시</h3>
-                                        <p>사옥 안전과 소방을 담보하는 필수 장치들의 실시간 작동율 및 상태 LED를 추적합니다.</p>
                                     </div>
                                 </div>
                             </div>
@@ -1441,7 +1725,6 @@
                                     <i data-lucide="shield-alert" class="header-icon orange-text"></i>
                                     <div>
                                         <h3>사내 부서별 안전 실무 활동 리스트</h3>
-                                        <p>전사 임직원의 건강과 사고 없는 사업장 조성을 위한 부서별 안전 프로젝트 진행률입니다.</p>
                                     </div>
                                 </div>
                             </div>
@@ -1517,7 +1800,6 @@
                                     <i data-lucide="award" class="header-icon orange-text"></i>
                                     <div>
                                         <h3>무재해 누적 성과 및 사내 쾌적 지수</h3>
-                                        <p>체계적 예방 점검으로 단 한 건의 유해 사고 없이 연속 달성 중인 무재해 기록입니다.</p>
                                     </div>
                                 </div>
                             </div>
@@ -1757,7 +2039,6 @@
                                     <i data-lucide="cpu" class="header-icon purple-text"></i>
                                     <div>
                                         <h3>핵심 AI 자율형 에이전트 실시간 감시</h3>
-                                        <p>CSEO 사내 인프라에서 구동 중인 주요 AI 에이전트들의 가동 상태와 추론 성능을 모니터링합니다.</p>
                                     </div>
                                 </div>
                             </div>
@@ -1838,7 +2119,6 @@
                                     <i data-lucide="check-square" class="header-icon purple-text"></i>
                                     <div>
                                         <h3>사내 부서별 AI 혁신 추진 과제 리스트</h3>
-                                        <p>전사 AI 전환(AX) 가속화를 위한 핵심 과제 진행 및 도입 현황입니다.</p>
                                     </div>
                                 </div>
                             </div>
@@ -1914,7 +2194,6 @@
                                     <i data-lucide="award" class="header-icon purple-text"></i>
                                     <div>
                                         <h3>전사 AI 전환 적합성 및 모델 평가 지표</h3>
-                                        <p>안정적인 AI 서비스 운영 및 전사 확장을 위해 검증된 주요 인프라 정합성 수치입니다.</p>
                                     </div>
                                 </div>
                             </div>
