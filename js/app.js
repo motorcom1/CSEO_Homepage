@@ -213,6 +213,117 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     // ==========================================================================
+    // 3.5 Utility rates tab toggle (전기 vs 용수)
+    // ==========================================================================
+    const btnTabElec = document.getElementById('btn-tab-elec');
+    const btnTabWater = document.getElementById('btn-tab-water');
+    const btnTabGas = document.getElementById('btn-tab-gas');
+    const panelElec = document.getElementById('rates-content-elec');
+    const panelWater = document.getElementById('rates-content-water');
+    const panelGas = document.getElementById('rates-content-gas');
+
+    btnTabElec?.addEventListener('click', () => {
+        btnTabElec.classList.add('active');
+        btnTabWater.classList.remove('active');
+        btnTabGas?.classList.remove('active');
+        btnTabElec.style.background = '#ffffff';
+        btnTabWater.style.background = 'transparent';
+        if (btnTabGas) btnTabGas.style.background = 'transparent';
+        btnTabElec.style.color = 'var(--text-primary)';
+        btnTabWater.style.color = 'var(--text-secondary)';
+        if (btnTabGas) btnTabGas.style.color = 'var(--text-secondary)';
+        if (panelElec) panelElec.style.display = 'block';
+        if (panelWater) panelWater.style.display = 'none';
+        if (panelGas) panelGas.style.display = 'none';
+    });
+
+    btnTabWater?.addEventListener('click', () => {
+        btnTabWater.classList.add('active');
+        btnTabElec.classList.remove('active');
+        btnTabGas?.classList.remove('active');
+        btnTabWater.style.background = '#ffffff';
+        btnTabElec.style.background = 'transparent';
+        if (btnTabGas) btnTabGas.style.background = 'transparent';
+        btnTabWater.style.color = 'var(--text-primary)';
+        btnTabElec.style.color = 'var(--text-secondary)';
+        if (btnTabGas) btnTabGas.style.color = 'var(--text-secondary)';
+        if (panelElec) panelElec.style.display = 'none';
+        if (panelWater) panelWater.style.display = 'block';
+        if (panelGas) panelGas.style.display = 'none';
+    });
+
+    btnTabGas?.addEventListener('click', () => {
+        btnTabGas.classList.add('active');
+        btnTabElec.classList.remove('active');
+        btnTabWater.classList.remove('active');
+        btnTabGas.style.background = '#ffffff';
+        btnTabElec.style.background = 'transparent';
+        btnTabWater.style.background = 'transparent';
+        btnTabGas.style.color = 'var(--text-primary)';
+        btnTabElec.style.color = 'var(--text-secondary)';
+        btnTabWater.style.color = 'var(--text-secondary)';
+        if (panelElec) panelElec.style.display = 'none';
+        if (panelWater) panelWater.style.display = 'none';
+        if (panelGas) panelGas.style.display = 'block';
+    });
+
+    // Gas Sub-tab Selector
+    const btnGasSeoul = document.getElementById('btn-gas-seoul');
+    const btnGasYeongnam = document.getElementById('btn-gas-yeongnam');
+    const displaySeoul = document.getElementById('gas-display-seoul');
+    const displayYeongnam = document.getElementById('gas-display-yeongnam');
+    const tableSeoul = document.getElementById('gas-table-seoul');
+    const tableYeongnam = document.getElementById('gas-table-yeongnam');
+
+    btnGasSeoul?.addEventListener('click', () => {
+        btnGasSeoul.classList.add('active');
+        btnGasYeongnam?.classList.remove('active');
+        btnGasSeoul.style.background = '#ffffff';
+        btnGasSeoul.style.color = 'var(--primary-green)';
+        if (btnGasYeongnam) {
+            btnGasYeongnam.style.background = 'transparent';
+            btnGasYeongnam.style.color = 'var(--text-secondary)';
+        }
+        if (displaySeoul) displaySeoul.style.display = 'flex';
+        if (displayYeongnam) displayYeongnam.style.display = 'none';
+        if (tableSeoul) tableSeoul.style.display = 'table';
+        if (tableYeongnam) tableYeongnam.style.display = 'none';
+    });
+
+    btnGasYeongnam?.addEventListener('click', () => {
+        btnGasYeongnam.classList.add('active');
+        btnGasSeoul?.classList.remove('active');
+        btnGasYeongnam.style.background = '#ffffff';
+        btnGasYeongnam.style.color = 'var(--primary-green)';
+        if (btnGasSeoul) {
+            btnGasSeoul.style.background = 'transparent';
+            btnGasSeoul.style.color = 'var(--text-secondary)';
+        }
+        if (displaySeoul) displaySeoul.style.display = 'none';
+        if (displayYeongnam) displayYeongnam.style.display = 'flex';
+        if (tableSeoul) tableSeoul.style.display = 'none';
+        if (tableYeongnam) tableYeongnam.style.display = 'table';
+    });
+
+    // KEPCO Season Selection click listeners
+    const btnSeasonSummer = document.getElementById('btn-season-summer');
+    const btnSeasonWinter = document.getElementById('btn-season-winter');
+    const btnSeasonSpringAutumn = document.getElementById('btn-season-springautumn');
+
+    btnSeasonSummer?.addEventListener('click', () => {
+        selectedKepcoSeason = 'summer';
+        updateKepcoRatesUI();
+    });
+    btnSeasonWinter?.addEventListener('click', () => {
+        selectedKepcoSeason = 'winter';
+        updateKepcoRatesUI();
+    });
+    btnSeasonSpringAutumn?.addEventListener('click', () => {
+        selectedKepcoSeason = 'spring_autumn';
+        updateKepcoRatesUI();
+    });
+
+    // ==========================================================================
     // 4. Premium Cursor Spotlight Tracking Effect for Portal Cards
     // ==========================================================================
     const portalCards = document.querySelectorAll('.portal-card');
@@ -484,12 +595,17 @@ document.addEventListener('DOMContentLoaded', () => {
     
     let co2Val = 24845;
     let treesVal = 3764;
-    let savingsVal = 4120400;
+    let savingsVal = 5760400;
 
     // Simulated Account Billing Prices
     let priceHvac = 1425000;
     let priceRd = 1850000;
     let priceData = 845400;
+    let priceIndWater = 320000;
+    let priceDomWater = 120000;
+    let priceSeoulGas = 520000;
+    let priceYeongnamGas = 680000;
+    let selectedKepcoSeason = null;
 
     function startEnergySimulator() {
         if (energySimInterval) return;
@@ -528,7 +644,11 @@ document.addEventListener('DOMContentLoaded', () => {
             priceHvac += Math.floor(Math.random() * 10);
             priceRd += Math.floor(Math.random() * 12);
             priceData += Math.floor(Math.random() * 8);
-            savingsVal = priceHvac + priceRd + priceData;
+            priceIndWater += Math.floor(Math.random() * 5);
+            priceDomWater += Math.floor(Math.random() * 3);
+            priceSeoulGas += Math.floor(Math.random() * 4);
+            priceYeongnamGas += Math.floor(Math.random() * 5);
+            savingsVal = priceHvac + priceRd + priceData + priceIndWater + priceDomWater + priceSeoulGas + priceYeongnamGas;
 
             // Update UI
             updateEnergyUI();
@@ -570,6 +690,10 @@ document.addEventListener('DOMContentLoaded', () => {
         const txtPriceHvac = document.getElementById('bill-price-hvac');
         const txtPriceRd = document.getElementById('bill-price-rd');
         const txtPriceData = document.getElementById('bill-price-data');
+        const txtPriceIndWater = document.getElementById('bill-price-indwater');
+        const txtPriceDomWater = document.getElementById('bill-price-domwater');
+        const txtPriceSeoulGas = document.getElementById('bill-price-seoulgas');
+        const txtPriceYeongnamGas = document.getElementById('bill-price-yngas');
 
         if (txtSolar) txtSolar.textContent = liveSolar.toFixed(1);
         if (barSolar) barSolar.style.width = `${((liveSolar - 200) / 200) * 100}%`;
@@ -593,6 +717,18 @@ document.addEventListener('DOMContentLoaded', () => {
         if (txtPriceHvac) txtPriceHvac.textContent = priceHvac.toLocaleString();
         if (txtPriceRd) txtPriceRd.textContent = priceRd.toLocaleString();
         if (txtPriceData) txtPriceData.textContent = priceData.toLocaleString();
+        if (txtPriceIndWater) txtPriceIndWater.textContent = priceIndWater.toLocaleString();
+        if (txtPriceDomWater) txtPriceDomWater.textContent = priceDomWater.toLocaleString();
+        if (txtPriceSeoulGas) txtPriceSeoulGas.textContent = priceSeoulGas.toLocaleString();
+        if (txtPriceYeongnamGas) txtPriceYeongnamGas.textContent = priceYeongnamGas.toLocaleString();
+
+        // Dynamic budget calculation
+        const elEstimatePct = document.getElementById('bill-estimate-pct');
+        const elEstimateBar = document.getElementById('bill-estimate-bar');
+        const budget = 8000000;
+        const pct = (savingsVal / budget) * 100;
+        if (elEstimatePct) elEstimatePct.textContent = `${pct.toFixed(1)}%`;
+        if (elEstimateBar) elEstimateBar.style.width = `${pct.toFixed(1)}%`;
 
         // KEPCO Industrial Rates UI
         updateKepcoRatesUI();
@@ -611,18 +747,63 @@ document.addEventListener('DOMContentLoaded', () => {
             elEstimateDate.textContent = `${month}/${date} ${hour}시 정산 기준`;
         }
 
+        // Auto-detect season if not manually selected yet
+        if (selectedKepcoSeason === null) {
+            if (month >= 6 && month <= 8) {
+                selectedKepcoSeason = "summer";
+            } else if (month === 11 || month === 12 || month === 1 || month === 2) {
+                selectedKepcoSeason = "winter";
+            } else {
+                selectedKepcoSeason = "spring_autumn";
+            }
+        }
+
         // 1. Determine Season
-        // Summer: 6, 7, 8
-        // Winter: 11, 12, 1, 2
-        // Spring/Autumn: 3, 4, 5, 9, 10
-        let season = "spring_autumn";
+        let season = selectedKepcoSeason;
         let seasonText = "봄·가을철";
-        if (month >= 6 && month <= 8) {
-            season = "summer";
+        if (season === "summer") {
             seasonText = "여름철";
-        } else if (month === 11 || month === 12 || month === 1 || month === 2) {
-            season = "winter";
+        } else if (season === "winter") {
             seasonText = "겨울철";
+        }
+
+        // Update season selector buttons active classes
+        const btnSeasonSummer = document.getElementById('btn-season-summer');
+        const btnSeasonWinter = document.getElementById('btn-season-winter');
+        const btnSeasonSpringAutumn = document.getElementById('btn-season-springautumn');
+
+        if (btnSeasonSummer) {
+            if (season === 'summer') {
+                btnSeasonSummer.classList.add('active');
+                btnSeasonSummer.style.background = '#ffffff';
+                btnSeasonSummer.style.color = 'var(--primary-green)';
+            } else {
+                btnSeasonSummer.classList.remove('active');
+                btnSeasonSummer.style.background = 'transparent';
+                btnSeasonSummer.style.color = 'var(--text-secondary)';
+            }
+        }
+        if (btnSeasonWinter) {
+            if (season === 'winter') {
+                btnSeasonWinter.classList.add('active');
+                btnSeasonWinter.style.background = '#ffffff';
+                btnSeasonWinter.style.color = 'var(--primary-green)';
+            } else {
+                btnSeasonWinter.classList.remove('active');
+                btnSeasonWinter.style.background = 'transparent';
+                btnSeasonWinter.style.color = 'var(--text-secondary)';
+            }
+        }
+        if (btnSeasonSpringAutumn) {
+            if (season === 'spring_autumn') {
+                btnSeasonSpringAutumn.classList.add('active');
+                btnSeasonSpringAutumn.style.background = '#ffffff';
+                btnSeasonSpringAutumn.style.color = 'var(--primary-green)';
+            } else {
+                btnSeasonSpringAutumn.classList.remove('active');
+                btnSeasonSpringAutumn.style.background = 'transparent';
+                btnSeasonSpringAutumn.style.color = 'var(--text-secondary)';
+            }
         }
 
         // 2. Define Rates for each Season (산업용(을) 고압A 선택 I 기준)
@@ -699,6 +880,79 @@ document.addEventListener('DOMContentLoaded', () => {
         if (period === 'offpeak' && rowOffpeak) rowOffpeak.classList.add('active-rate-row');
         if (period === 'midpeak' && rowMidpeak) rowMidpeak.classList.add('active-rate-row');
         if (period === 'peak' && rowPeak) rowPeak.classList.add('active-rate-row');
+
+        // Highlight active row in Gas tables
+        const rowSeoulWinter = document.getElementById('seoul-gas-row-winter');
+        const rowSeoulSummer = document.getElementById('seoul-gas-row-summer');
+        const rowSeoulOther = document.getElementById('seoul-gas-row-other');
+        const rowYeongnamWinter = document.getElementById('yeongnam-gas-row-winter');
+        const rowYeongnamSummer = document.getElementById('yeongnam-gas-row-summer');
+        const rowYeongnamOther = document.getElementById('yeongnam-gas-row-other');
+
+        if (rowSeoulWinter) { rowSeoulWinter.className = ''; rowSeoulWinter.style.background = ''; rowSeoulWinter.style.borderLeft = ''; }
+        if (rowSeoulSummer) { rowSeoulSummer.className = ''; rowSeoulSummer.style.background = ''; rowSeoulSummer.style.borderLeft = ''; }
+        if (rowSeoulOther) { rowSeoulOther.className = ''; rowSeoulOther.style.background = ''; rowSeoulOther.style.borderLeft = ''; }
+        if (rowYeongnamWinter) { rowYeongnamWinter.className = ''; rowYeongnamWinter.style.background = ''; rowYeongnamWinter.style.borderLeft = ''; }
+        if (rowYeongnamSummer) { rowYeongnamSummer.className = ''; rowYeongnamSummer.style.background = ''; rowYeongnamSummer.style.borderLeft = ''; }
+        if (rowYeongnamOther) { rowYeongnamOther.className = ''; rowYeongnamOther.style.background = ''; rowYeongnamOther.style.borderLeft = ''; }
+
+        let activePriceSeoul = 22.2013;
+        let activePriceYeongnam = 23.3427;
+        let activeSeasonText = "기타월";
+
+        if (season === 'summer') {
+            if (rowSeoulSummer) {
+                rowSeoulSummer.classList.add('active-rate-row');
+                rowSeoulSummer.style.background = 'rgba(217, 119, 6, 0.08)';
+                rowSeoulSummer.style.borderLeft = '3px solid #d97706';
+            }
+            if (rowYeongnamSummer) {
+                rowYeongnamSummer.classList.add('active-rate-row');
+                rowYeongnamSummer.style.background = 'rgba(234, 88, 12, 0.08)';
+                rowYeongnamSummer.style.borderLeft = '3px solid #ea580c';
+            }
+            activePriceSeoul = 22.2013;
+            activePriceYeongnam = 23.3427;
+            activeSeasonText = "하절기";
+        } else if (season === 'winter') {
+            if (rowSeoulWinter) {
+                rowSeoulWinter.classList.add('active-rate-row');
+                rowSeoulWinter.style.background = 'rgba(217, 119, 6, 0.08)';
+                rowSeoulWinter.style.borderLeft = '3px solid #d97706';
+            }
+            if (rowYeongnamWinter) {
+                rowYeongnamWinter.classList.add('active-rate-row');
+                rowYeongnamWinter.style.background = 'rgba(234, 88, 12, 0.08)';
+                rowYeongnamWinter.style.borderLeft = '3px solid #ea580c';
+            }
+            activePriceSeoul = 22.2013;
+            activePriceYeongnam = 23.3427;
+            activeSeasonText = "동절기";
+        } else {
+            if (rowSeoulOther) {
+                rowSeoulOther.classList.add('active-rate-row');
+                rowSeoulOther.style.background = 'rgba(217, 119, 6, 0.08)';
+                rowSeoulOther.style.borderLeft = '3px solid #d97706';
+            }
+            if (rowYeongnamOther) {
+                rowYeongnamOther.classList.add('active-rate-row');
+                rowYeongnamOther.style.background = 'rgba(234, 88, 12, 0.08)';
+                rowYeongnamOther.style.borderLeft = '3px solid #ea580c';
+            }
+            activePriceSeoul = 22.2013;
+            activePriceYeongnam = 23.3427;
+            activeSeasonText = "기타월";
+        }
+
+        const elActiveSeasonSeoul = document.getElementById('gas-active-season-seoul');
+        const elActiveSeasonYeongnam = document.getElementById('gas-active-season-yeongnam');
+        const elActivePriceSeoul = document.getElementById('gas-active-price-seoul');
+        const elActivePriceYeongnam = document.getElementById('gas-active-price-yeongnam');
+
+        if (elActiveSeasonSeoul) elActiveSeasonSeoul.textContent = `${activeSeasonText} 요금제 적용`;
+        if (elActiveSeasonYeongnam) elActiveSeasonYeongnam.textContent = `${activeSeasonText} 요금제 적용`;
+        if (elActivePriceSeoul) elActivePriceSeoul.textContent = activePriceSeoul.toFixed(4);
+        if (elActivePriceYeongnam) elActivePriceYeongnam.textContent = activePriceYeongnam.toFixed(4);
     }
 
     // ==========================================================================

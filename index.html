@@ -594,7 +594,6 @@
                                     </div>
                                 </div>
                             </div>
-                            
                             <!-- SCADA Real-time Database Comparison Grid (Bar Chart + Table) -->
                             <div class="glass-card scada-db-analytics-card" style="margin-top: 0.5rem; padding: 1.25rem; flex-shrink: 0;">
                                 <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 0.75rem; border-bottom: 1px solid var(--border-color); padding-bottom: 0.5rem;">
@@ -634,8 +633,8 @@
                                 <div class="card-header-title">
                                     <i data-lucide="coins" class="header-icon green-text"></i>
                                     <div>
-                                        <h3>계정 및 용도별 전기요금 실시간 추세</h3>
-                                        <p>사옥 내 주요 핵심 전력 소비처별 요금 부담 비중과 한전 요금(을) 기준 당월 예상 요금을 정산합니다.</p>
+                                        <h3>계정 및 용도별 유틸리티 요금 실시간 추세</h3>
+                                        <p>사옥 내 주요 핵심 전력 및 용수 소비처별 요금 부담 비중과 실시간 단가 기준 당월 예상 요금을 정산합니다.</p>
                                     </div>
                                 </div>
                             </div>
@@ -675,8 +674,52 @@
                                             <span class="pct-val positive">+8.7%</span>
                                         </div>
                                     </div>
+                                    <div class="bill-account-item">
+                                        <div class="acct-info">
+                                            <span class="acct-badge acct-indwater">공업용수</span>
+                                            <span class="acct-name">생산 및 설비 냉각 용수</span>
+                                        </div>
+                                        <div class="acct-val">
+                                            <span class="acct-price" id="bill-price-indwater">320,000</span>
+                                            <span class="acct-unit">원</span>
+                                            <span class="pct-val positive">+1.5%</span>
+                                        </div>
+                                    </div>
+                                    <div class="bill-account-item">
+                                        <div class="acct-info">
+                                            <span class="acct-badge acct-domwater">생활용수</span>
+                                            <span class="acct-name">사옥 생활 및 식수</span>
+                                        </div>
+                                        <div class="acct-val">
+                                            <span class="acct-price" id="bill-price-domwater">120,000</span>
+                                            <span class="acct-unit">원</span>
+                                            <span class="pct-val negative">-2.0%</span>
+                                        </div>
+                                    </div>
+                                    <div class="bill-account-item">
+                                        <div class="acct-info">
+                                            <span class="acct-badge acct-seoulgas">서울가스 (경기)</span>
+                                            <span class="acct-name">사옥 산업용 도시가스 LNG</span>
+                                        </div>
+                                        <div class="acct-val">
+                                            <span class="acct-price" id="bill-price-seoulgas">520,000</span>
+                                            <span class="acct-unit">원</span>
+                                            <span class="pct-val positive">+0.8%</span>
+                                        </div>
+                                    </div>
+                                    <div class="bill-account-item">
+                                        <div class="acct-info">
+                                            <span class="acct-badge acct-yngas">영남에너지</span>
+                                            <span class="acct-name">흡수식 냉동기 및 가열기 LNG</span>
+                                        </div>
+                                        <div class="acct-val">
+                                            <span class="acct-price" id="bill-price-yngas">680,000</span>
+                                            <span class="acct-unit">원</span>
+                                            <span class="pct-val negative">-1.2%</span>
+                                        </div>
+                                    </div>
                                 </div>
-
+ 
                                 <!-- Right panel container -->
                                 <div class="bill-analysis-right-panel">
                                     <!-- Right billing estimation simulation widget -->
@@ -689,71 +732,219 @@
                                             <div class="estimate-total">
                                                 <span class="lbl">통합 누계 요금</span>
                                                 <div class="price-box">
-                                                    <span class="price-val" id="eco-savings-val-billing">4,120,400</span>
+                                                    <span class="price-val" id="eco-savings-val-billing">4,560,400</span>
                                                     <span class="price-unit">KRW</span>
                                                 </div>
-                                                <span class="desc">한전 고압(을) 전력 기본료 및 사용량 합산 요율 적용</span>
+                                                <span class="desc">한전 전력 요율, 수도 요금 및 도시가스 요금 합산 요금</span>
                                             </div>
                                             <div class="estimate-progress-bar">
-                                                <div class="bar-lbl"><span>월 목표 예산 (500만원) 대비 달성률</span> <strong>82.4%</strong></div>
+                                                <div class="bar-lbl"><span>월 통합 목표 예산 (800만원) 대비 달성률</span> <strong id="bill-estimate-pct">72.0%</strong></div>
                                                 <div class="progress-bar-bg">
-                                                    <div class="progress-bar-fill progress-bill-estimate" style="width: 82.4%;"></div>
+                                                    <div class="progress-bar-fill progress-bill-estimate" id="bill-estimate-bar" style="width: 72.0%;"></div>
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
-
-                                    <!-- KEPCO Industrial Rates Widget -->
+ 
+                                    <!-- KEPCO & Water Rates Widget -->
                                     <div class="kepco-rates-widget">
-                                        <div class="rates-header">
-                                            <h4><i data-lucide="zap"></i> 한국전력 실시간 단가 연동</h4>
-                                            <span class="rates-badge" id="kepco-tariff-type">산업용(을) 고압A 선택 I</span>
+                                        <div class="rates-header" style="margin-bottom: 0.25rem;">
+                                            <h4><i data-lucide="zap"></i> 실시간 단가 연동</h4>
+                                            <div class="rates-tabs" style="display: flex; gap: 0.3rem; background: #e2e8f0; padding: 0.15rem; border-radius: 8px;">
+                                                <button type="button" class="rates-tab-btn active" id="btn-tab-elec" style="padding: 0.25rem 0.55rem; border-radius: 6px; font-size: 0.7rem; font-weight: 700; border: none; background: #ffffff; color: var(--text-primary); cursor: pointer; transition: all 0.2s; font-family: inherit;">전기 (한전)</button>
+                                                <button type="button" class="rates-tab-btn" id="btn-tab-water" style="padding: 0.25rem 0.55rem; border-radius: 6px; font-size: 0.7rem; font-weight: 700; border: none; background: transparent; color: var(--text-secondary); cursor: pointer; transition: all 0.2s; font-family: inherit;">용수 (수공)</button>
+                                                <button type="button" class="rates-tab-btn" id="btn-tab-gas" style="padding: 0.25rem 0.55rem; border-radius: 6px; font-size: 0.7rem; font-weight: 700; border: none; background: transparent; color: var(--text-secondary); cursor: pointer; transition: all 0.2s; font-family: inherit;">가스 (도시가스)</button>
+                                            </div>
                                         </div>
                                         
-                                        <div class="rates-active-display">
-                                            <div class="rates-active-label">
-                                                <span class="lbl" id="kepco-active-season">여름철 요금제 적용</span>
-                                                <span class="state" id="kepco-active-period">
-                                                    <span class="pulse-dot green" style="width: 6px; height: 6px;"></span> 
-                                                    중간부하 적용 중
-                                                </span>
+                                        <!-- Electricity Rates Tab Content -->
+                                        <div id="rates-content-elec">
+                                            <!-- KEPCO Season Selector -->
+                                            <div class="kepco-season-selector" style="display: flex; gap: 0.3rem; background: #e2e8f0; padding: 0.15rem; border-radius: 8px; margin-bottom: 0.5rem;">
+                                                <button type="button" class="kepco-season-btn" id="btn-season-summer" style="flex: 1; padding: 0.2rem; border-radius: 6px; font-size: 0.65rem; font-weight: 700; border: none; background: transparent; color: var(--text-secondary); cursor: pointer; transition: all 0.2s; font-family: inherit;">여름철 (하절기)</button>
+                                                <button type="button" class="kepco-season-btn" id="btn-season-winter" style="flex: 1; padding: 0.2rem; border-radius: 6px; font-size: 0.65rem; font-weight: 700; border: none; background: transparent; color: var(--text-secondary); cursor: pointer; transition: all 0.2s; font-family: inherit;">겨울철 (동절기)</button>
+                                                <button type="button" class="kepco-season-btn" id="btn-season-springautumn" style="flex: 1; padding: 0.2rem; border-radius: 6px; font-size: 0.65rem; font-weight: 700; border: none; background: transparent; color: var(--text-secondary); cursor: pointer; transition: all 0.2s; font-family: inherit;">춘추절기 (봄/가을)</button>
                                             </div>
-                                            <div class="rates-active-val">
-                                                <span class="val" id="kepco-active-price">178.7</span>
-                                                <span class="unit">원/kWh</span>
+
+                                            <div class="rates-active-display">
+                                                <div class="rates-active-label">
+                                                    <span class="lbl" id="kepco-active-season">여름철 요금제 적용</span>
+                                                    <span class="state" id="kepco-active-period">
+                                                        <span class="pulse-dot green" style="width: 6px; height: 6px;"></span> 
+                                                        중간부하 적용 중
+                                                    </span>
+                                                </div>
+                                                <div class="rates-active-val">
+                                                    <span class="val" id="kepco-active-price">178.7</span>
+                                                    <span class="unit">원/kWh</span>
+                                                </div>
                                             </div>
+ 
+                                            <table class="kepco-rates-table">
+                                                <thead>
+                                                    <tr>
+                                                        <th>구분</th>
+                                                        <th>시간대</th>
+                                                        <th>단가 (원/kWh)</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    <tr id="rate-row-offpeak">
+                                                        <td>경부하</td>
+                                                        <td>22:00 ~ 08:00</td>
+                                                        <td class="rate-val" id="kepco-price-offpeak">126.2</td>
+                                                    </tr>
+                                                    <tr id="rate-row-midpeak">
+                                                        <td>중간부하</td>
+                                                        <td>08:00~15:00, 21:00~22:00</td>
+                                                        <td class="rate-val" id="kepco-price-midpeak">178.7</td>
+                                                    </tr>
+                                                    <tr id="rate-row-peak">
+                                                        <td>최대부하</td>
+                                                        <td>15:00 ~ 21:00</td>
+                                                        <td class="rate-val" id="kepco-price-peak">242.7</td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
+ 
+                                        <!-- Water Rates Tab Content -->
+                                        <div id="rates-content-water" style="display: none;">
+                                            <div class="rates-active-display" style="background: rgba(13, 148, 136, 0.04); border-color: rgba(13, 148, 136, 0.1);">
+                                                <div class="rates-active-label">
+                                                    <span class="lbl">공수도 종합 표준 고정 단가</span>
+                                                    <span class="state" style="color: #0d9488;">
+                                                        <span class="pulse-dot green" style="background: #0d9488; width: 6px; height: 6px;"></span> 
+                                                        계통 공급 정상
+                                                    </span>
+                                                </div>
+                                                <div class="rates-active-val">
+                                                    <span class="val" style="color: #0d9488;">500 / 1,200</span>
+                                                    <span class="unit">원/m³</span>
+                                                </div>
+                                            </div>
+ 
+                                            <table class="kepco-rates-table">
+                                                <thead>
+                                                    <tr>
+                                                        <th>구분</th>
+                                                        <th>용도 범위</th>
+                                                        <th>단가 (원/m³)</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    <tr class="active-rate-row" style="background: rgba(13, 148, 136, 0.08); border-left: 3px solid #0d9488;">
+                                                        <td style="color: #0d9488; font-weight: 800;">공업용수</td>
+                                                        <td>생산 공정 및 냉각용수 공급</td>
+                                                        <td style="color: #0d9488; font-weight: 800;">500.0</td>
+                                                    </tr>
+                                                    <tr class="active-rate-row" style="background: rgba(37, 99, 235, 0.08); border-left: 3px solid #2563eb;">
+                                                        <td style="color: #2563eb; font-weight: 800;">생활용수</td>
+                                                        <td>사원 복지 식수 및 생활 용수</td>
+                                                        <td style="color: #2563eb; font-weight: 800;">1,200.0</td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
                                         </div>
 
-                                        <table class="kepco-rates-table">
-                                            <thead>
-                                                <tr>
-                                                    <th>구분</th>
-                                                    <th>시간대</th>
-                                                    <th>단가 (원/kWh)</th>
-                                                </tr>
-                                            </thead>
-                                            <tbody>
-                                                <tr id="rate-row-offpeak">
-                                                    <td>경부하</td>
-                                                    <td>22:00 ~ 08:00</td>
-                                                    <td class="rate-val" id="kepco-price-offpeak">126.2</td>
-                                                </tr>
-                                                <tr id="rate-row-midpeak">
-                                                    <td>중간부하</td>
-                                                    <td>08:00~15:00, 21:00~22:00</td>
-                                                    <td class="rate-val" id="kepco-price-midpeak">178.7</td>
-                                                </tr>
-                                                <tr id="rate-row-peak">
-                                                    <td>최대부하</td>
-                                                    <td>15:00 ~ 21:00</td>
-                                                    <td class="rate-val" id="kepco-price-peak">242.7</td>
-                                                </tr>
-                                            </tbody>
-                                        </table>
+                                        <!-- Gas Rates Tab Content -->
+                                        <div id="rates-content-gas" style="display: none;">
+                                            <!-- Sub Selector for Gas Providers -->
+                                            <div class="gas-sub-selector" style="display: flex; gap: 0.3rem; background: #e2e8f0; padding: 0.15rem; border-radius: 8px; margin-bottom: 0.5rem;">
+                                                <button type="button" class="gas-sub-btn active" id="btn-gas-seoul" style="flex: 1; padding: 0.2rem; border-radius: 6px; font-size: 0.65rem; font-weight: 700; border: none; background: #ffffff; color: var(--primary-green); cursor: pointer; transition: all 0.2s; font-family: inherit;">서울도시가스 (경기)</button>
+                                                <button type="button" class="gas-sub-btn" id="btn-gas-yeongnam" style="flex: 1; padding: 0.2rem; border-radius: 6px; font-size: 0.65rem; font-weight: 700; border: none; background: transparent; color: var(--text-secondary); cursor: pointer; transition: all 0.2s; font-family: inherit;">영남에너지서비스</button>
+                                            </div>
+
+                                            <!-- Seoul Gas Active Display -->
+                                            <div class="rates-active-display" id="gas-display-seoul" style="background: rgba(217, 119, 6, 0.04); border-color: rgba(217, 119, 6, 0.1);">
+                                                <div class="rates-active-label">
+                                                    <span class="lbl" id="gas-active-season-seoul">하절기 요금제 적용</span>
+                                                    <span class="state" style="color: #d97706;">
+                                                        <span class="pulse-dot orange" style="background: #d97706; width: 6px; height: 6px;"></span> 
+                                                        공급 압력 정상
+                                                    </span>
+                                                </div>
+                                                <div class="rates-active-val">
+                                                    <span class="val" id="gas-active-price-seoul" style="color: #d97706;">22.2013</span>
+                                                    <span class="unit">원/MJ</span>
+                                                </div>
+                                            </div>
+
+                                            <!-- Yeongnam Gas Active Display -->
+                                            <div class="rates-active-display" id="gas-display-yeongnam" style="display: none; background: rgba(234, 88, 12, 0.04); border-color: rgba(234, 88, 12, 0.1);">
+                                                <div class="rates-active-label">
+                                                    <span class="lbl" id="gas-active-season-yeongnam">하절기 요금제 적용</span>
+                                                    <span class="state" style="color: #ea580c;">
+                                                        <span class="pulse-dot orange" style="background: #ea580c; width: 6px; height: 6px;"></span> 
+                                                        공급 압력 정상
+                                                    </span>
+                                                </div>
+                                                <div class="rates-active-val">
+                                                    <span class="val" id="gas-active-price-yeongnam" style="color: #ea580c;">23.3427</span>
+                                                    <span class="unit">원/MJ</span>
+                                                </div>
+                                            </div>
+
+                                            <!-- Seoul Gas Rates Table -->
+                                            <table class="kepco-rates-table" id="gas-table-seoul">
+                                                <thead>
+                                                    <tr>
+                                                        <th>구분</th>
+                                                        <th>시간 및 비고</th>
+                                                        <th>단가 (원/MJ)</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    <tr id="seoul-gas-row-winter">
+                                                        <td>동절기 (12~2월)</td>
+                                                        <td>산업용</td>
+                                                        <td class="rate-val">22.2013</td>
+                                                    </tr>
+                                                    <tr id="seoul-gas-row-summer">
+                                                        <td>하절기 (6~8월)</td>
+                                                        <td>산업용</td>
+                                                        <td class="rate-val">22.2013</td>
+                                                    </tr>
+                                                    <tr id="seoul-gas-row-other">
+                                                        <td>기타월 (3~5, 9~11월)</td>
+                                                        <td>산업용</td>
+                                                        <td class="rate-val">22.2013</td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+
+                                            <!-- Yeongnam Gas Rates Table -->
+                                            <table class="kepco-rates-table" id="gas-table-yeongnam" style="display: none;">
+                                                <thead>
+                                                    <tr>
+                                                        <th>구분</th>
+                                                        <th>시간 및 비고</th>
+                                                        <th>단가 (원/MJ)</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    <tr id="yeongnam-gas-row-winter">
+                                                        <td>동절기 (12~2월)</td>
+                                                        <td>산업용 (흡수식)</td>
+                                                        <td class="rate-val">23.3427</td>
+                                                    </tr>
+                                                    <tr id="yeongnam-gas-row-summer">
+                                                        <td>하절기 (6~8월)</td>
+                                                        <td>산업용 (흡수식)</td>
+                                                        <td class="rate-val">23.3427</td>
+                                                    </tr>
+                                                    <tr id="yeongnam-gas-row-other">
+                                                        <td>기타월 (3~5, 9~11월)</td>
+                                                        <td>산업용 (흡수식)</td>
+                                                        <td class="rate-val">23.3427</td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
                                         
                                         <div class="rates-footer-desc">
-                                            ※ 2026년 4월 16일 시행 KEPCO 개편 단가 기준<br>
-                                            실시간 시스템 시각에 맞추어 적용 단가가 자동 연동됩니다.
+                                            ※ KEPCO 개편 단가, 수공 및 가스공사 도매 단가 연동 기준<br>
+                                            실시간 시스템에 따라 유틸리티 단가가 연동됩니다.
                                         </div>
                                     </div>
                                 </div>

@@ -1337,14 +1337,17 @@ button {
 .bill-accounts-list {
     display: flex;
     flex-direction: column;
-    gap: 1.15rem;
+    gap: 0.5rem;
+    max-height: 485px;
+    overflow-y: auto;
+    padding-right: 0.5rem;
 }
 
 .bill-account-item {
     background: var(--bg-surface-solid);
     border: 1px solid var(--border-color);
     border-radius: 18px;
-    padding: 1.15rem 1.5rem;
+    padding: 0.8rem 1.25rem;
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -1374,6 +1377,10 @@ button {
 .acct-planning { background: var(--primary-purple-light); color: var(--primary-purple); }
 .acct-rd { background: var(--primary-green-light); color: var(--primary-green); }
 .acct-databiz { background: #e0f2fe; color: var(--blue-accent); }
+.acct-indwater { background: #e0fbf7; color: #0d9488; }
+.acct-domwater { background: #eff6ff; color: #2563eb; }
+.acct-seoulgas { background: #ffedd5; color: #ea580c; }
+.acct-yngas { background: #fee2e2; color: #dc2626; }
 
 .acct-name {
     font-size: 0.92rem;
