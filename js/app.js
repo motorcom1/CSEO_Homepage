@@ -593,6 +593,112 @@ document.addEventListener('DOMContentLoaded', () => {
         if (txtPriceHvac) txtPriceHvac.textContent = priceHvac.toLocaleString();
         if (txtPriceRd) txtPriceRd.textContent = priceRd.toLocaleString();
         if (txtPriceData) txtPriceData.textContent = priceData.toLocaleString();
+
+        // KEPCO Industrial Rates UI
+        updateKepcoRatesUI();
+    }
+
+    function updateKepcoRatesUI() {
+        const now = new Date();
+        const month = now.getMonth() + 1; // 1-12
+        const date = now.getDate();
+        const hour = now.getHours();
+        const isWeekend = now.getDay() === 0 || now.getDay() === 6;
+
+        // Update the estimate date to the current date/time
+        const elEstimateDate = document.querySelector('.estimate-date');
+        if (elEstimateDate) {
+            elEstimateDate.textContent = `${month}/${date} ${hour}시 정산 기준`;
+        }
+
+        // 1. Determine Season
+        // Summer: 6, 7, 8
+        // Winter: 11, 12, 1, 2
+        // Spring/Autumn: 3, 4, 5, 9, 10
+        let season = "spring_autumn";
+        let seasonText = "봄·가을철";
+        if (month >= 6 && month <= 8) {
+            season = "summer";
+            seasonText = "여름철";
+        } else if (month === 11 || month === 12 || month === 1 || month === 2) {
+            season = "winter";
+            seasonText = "겨울철";
+        }
+
+        // 2. Define Rates for each Season (산업용(을) 고압A 선택 I 기준)
+        const rates = {
+            summer: { offpeak: 126.2, midpeak: 178.7, peak: 242.7 },
+            spring_autumn: { offpeak: 125.1, midpeak: 174.0, peak: 238.0 },
+            winter: { offpeak: 125.1, midpeak: 172.9, peak: 236.9 }
+        };
+
+        const seasonRates = rates[season];
+
+        // Update KEPCO rate table text contents
+        const elPriceOffpeak = document.getElementById('kepco-price-offpeak');
+        const elPriceMidpeak = document.getElementById('kepco-price-midpeak');
+        const elPricePeak = document.getElementById('kepco-price-peak');
+        if (elPriceOffpeak) elPriceOffpeak.textContent = seasonRates.offpeak.toFixed(1);
+        if (elPriceMidpeak) elPriceMidpeak.textContent = seasonRates.midpeak.toFixed(1);
+        if (elPricePeak) elPricePeak.textContent = seasonRates.peak.toFixed(1);
+
+        // 3. Determine Load Period (based on 2026-04-16 KEPCO rules)
+        // Off-peak (경부하): 22:00 ~ 08:00
+        // Peak (최대부하): 15:00 ~ 21:00 (Weekdays)
+        // Mid-peak (중간부하): 08:00 ~ 15:00, 21:00 ~ 22:00 (Weekdays)
+        let period = "midpeak";
+        let periodText = "중간부하";
+        let pulseColor = "orange";
+        
+        if (hour >= 22 || hour < 8) {
+            period = "offpeak";
+            periodText = "경부하";
+            pulseColor = "green";
+        } else {
+            if (isWeekend) {
+                period = "midpeak";
+                periodText = "중간부하 (주말)";
+                pulseColor = "green";
+            } else {
+                if (hour >= 15 && hour < 21) {
+                    period = "peak";
+                    periodText = "최대부하";
+                    pulseColor = "red";
+                } else {
+                    period = "midpeak";
+                    periodText = "중간부하";
+                    pulseColor = "orange";
+                }
+            }
+        }
+
+        const activePrice = seasonRates[period];
+
+        // 4. Update UI Display
+        const elActiveSeason = document.getElementById('kepco-active-season');
+        const elActivePeriod = document.getElementById('kepco-active-period');
+        const elActivePrice = document.getElementById('kepco-active-price');
+
+        if (elActiveSeason) elActiveSeason.textContent = `${seasonText} 요금제 적용`;
+        
+        if (elActivePeriod) {
+            elActivePeriod.innerHTML = `<span class="pulse-dot ${pulseColor}"></span> ${periodText} 적용 중`;
+        }
+        
+        if (elActivePrice) elActivePrice.textContent = activePrice.toFixed(1);
+
+        // Highlight active row in table
+        const rowOffpeak = document.getElementById('rate-row-offpeak');
+        const rowMidpeak = document.getElementById('rate-row-midpeak');
+        const rowPeak = document.getElementById('rate-row-peak');
+
+        if (rowOffpeak) rowOffpeak.classList.remove('active-rate-row');
+        if (rowMidpeak) rowMidpeak.classList.remove('active-rate-row');
+        if (rowPeak) rowPeak.classList.remove('active-rate-row');
+
+        if (period === 'offpeak' && rowOffpeak) rowOffpeak.classList.add('active-rate-row');
+        if (period === 'midpeak' && rowMidpeak) rowMidpeak.classList.add('active-rate-row');
+        if (period === 'peak' && rowPeak) rowPeak.classList.add('active-rate-row');
     }
 
     // ==========================================================================
