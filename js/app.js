@@ -1704,6 +1704,11 @@ document.addEventListener('DOMContentLoaded', () => {
         const hoursLabels = ['00:00', '01:00', '02:00', '03:00', '04:00', '05:00', '06:00', '07:00', '08:00', '09:00', '10:00', '11:00', '12:00', '13:00', '14:00', '15:00', '16:00', '17:00', '18:00', '19:00', '20:00', '21:00', '22:00', '23:00', '24:00'];
         const hoursValues = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24];
         
+        // Calculate nearest rounded hour index for "NOW" highlight
+        const nowTime = new Date();
+        const roundedHour = nowTime.getMinutes() >= 30 ? (nowTime.getHours() + 1) : nowTime.getHours();
+        const currentHourIndex = Math.min(Math.max(roundedHour, 0), 24);
+
         const pajuTempData = hoursValues.map(h => parseFloat((23.0 + 5.0 * Math.sin((h - 8) * Math.PI / 12)).toFixed(1)));
         const pajuHumiData = hoursValues.map(h => parseFloat((72.5 - 12.5 * Math.sin((h - 8) * Math.PI / 12)).toFixed(1)));
         const gumiTempData = hoursValues.map(h => parseFloat((24.5 + 5.0 * Math.sin((h - 8) * Math.PI / 12)).toFixed(1)));
@@ -1724,11 +1729,11 @@ document.addEventListener('DOMContentLoaded', () => {
                     backgroundColor: 'transparent',
                     fill: false,
                     tension: 0.4,
-                    pointBackgroundColor: '#10b981',
-                    pointBorderColor: '#ffffff',
-                    pointBorderWidth: 1.5,
-                    pointRadius: 4,
-                    pointHoverRadius: 6,
+                    pointRadius: (context) => context.dataIndex === currentHourIndex ? 6 : 4,
+                    pointHoverRadius: (context) => context.dataIndex === currentHourIndex ? 8 : 6,
+                    pointBorderWidth: (context) => context.dataIndex === currentHourIndex ? 2.5 : 1.5,
+                    pointBackgroundColor: (context) => context.dataIndex === currentHourIndex ? '#ffffff' : '#10b981',
+                    pointBorderColor: (context) => context.dataIndex === currentHourIndex ? '#10b981' : '#ffffff',
                     yAxisID: 'y'
                 },
                 {
@@ -1740,11 +1745,11 @@ document.addEventListener('DOMContentLoaded', () => {
                     backgroundColor: 'transparent',
                     fill: false,
                     tension: 0.4,
-                    pointBackgroundColor: '#14b8a6',
-                    pointBorderColor: '#ffffff',
-                    pointBorderWidth: 1.0,
-                    pointRadius: 3,
-                    pointHoverRadius: 5,
+                    pointRadius: (context) => context.dataIndex === currentHourIndex ? 5 : 3,
+                    pointHoverRadius: (context) => context.dataIndex === currentHourIndex ? 7 : 5,
+                    pointBorderWidth: (context) => context.dataIndex === currentHourIndex ? 2.0 : 1.0,
+                    pointBackgroundColor: (context) => context.dataIndex === currentHourIndex ? '#ffffff' : '#14b8a6',
+                    pointBorderColor: (context) => context.dataIndex === currentHourIndex ? '#14b8a6' : '#ffffff',
                     yAxisID: 'y1'
                 },
                 {
@@ -1755,11 +1760,11 @@ document.addEventListener('DOMContentLoaded', () => {
                     backgroundColor: 'transparent',
                     fill: false,
                     tension: 0.4,
-                    pointBackgroundColor: '#3b82f6',
-                    pointBorderColor: '#ffffff',
-                    pointBorderWidth: 1.5,
-                    pointRadius: 4,
-                    pointHoverRadius: 6,
+                    pointRadius: (context) => context.dataIndex === currentHourIndex ? 6 : 4,
+                    pointHoverRadius: (context) => context.dataIndex === currentHourIndex ? 8 : 6,
+                    pointBorderWidth: (context) => context.dataIndex === currentHourIndex ? 2.5 : 1.5,
+                    pointBackgroundColor: (context) => context.dataIndex === currentHourIndex ? '#ffffff' : '#3b82f6',
+                    pointBorderColor: (context) => context.dataIndex === currentHourIndex ? '#3b82f6' : '#ffffff',
                     yAxisID: 'y'
                 },
                 {
@@ -1771,11 +1776,11 @@ document.addEventListener('DOMContentLoaded', () => {
                     backgroundColor: 'transparent',
                     fill: false,
                     tension: 0.4,
-                    pointBackgroundColor: '#60a5fa',
-                    pointBorderColor: '#ffffff',
-                    pointBorderWidth: 1.0,
-                    pointRadius: 3,
-                    pointHoverRadius: 5,
+                    pointRadius: (context) => context.dataIndex === currentHourIndex ? 5 : 3,
+                    pointHoverRadius: (context) => context.dataIndex === currentHourIndex ? 7 : 5,
+                    pointBorderWidth: (context) => context.dataIndex === currentHourIndex ? 2.0 : 1.0,
+                    pointBackgroundColor: (context) => context.dataIndex === currentHourIndex ? '#ffffff' : '#60a5fa',
+                    pointBorderColor: (context) => context.dataIndex === currentHourIndex ? '#60a5fa' : '#ffffff',
                     yAxisID: 'y1'
                 },
                 {
@@ -1786,11 +1791,11 @@ document.addEventListener('DOMContentLoaded', () => {
                     backgroundColor: 'transparent',
                     fill: false,
                     tension: 0.4,
-                    pointBackgroundColor: '#ef4444',
-                    pointBorderColor: '#ffffff',
-                    pointBorderWidth: 1.5,
-                    pointRadius: 4,
-                    pointHoverRadius: 6,
+                    pointRadius: (context) => context.dataIndex === currentHourIndex ? 6 : 4,
+                    pointHoverRadius: (context) => context.dataIndex === currentHourIndex ? 8 : 6,
+                    pointBorderWidth: (context) => context.dataIndex === currentHourIndex ? 2.5 : 1.5,
+                    pointBackgroundColor: (context) => context.dataIndex === currentHourIndex ? '#ffffff' : '#ef4444',
+                    pointBorderColor: (context) => context.dataIndex === currentHourIndex ? '#ef4444' : '#ffffff',
                     yAxisID: 'y'
                 },
                 {
@@ -1802,11 +1807,11 @@ document.addEventListener('DOMContentLoaded', () => {
                     backgroundColor: 'transparent',
                     fill: false,
                     tension: 0.4,
-                    pointBackgroundColor: '#f87171',
-                    pointBorderColor: '#ffffff',
-                    pointBorderWidth: 1.0,
-                    pointRadius: 3,
-                    pointHoverRadius: 5,
+                    pointRadius: (context) => context.dataIndex === currentHourIndex ? 5 : 3,
+                    pointHoverRadius: (context) => context.dataIndex === currentHourIndex ? 7 : 5,
+                    pointBorderWidth: (context) => context.dataIndex === currentHourIndex ? 2.0 : 1.0,
+                    pointBackgroundColor: (context) => context.dataIndex === currentHourIndex ? '#ffffff' : '#f87171',
+                    pointBorderColor: (context) => context.dataIndex === currentHourIndex ? '#f87171' : '#ffffff',
                     yAxisID: 'y1'
                 },
                 {
@@ -1817,11 +1822,11 @@ document.addEventListener('DOMContentLoaded', () => {
                     backgroundColor: 'transparent',
                     fill: false,
                     tension: 0.4,
-                    pointBackgroundColor: '#8b5cf6',
-                    pointBorderColor: '#ffffff',
-                    pointBorderWidth: 1.5,
-                    pointRadius: 4,
-                    pointHoverRadius: 6,
+                    pointRadius: (context) => context.dataIndex === currentHourIndex ? 6 : 4,
+                    pointHoverRadius: (context) => context.dataIndex === currentHourIndex ? 8 : 6,
+                    pointBorderWidth: (context) => context.dataIndex === currentHourIndex ? 2.5 : 1.5,
+                    pointBackgroundColor: (context) => context.dataIndex === currentHourIndex ? '#ffffff' : '#8b5cf6',
+                    pointBorderColor: (context) => context.dataIndex === currentHourIndex ? '#8b5cf6' : '#ffffff',
                     yAxisID: 'y'
                 },
                 {
@@ -1833,19 +1838,84 @@ document.addEventListener('DOMContentLoaded', () => {
                     backgroundColor: 'transparent',
                     fill: false,
                     tension: 0.4,
-                    pointBackgroundColor: '#a78bfa',
-                    pointBorderColor: '#ffffff',
-                    pointBorderWidth: 1.0,
-                    pointRadius: 3,
-                    pointHoverRadius: 5,
+                    pointRadius: (context) => context.dataIndex === currentHourIndex ? 5 : 3,
+                    pointHoverRadius: (context) => context.dataIndex === currentHourIndex ? 7 : 5,
+                    pointBorderWidth: (context) => context.dataIndex === currentHourIndex ? 2.0 : 1.0,
+                    pointBackgroundColor: (context) => context.dataIndex === currentHourIndex ? '#ffffff' : '#a78bfa',
+                    pointBorderColor: (context) => context.dataIndex === currentHourIndex ? '#a78bfa' : '#ffffff',
                     yAxisID: 'y1'
                 }
             ]
         };
 
+        const currentHourHighlightPlugin = {
+            id: 'currentHourHighlight',
+            beforeDatasetsDraw: function(chart) {
+                const activeScale = chart.scales.x;
+                const xVal = activeScale.getPixelForTick(currentHourIndex);
+                const topY = chart.scales.y.top;
+                const bottomY = chart.scales.y.bottom;
+                const ctx = chart.ctx;
+                
+                ctx.save();
+                
+                // Draw subtle vertical highlight band (background shade)
+                const bandWidth = 24;
+                ctx.fillStyle = 'rgba(16, 185, 129, 0.04)';
+                ctx.fillRect(xVal - bandWidth / 2, topY, bandWidth, bottomY - topY);
+                
+                // Draw vertical dashed line
+                ctx.beginPath();
+                ctx.strokeStyle = 'rgba(16, 185, 129, 0.35)';
+                ctx.lineWidth = 1.5;
+                ctx.setLineDash([5, 5]);
+                ctx.moveTo(xVal, topY);
+                ctx.lineTo(xVal, bottomY);
+                ctx.stroke();
+                
+                ctx.restore();
+            },
+            afterDraw: function(chart) {
+                const activeScale = chart.scales.x;
+                const xVal = activeScale.getPixelForTick(currentHourIndex);
+                const topY = chart.scales.y.top;
+                const ctx = chart.ctx;
+                
+                ctx.save();
+                
+                // Draw a small "NOW" label pill at the top of the line inside the chart
+                const text = "NOW";
+                ctx.font = 'bold 9px Outfit, sans-serif';
+                const textWidth = ctx.measureText(text).width;
+                const pillWidth = textWidth + 10;
+                const pillHeight = 15;
+                const pillX = xVal - pillWidth / 2;
+                const pillY = topY + 6;
+                
+                // Draw pill background
+                ctx.fillStyle = '#10b981';
+                ctx.beginPath();
+                if (ctx.roundRect) {
+                    ctx.roundRect(pillX, pillY, pillWidth, pillHeight, 4);
+                } else {
+                    ctx.rect(pillX, pillY, pillWidth, pillHeight);
+                }
+                ctx.fill();
+                
+                // Draw pill text
+                ctx.fillStyle = '#ffffff';
+                ctx.textAlign = 'center';
+                ctx.textBaseline = 'middle';
+                ctx.fillText(text, xVal, pillY + pillHeight / 2);
+                
+                ctx.restore();
+            }
+        };
+
         weatherChartInstance = new Chart(ctx, {
             type: 'line',
             data: weatherData,
+            plugins: [currentHourHighlightPlugin],
             options: {
                 responsive: true,
                 maintainAspectRatio: false,

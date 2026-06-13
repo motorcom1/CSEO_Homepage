@@ -639,8 +639,10 @@
                                 </div>
                             </div>
                             <div class="bill-analysis-grid">
-                                <!-- Left Billing Account List -->
-                                <div class="bill-accounts-list">
+                                <!-- Left panel wrapper (combining Accounts list and Future Outlook) -->
+                                <div class="bill-analysis-left-panel" style="display: flex; flex-direction: column; gap: 1.5rem; flex-shrink: 0; min-width: 0;">
+                                    <!-- Left Billing Account List -->
+                                    <div class="bill-accounts-list">
                                     <div class="bill-account-item">
                                         <div class="acct-info">
                                             <span class="acct-badge acct-planning">공용 설비</span>
@@ -719,9 +721,58 @@
                                         </div>
                                     </div>
                                 </div>
- 
-                                <!-- Right panel container -->
-                                <div class="bill-analysis-right-panel">
+                                
+                                <!-- Utility Rates Future Outlook Section -->
+                                <div class="utility-outlook-section" style="padding: 1.5rem 0 0 0; border-top: 1px solid var(--border-color); flex-shrink: 0; display: flex; flex-direction: column; gap: 1rem;">
+                                    <h4 style="font-size: 1.05rem; font-weight: 800; display: flex; align-items: center; gap: 0.5rem; color: var(--text-primary); margin: 0 0 0.5rem 0;">
+                                        <i data-lucide="trending-up" style="color: var(--primary-green); width: 18px; height: 18px;"></i>
+                                        향후 6개월 유틸리티 요금 전망 및 분석 (시뮬레이션)
+                                    </h4>
+                                    
+                                    <div class="outlook-layout" style="display: flex; flex-direction: column; gap: 1rem;">
+                                        <!-- Top: Chart Container -->
+                                        <div class="glass-card" style="padding: 1rem 1.25rem; background: var(--bg-surface-solid); border: 1px solid var(--border-color); border-radius: 20px; display: flex; flex-direction: column; flex-shrink: 0;">
+                                            <div class="chart-wrapper" style="position: relative; height: 240px; width: 100%;">
+                                                <canvas id="utility-outlook-chart"></canvas>
+                                            </div>
+                                        </div>
+                                        
+                                        <!-- Bottom: Outlook Insights Cards (3 columns) -->
+                                        <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 0.75rem; flex-shrink: 0;">
+                                            <div class="glass-card" style="padding: 0.75rem 0.95rem; background: var(--bg-surface-solid); border: 1px solid var(--border-color); border-radius: 16px; border-left: 4px solid #10b981; flex-shrink: 0; display: flex; flex-direction: column; justify-content: space-between;">
+                                                <h5 style="font-size: 0.82rem; font-weight: 800; color: #10b981; margin: 0 0 0.25rem 0; display: flex; align-items: center; gap: 0.3rem;">
+                                                    <i data-lucide="zap" style="width: 12px; height: 12px;"></i>
+                                                    전기 요금 전망
+                                                </h5>
+                                                <p style="font-size: 0.72rem; color: var(--text-secondary); margin: 0; line-height: 1.4;">
+                                                    하절기(7~8월) 냉방 부하 급증 및 최대부하 요율 인상으로 인한 단가 상승 전망. ESS 충방전 최적화 필요.
+                                                </p>
+                                            </div>
+                                            <div class="glass-card" style="padding: 0.75rem 0.95rem; background: var(--bg-surface-solid); border: 1px solid var(--border-color); border-radius: 16px; border-left: 4px solid #0d9488; flex-shrink: 0; display: flex; flex-direction: column; justify-content: space-between;">
+                                                <h5 style="font-size: 0.82rem; font-weight: 800; color: #0d9488; margin: 0 0 0.25rem 0; display: flex; align-items: center; gap: 0.3rem;">
+                                                    <i data-lucide="droplet" style="width: 12px; height: 12px;"></i>
+                                                    수도 요금 전망
+                                                </h5>
+                                                <p style="font-size: 0.72rem; color: var(--text-secondary); margin: 0; line-height: 1.4;">
+                                                    한국수자원공사 광역상수도 단가는 안정세 예상. 냉각탑 제어 및 폐수 재이용률 제고로 용수 요금 추가 3.2% 절감.
+                                                </p>
+                                            </div>
+                                            <div class="glass-card" style="padding: 0.75rem 0.95rem; background: var(--bg-surface-solid); border: 1px solid var(--border-color); border-radius: 16px; border-left: 4px solid #ea580c; flex-shrink: 0; display: flex; flex-direction: column; justify-content: space-between;">
+                                                <h5 style="font-size: 0.82rem; font-weight: 800; color: #ea580c; margin: 0 0 0.25rem 0; display: flex; align-items: center; gap: 0.3rem;">
+                                                    <i data-lucide="flame" style="width: 12px; height: 12px;"></i>
+                                                    도시가스 전망
+                                                </h5>
+                                                <p style="font-size: 0.72rem; color: var(--text-secondary); margin: 0; line-height: 1.4;">
+                                                    글로벌 LNG 수급난 및 동절기(11월~) 난방용 고압 단가 인상으로 10% 내외 요금 인상 전망. 흡수식 냉동기 효율화.
+                                                </p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div> <!-- End of bill-analysis-left-panel -->
+
+                            <!-- Right panel container -->
+                            <div class="bill-analysis-right-panel">
                                     <!-- Right billing estimation simulation widget -->
                                     <div class="bill-estimate-widget">
                                         <div class="estimate-header">
@@ -947,56 +998,10 @@
                                             실시간 시스템에 따라 유틸리티 단가가 연동됩니다.
                                         </div>
                             </div>
-                            
-                            <!-- Utility Rates Future Outlook Section -->
-                            <div class="utility-outlook-section" style="padding: 1.5rem 2.25rem; border-top: 1px solid var(--border-color); flex-shrink: 0; display: flex; flex-direction: column; gap: 1rem;">
-                                <h4 style="font-size: 1.05rem; font-weight: 800; display: flex; align-items: center; gap: 0.5rem; color: var(--text-primary); margin: 0 0 0.5rem 0;">
-                                    <i data-lucide="trending-up" style="color: var(--primary-green); width: 18px; height: 18px;"></i>
-                                    향후 6개월 유틸리티 요금 전망 및 분석 (시뮬레이션)
-                                </h4>
-                                
-                                <div class="outlook-grid" style="display: grid; grid-template-columns: 2fr 1fr; gap: 1.5rem; min-height: 320px;">
-                                    <!-- Left: Chart Container -->
-                                    <div class="glass-card" style="padding: 1.25rem; background: var(--bg-surface-solid); border: 1px solid var(--border-color); border-radius: 20px; display: flex; flex-direction: column; flex-shrink: 0;">
-                                        <div class="chart-wrapper" style="position: relative; height: 260px; width: 100%;">
-                                            <canvas id="utility-outlook-chart"></canvas>
-                                        </div>
-                                    </div>
-                                    
-                                    <!-- Right: Outlook Insights Cards -->
-                                    <div style="display: flex; flex-direction: column; gap: 0.75rem;">
-                                        <div class="glass-card" style="padding: 0.85rem 1.15rem; background: var(--bg-surface-solid); border: 1px solid var(--border-color); border-radius: 16px; border-left: 4px solid #10b981; flex-shrink: 0;">
-                                            <h5 style="font-size: 0.85rem; font-weight: 800; color: #10b981; margin: 0 0 0.25rem 0; display: flex; align-items: center; gap: 0.35rem;">
-                                                <i data-lucide="zap" style="width: 13px; height: 13px;"></i>
-                                                전기 요금 전망 (7~8월 피크)
-                                            </h5>
-                                            <p style="font-size: 0.76rem; color: var(--text-secondary); margin: 0; line-height: 1.45;">
-                                                하절기(7~8월) 냉방 부하 급증 및 최대부하 요율 단가 인상으로 인한 단가 상승 전망. ESS 충방전 스케줄 최적화 필요.
-                                            </p>
-                                        </div>
-                                        <div class="glass-card" style="padding: 0.85rem 1.15rem; background: var(--bg-surface-solid); border: 1px solid var(--border-color); border-radius: 16px; border-left: 4px solid #0d9488; flex-shrink: 0;">
-                                            <h5 style="font-size: 0.85rem; font-weight: 800; color: #0d9488; margin: 0 0 0.25rem 0; display: flex; align-items: center; gap: 0.35rem;">
-                                                <i data-lucide="droplet" style="width: 13px; height: 13px;"></i>
-                                                수도 요금 전망 (수공 단가 안정)
-                                            </h5>
-                                            <p style="font-size: 0.76rem; color: var(--text-secondary); margin: 0; line-height: 1.45;">
-                                                한국수자원공사 광역상수도 단가는 안정세 유지 예상. 냉각탑 증발량 제어 및 폐수 재이용률 제고로 용수 요금 추가 3.2% 절감 가능.
-                                            </p>
-                                        </div>
-                                        <div class="glass-card" style="padding: 0.85rem 1.15rem; background: var(--bg-surface-solid); border: 1px solid var(--border-color); border-radius: 16px; border-left: 4px solid #ea580c; flex-shrink: 0;">
-                                            <h5 style="font-size: 0.85rem; font-weight: 800; color: #ea580c; margin: 0 0 0.25rem 0; display: flex; align-items: center; gap: 0.35rem;">
-                                                <i data-lucide="flame" style="width: 13px; height: 13px;"></i>
-                                                도시가스 전망 (동절기 대비 인상)
-                                            </h5>
-                                            <p style="font-size: 0.76rem; color: var(--text-secondary); margin: 0; line-height: 1.45;">
-                                                글로벌 LNG 수급난 및 동절기(11월~) 난방용 고압 단가 인상 요인이 작용하여 10% 내외의 요금 인상 전망. 흡수식 냉동기 운전 효율화 권장.
-                                            </p>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
                         </div>
                     </div>
+                </div>
+            </div>
 
                     <!-- Sub-view 3: 설비별 에너지 현황 (신규 4대 설비 감시 그리드 + LED 점멸등) -->
                     <div id="energy-facility-status" class="sub-view">

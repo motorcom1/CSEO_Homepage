@@ -1330,7 +1330,7 @@ button {
     gap: 2rem;
     padding: 2.25rem;
     flex-grow: 1;
-    align-items: center;
+    align-items: start;
     background: radial-gradient(circle at bottom right, rgba(16, 185, 129, 0.02) 0%, transparent 60%);
 }
 
