@@ -2013,7 +2013,7 @@ button {
 }
 
 /* Weather Analysis sub-view styles */
-#energy-weather-analysis {
+#energy-weather-analysis, #energy-bill-analysis {
     overflow-y: auto !important;
 }
 .weather-location-card {

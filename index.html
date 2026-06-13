@@ -629,7 +629,7 @@
 
                     <!-- Sub-view 2: 계정별 요금 분석 (신규 요금 도넛 차트 및 예상 청구액 시뮬레이터) -->
                     <div id="energy-bill-analysis" class="sub-view">
-                        <div class="glass-card full-height-card">
+                        <div class="glass-card" style="display: flex; flex-direction: column; min-height: 100%; height: auto; padding-bottom: 2rem; flex-shrink: 0;">
                             <div class="card-header">
                                 <div class="card-header-title">
                                     <i data-lucide="coins" class="header-icon green-text"></i>
@@ -946,6 +946,52 @@
                                             ※ KEPCO 개편 단가, 수공 및 가스공사 도매 단가 연동 기준<br>
                                             실시간 시스템에 따라 유틸리티 단가가 연동됩니다.
                                         </div>
+                            </div>
+                            
+                            <!-- Utility Rates Future Outlook Section -->
+                            <div class="utility-outlook-section" style="padding: 1.5rem 2.25rem; border-top: 1px solid var(--border-color); flex-shrink: 0; display: flex; flex-direction: column; gap: 1rem;">
+                                <h4 style="font-size: 1.05rem; font-weight: 800; display: flex; align-items: center; gap: 0.5rem; color: var(--text-primary); margin: 0 0 0.5rem 0;">
+                                    <i data-lucide="trending-up" style="color: var(--primary-green); width: 18px; height: 18px;"></i>
+                                    향후 6개월 유틸리티 요금 전망 및 분석 (시뮬레이션)
+                                </h4>
+                                
+                                <div class="outlook-grid" style="display: grid; grid-template-columns: 2fr 1fr; gap: 1.5rem; min-height: 320px;">
+                                    <!-- Left: Chart Container -->
+                                    <div class="glass-card" style="padding: 1.25rem; background: var(--bg-surface-solid); border: 1px solid var(--border-color); border-radius: 20px; display: flex; flex-direction: column; flex-shrink: 0;">
+                                        <div class="chart-wrapper" style="position: relative; height: 260px; width: 100%;">
+                                            <canvas id="utility-outlook-chart"></canvas>
+                                        </div>
+                                    </div>
+                                    
+                                    <!-- Right: Outlook Insights Cards -->
+                                    <div style="display: flex; flex-direction: column; gap: 0.75rem;">
+                                        <div class="glass-card" style="padding: 0.85rem 1.15rem; background: var(--bg-surface-solid); border: 1px solid var(--border-color); border-radius: 16px; border-left: 4px solid #10b981; flex-shrink: 0;">
+                                            <h5 style="font-size: 0.85rem; font-weight: 800; color: #10b981; margin: 0 0 0.25rem 0; display: flex; align-items: center; gap: 0.35rem;">
+                                                <i data-lucide="zap" style="width: 13px; height: 13px;"></i>
+                                                전기 요금 전망 (7~8월 피크)
+                                            </h5>
+                                            <p style="font-size: 0.76rem; color: var(--text-secondary); margin: 0; line-height: 1.45;">
+                                                하절기(7~8월) 냉방 부하 급증 및 최대부하 요율 단가 인상으로 인한 단가 상승 전망. ESS 충방전 스케줄 최적화 필요.
+                                            </p>
+                                        </div>
+                                        <div class="glass-card" style="padding: 0.85rem 1.15rem; background: var(--bg-surface-solid); border: 1px solid var(--border-color); border-radius: 16px; border-left: 4px solid #0d9488; flex-shrink: 0;">
+                                            <h5 style="font-size: 0.85rem; font-weight: 800; color: #0d9488; margin: 0 0 0.25rem 0; display: flex; align-items: center; gap: 0.35rem;">
+                                                <i data-lucide="droplet" style="width: 13px; height: 13px;"></i>
+                                                수도 요금 전망 (수공 단가 안정)
+                                            </h5>
+                                            <p style="font-size: 0.76rem; color: var(--text-secondary); margin: 0; line-height: 1.45;">
+                                                한국수자원공사 광역상수도 단가는 안정세 유지 예상. 냉각탑 증발량 제어 및 폐수 재이용률 제고로 용수 요금 추가 3.2% 절감 가능.
+                                            </p>
+                                        </div>
+                                        <div class="glass-card" style="padding: 0.85rem 1.15rem; background: var(--bg-surface-solid); border: 1px solid var(--border-color); border-radius: 16px; border-left: 4px solid #ea580c; flex-shrink: 0;">
+                                            <h5 style="font-size: 0.85rem; font-weight: 800; color: #ea580c; margin: 0 0 0.25rem 0; display: flex; align-items: center; gap: 0.35rem;">
+                                                <i data-lucide="flame" style="width: 13px; height: 13px;"></i>
+                                                도시가스 전망 (동절기 대비 인상)
+                                            </h5>
+                                            <p style="font-size: 0.76rem; color: var(--text-secondary); margin: 0; line-height: 1.45;">
+                                                글로벌 LNG 수급난 및 동절기(11월~) 난방용 고압 단가 인상 요인이 작용하여 10% 내외의 요금 인상 전망. 흡수식 냉동기 운전 효율화 권장.
+                                            </p>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -1221,6 +1267,30 @@
                                                 <div class="weather-progress-fill" id="weather-humi-bar-paju" style="width: 68%; height: 100%; background: #3b82f6; border-radius: 4px; transition: width 0.5s ease;"></div>
                                             </div>
                                         </div>
+                                        
+                                        <!-- Wet-bulb & Dew Point row -->
+                                        <div class="weather-sub-metrics" style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem; margin-top: 0.75rem; padding-top: 0.75rem; border-top: 1px dashed var(--border-color); flex-shrink: 0;">
+                                            <div style="display: flex; flex-direction: column; gap: 0.15rem;">
+                                                <span style="font-size: 0.75rem; font-weight: 700; color: var(--text-secondary); display: flex; align-items: center; gap: 0.25rem;">
+                                                    <i data-lucide="droplets" style="color: #0ea5e9; width: 12px; height: 12px;"></i>
+                                                    습구 온도
+                                                </span>
+                                                <div style="display: flex; align-items: baseline; gap: 0.1rem;">
+                                                    <span id="weather-wetbulb-paju" style="font-size: 1.1rem; font-weight: 800; color: var(--text-primary);">-</span>
+                                                    <span style="font-size: 0.75rem; font-weight: 700; color: var(--text-secondary);">°C</span>
+                                                </div>
+                                            </div>
+                                            <div style="display: flex; flex-direction: column; gap: 0.15rem;">
+                                                <span style="font-size: 0.75rem; font-weight: 700; color: var(--text-secondary); display: flex; align-items: center; gap: 0.25rem;">
+                                                    <i data-lucide="thermometer" style="color: #6366f1; width: 12px; height: 12px;"></i>
+                                                    노점 온도
+                                                </span>
+                                                <div style="display: flex; align-items: baseline; gap: 0.1rem;">
+                                                    <span id="weather-dewpoint-paju" style="font-size: 1.1rem; font-weight: 800; color: var(--text-primary);">-</span>
+                                                    <span style="font-size: 0.75rem; font-weight: 700; color: var(--text-secondary);">°C</span>
+                                                </div>
+                                            </div>
+                                        </div>
                                     </div>
                                     
                                     <div class="weather-card-foot" style="border-top: 1px solid var(--border-color); padding-top: 0.6rem; display: flex; justify-content: space-between; align-items: center;">
@@ -1271,6 +1341,30 @@
                                             </div>
                                             <div class="weather-progress-bg" style="width: 100%; height: 6px; background: rgba(0,0,0,0.05); border-radius: 4px; overflow: hidden;">
                                                 <div class="weather-progress-fill" id="weather-humi-bar-gumi" style="width: 62%; height: 100%; background: #3b82f6; border-radius: 4px; transition: width 0.5s ease;"></div>
+                                            </div>
+                                        </div>
+                                        
+                                        <!-- Wet-bulb & Dew Point row -->
+                                        <div class="weather-sub-metrics" style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem; margin-top: 0.75rem; padding-top: 0.75rem; border-top: 1px dashed var(--border-color); flex-shrink: 0;">
+                                            <div style="display: flex; flex-direction: column; gap: 0.15rem;">
+                                                <span style="font-size: 0.75rem; font-weight: 700; color: var(--text-secondary); display: flex; align-items: center; gap: 0.25rem;">
+                                                    <i data-lucide="droplets" style="color: #0ea5e9; width: 12px; height: 12px;"></i>
+                                                    습구 온도
+                                                </span>
+                                                <div style="display: flex; align-items: baseline; gap: 0.1rem;">
+                                                    <span id="weather-wetbulb-gumi" style="font-size: 1.1rem; font-weight: 800; color: var(--text-primary);">-</span>
+                                                    <span style="font-size: 0.75rem; font-weight: 700; color: var(--text-secondary);">°C</span>
+                                                </div>
+                                            </div>
+                                            <div style="display: flex; flex-direction: column; gap: 0.15rem;">
+                                                <span style="font-size: 0.75rem; font-weight: 700; color: var(--text-secondary); display: flex; align-items: center; gap: 0.25rem;">
+                                                    <i data-lucide="thermometer" style="color: #6366f1; width: 12px; height: 12px;"></i>
+                                                    노점 온도
+                                                </span>
+                                                <div style="display: flex; align-items: baseline; gap: 0.1rem;">
+                                                    <span id="weather-dewpoint-gumi" style="font-size: 1.1rem; font-weight: 800; color: var(--text-primary);">-</span>
+                                                    <span style="font-size: 0.75rem; font-weight: 700; color: var(--text-secondary);">°C</span>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
@@ -1325,6 +1419,30 @@
                                                 <div class="weather-progress-fill" id="weather-humi-bar-guangzhou" style="width: 82%; height: 100%; background: #3b82f6; border-radius: 4px; transition: width 0.5s ease;"></div>
                                             </div>
                                         </div>
+                                        
+                                        <!-- Wet-bulb & Dew Point row -->
+                                        <div class="weather-sub-metrics" style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem; margin-top: 0.75rem; padding-top: 0.75rem; border-top: 1px dashed var(--border-color); flex-shrink: 0;">
+                                            <div style="display: flex; flex-direction: column; gap: 0.15rem;">
+                                                <span style="font-size: 0.75rem; font-weight: 700; color: var(--text-secondary); display: flex; align-items: center; gap: 0.25rem;">
+                                                    <i data-lucide="droplets" style="color: #0ea5e9; width: 12px; height: 12px;"></i>
+                                                    습구 온도
+                                                </span>
+                                                <div style="display: flex; align-items: baseline; gap: 0.1rem;">
+                                                    <span id="weather-wetbulb-guangzhou" style="font-size: 1.1rem; font-weight: 800; color: var(--text-primary);">-</span>
+                                                    <span style="font-size: 0.75rem; font-weight: 700; color: var(--text-secondary);">°C</span>
+                                                </div>
+                                            </div>
+                                            <div style="display: flex; flex-direction: column; gap: 0.15rem;">
+                                                <span style="font-size: 0.75rem; font-weight: 700; color: var(--text-secondary); display: flex; align-items: center; gap: 0.25rem;">
+                                                    <i data-lucide="thermometer" style="color: #6366f1; width: 12px; height: 12px;"></i>
+                                                    노점 온도
+                                                </span>
+                                                <div style="display: flex; align-items: baseline; gap: 0.1rem;">
+                                                    <span id="weather-dewpoint-guangzhou" style="font-size: 1.1rem; font-weight: 800; color: var(--text-primary);">-</span>
+                                                    <span style="font-size: 0.75rem; font-weight: 700; color: var(--text-secondary);">°C</span>
+                                                </div>
+                                            </div>
+                                        </div>
                                     </div>
                                     
                                     <div class="weather-card-foot" style="border-top: 1px solid var(--border-color); padding-top: 0.6rem; display: flex; justify-content: space-between; align-items: center;">
@@ -1375,6 +1493,30 @@
                                             </div>
                                             <div class="weather-progress-bg" style="width: 100%; height: 6px; background: rgba(0,0,0,0.05); border-radius: 4px; overflow: hidden;">
                                                 <div class="weather-progress-fill" id="weather-humi-bar-haiphong" style="width: 85%; height: 100%; background: #3b82f6; border-radius: 4px; transition: width 0.5s ease;"></div>
+                                            </div>
+                                        </div>
+                                        
+                                        <!-- Wet-bulb & Dew Point row -->
+                                        <div class="weather-sub-metrics" style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem; margin-top: 0.75rem; padding-top: 0.75rem; border-top: 1px dashed var(--border-color); flex-shrink: 0;">
+                                            <div style="display: flex; flex-direction: column; gap: 0.15rem;">
+                                                <span style="font-size: 0.75rem; font-weight: 700; color: var(--text-secondary); display: flex; align-items: center; gap: 0.25rem;">
+                                                    <i data-lucide="droplets" style="color: #0ea5e9; width: 12px; height: 12px;"></i>
+                                                    습구 온도
+                                                </span>
+                                                <div style="display: flex; align-items: baseline; gap: 0.1rem;">
+                                                    <span id="weather-wetbulb-haiphong" style="font-size: 1.1rem; font-weight: 800; color: var(--text-primary);">-</span>
+                                                    <span style="font-size: 0.75rem; font-weight: 700; color: var(--text-secondary);">°C</span>
+                                                </div>
+                                            </div>
+                                            <div style="display: flex; flex-direction: column; gap: 0.15rem;">
+                                                <span style="font-size: 0.75rem; font-weight: 700; color: var(--text-secondary); display: flex; align-items: center; gap: 0.25rem;">
+                                                    <i data-lucide="thermometer" style="color: #6366f1; width: 12px; height: 12px;"></i>
+                                                    노점 온도
+                                                </span>
+                                                <div style="display: flex; align-items: baseline; gap: 0.1rem;">
+                                                    <span id="weather-dewpoint-haiphong" style="font-size: 1.1rem; font-weight: 800; color: var(--text-primary);">-</span>
+                                                    <span style="font-size: 0.75rem; font-weight: 700; color: var(--text-secondary);">°C</span>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>

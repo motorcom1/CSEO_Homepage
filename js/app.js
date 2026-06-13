@@ -193,6 +193,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 // Lazy-load Energy Charts only when active
                 if (targetId === 'energy-overview') {
                     setTimeout(initEnergyChart, 100);
+                } else if (targetId === 'energy-bill-analysis') {
+                    setTimeout(initUtilityOutlookChart, 100);
                 } else if (targetId === 'energy-weather-analysis') {
                     setTimeout(initWeatherChart, 100);
                     setTimeout(initDailyForecast, 100);
@@ -819,42 +821,58 @@ document.addEventListener('DOMContentLoaded', () => {
         const txtTempPaju = document.getElementById('weather-temp-paju');
         const txtHumiPaju = document.getElementById('weather-humi-paju');
         const barHumiPaju = document.getElementById('weather-humi-bar-paju');
+        const txtWetbulbPaju = document.getElementById('weather-wetbulb-paju');
+        const txtDewpointPaju = document.getElementById('weather-dewpoint-paju');
         const txtStatusPaju = document.getElementById('weather-status-text-paju');
         const iconPaju = document.getElementById('weather-icon-paju');
 
         const txtTempGumi = document.getElementById('weather-temp-gumi');
         const txtHumiGumi = document.getElementById('weather-humi-gumi');
         const barHumiGumi = document.getElementById('weather-humi-bar-gumi');
+        const txtWetbulbGumi = document.getElementById('weather-wetbulb-gumi');
+        const txtDewpointGumi = document.getElementById('weather-dewpoint-gumi');
         const txtStatusGumi = document.getElementById('weather-status-text-gumi');
         const iconGumi = document.getElementById('weather-icon-gumi');
 
         const txtTempGuangzhou = document.getElementById('weather-temp-guangzhou');
         const txtHumiGuangzhou = document.getElementById('weather-humi-guangzhou');
         const barHumiGuangzhou = document.getElementById('weather-humi-bar-guangzhou');
+        const txtWetbulbGuangzhou = document.getElementById('weather-wetbulb-guangzhou');
+        const txtDewpointGuangzhou = document.getElementById('weather-dewpoint-guangzhou');
         const txtStatusGuangzhou = document.getElementById('weather-status-text-guangzhou');
         const iconGuangzhou = document.getElementById('weather-icon-guangzhou');
 
         const txtTempHaiphong = document.getElementById('weather-temp-haiphong');
         const txtHumiHaiphong = document.getElementById('weather-humi-haiphong');
         const barHumiHaiphong = document.getElementById('weather-humi-bar-haiphong');
+        const txtWetbulbHaiphong = document.getElementById('weather-wetbulb-haiphong');
+        const txtDewpointHaiphong = document.getElementById('weather-dewpoint-haiphong');
         const txtStatusHaiphong = document.getElementById('weather-status-text-haiphong');
         const iconHaiphong = document.getElementById('weather-icon-haiphong');
 
         if (txtTempPaju) txtTempPaju.textContent = livePajuTemp.toFixed(1);
         if (txtHumiPaju) txtHumiPaju.textContent = Math.round(livePajuHumi);
         if (barHumiPaju) barHumiPaju.style.width = `${Math.round(livePajuHumi)}%`;
+        if (txtWetbulbPaju) txtWetbulbPaju.textContent = calculateWetBulb(livePajuTemp, livePajuHumi).toFixed(1);
+        if (txtDewpointPaju) txtDewpointPaju.textContent = calculateDewPoint(livePajuTemp, livePajuHumi).toFixed(1);
         
         if (txtTempGumi) txtTempGumi.textContent = liveGumiTemp.toFixed(1);
         if (txtHumiGumi) txtHumiGumi.textContent = Math.round(liveGumiHumi);
         if (barHumiGumi) barHumiGumi.style.width = `${Math.round(liveGumiHumi)}%`;
+        if (txtWetbulbGumi) txtWetbulbGumi.textContent = calculateWetBulb(liveGumiTemp, liveGumiHumi).toFixed(1);
+        if (txtDewpointGumi) txtDewpointGumi.textContent = calculateDewPoint(liveGumiTemp, liveGumiHumi).toFixed(1);
 
         if (txtTempGuangzhou) txtTempGuangzhou.textContent = liveGuangzhouTemp.toFixed(1);
         if (txtHumiGuangzhou) txtHumiGuangzhou.textContent = Math.round(liveGuangzhouHumi);
         if (barHumiGuangzhou) barHumiGuangzhou.style.width = `${Math.round(liveGuangzhouHumi)}%`;
+        if (txtWetbulbGuangzhou) txtWetbulbGuangzhou.textContent = calculateWetBulb(liveGuangzhouTemp, liveGuangzhouHumi).toFixed(1);
+        if (txtDewpointGuangzhou) txtDewpointGuangzhou.textContent = calculateDewPoint(liveGuangzhouTemp, liveGuangzhouHumi).toFixed(1);
 
         if (txtTempHaiphong) txtTempHaiphong.textContent = liveHaiphongTemp.toFixed(1);
         if (txtHumiHaiphong) txtHumiHaiphong.textContent = Math.round(liveHaiphongHumi);
         if (barHumiHaiphong) barHumiHaiphong.style.width = `${Math.round(liveHaiphongHumi)}%`;
+        if (txtWetbulbHaiphong) txtWetbulbHaiphong.textContent = calculateWetBulb(liveHaiphongTemp, liveHaiphongHumi).toFixed(1);
+        if (txtDewpointHaiphong) txtDewpointHaiphong.textContent = calculateDewPoint(liveHaiphongTemp, liveHaiphongHumi).toFixed(1);
 
         let lucideNeedsRefresh = false;
 
@@ -1523,6 +1541,132 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // ==========================================================================
+    // 8.5 Utility Future Outlook Chart
+    // ==========================================================================
+    let utilityOutlookChartInstance = null;
+
+    function initUtilityOutlookChart() {
+        const ctx = document.getElementById('utility-outlook-chart');
+        if (!ctx || utilityOutlookChartInstance) return;
+
+        utilityOutlookChartInstance = new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: ['6월 (당월)', '7월', '8월', '9월', '10월', '11월'],
+                datasets: [
+                    {
+                        label: '전기 요금 전망',
+                        data: [412, 585, 620, 435, 395, 445],
+                        borderColor: '#10b981',
+                        backgroundColor: 'rgba(16, 185, 129, 0.04)',
+                        borderWidth: 3,
+                        pointBackgroundColor: '#10b981',
+                        pointBorderColor: '#ffffff',
+                        pointBorderWidth: 2,
+                        pointRadius: 5,
+                        pointHoverRadius: 7,
+                        tension: 0.35,
+                        fill: true
+                    },
+                    {
+                        label: '도시가스 요금 전망',
+                        data: [120, 95, 91, 115, 185, 320],
+                        borderColor: '#ea580c',
+                        backgroundColor: 'rgba(234, 88, 12, 0.04)',
+                        borderWidth: 3,
+                        pointBackgroundColor: '#ea580c',
+                        pointBorderColor: '#ffffff',
+                        pointBorderWidth: 2,
+                        pointRadius: 5,
+                        pointHoverRadius: 7,
+                        tension: 0.35,
+                        fill: true
+                    },
+                    {
+                        label: '수도 요금 전망',
+                        data: [44, 49, 51, 45, 43, 42],
+                        borderColor: '#0d9488',
+                        backgroundColor: 'rgba(13, 148, 136, 0.04)',
+                        borderWidth: 3,
+                        pointBackgroundColor: '#0d9488',
+                        pointBorderColor: '#ffffff',
+                        pointBorderWidth: 2,
+                        pointRadius: 5,
+                        pointHoverRadius: 7,
+                        tension: 0.35,
+                        fill: true
+                    }
+                ]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        position: 'top',
+                        labels: {
+                            font: { family: 'Noto Sans KR', size: 10, weight: '700' },
+                            color: '#475569',
+                            boxWidth: 12,
+                            padding: 15
+                        }
+                    },
+                    tooltip: {
+                        backgroundColor: 'rgba(255, 255, 255, 0.95)',
+                        titleColor: '#0f172a',
+                        bodyColor: '#475569',
+                        borderColor: 'rgba(16, 185, 129, 0.15)',
+                        borderWidth: 1,
+                        padding: 12,
+                        cornerRadius: 12,
+                        titleFont: { family: 'Noto Sans KR', weight: '700', size: 11 },
+                        bodyFont: { family: 'Noto Sans KR', size: 10 },
+                        callbacks: {
+                            label: function(context) {
+                                let label = context.dataset.label || '';
+                                if (label) {
+                                    label += ': ';
+                                }
+                                if (context.parsed.y !== null) {
+                                    label += context.parsed.y.toLocaleString() + ' 만원';
+                                    const krw = context.parsed.y * 10000;
+                                    label += ` (${krw.toLocaleString()} 원)`;
+                                }
+                                return label;
+                            }
+                        }
+                    }
+                },
+                scales: {
+                    x: {
+                        grid: { display: false },
+                        ticks: {
+                            font: { family: 'Noto Sans KR', size: 10, weight: '600' },
+                            color: '#475569'
+                        }
+                    },
+                    y: {
+                        grid: { color: 'rgba(226, 232, 240, 0.5)' },
+                        title: {
+                            display: true,
+                            text: '예상 요금 (단위: 만원)',
+                            font: { family: 'Noto Sans KR', size: 10, weight: '700' },
+                            color: '#475569'
+                        },
+                        ticks: {
+                            font: { family: 'Outfit', size: 9 },
+                            color: '#94a3b8',
+                            callback: function(value) {
+                                return value.toLocaleString() + ' 만원';
+                            }
+                        }
+                    }
+                }
+            }
+        });
+    }
+
+    // ==========================================================================
     // 9. Weather Forecast Comparison Chart and Helper Logic
     // ==========================================================================
     let weatherChartInstance = null;
@@ -1532,6 +1676,25 @@ document.addEventListener('DOMContentLoaded', () => {
         if (humi > 72) return { text: "흐림", icon: "cloud" };
         if (humi > 63) return { text: "구름 조금", icon: "cloud-sun" };
         return { text: "맑음", icon: "sun" };
+    }
+
+    function calculateWetBulb(temp, humi) {
+        const T = temp;
+        const RH = humi;
+        const tw = T * Math.atan(0.151977 * Math.sqrt(RH + 8.313659)) 
+                 + Math.atan(T + RH) 
+                 - Math.atan(RH - 1.676331) 
+                 + 0.00391838 * Math.pow(RH, 1.5) * Math.atan(0.023101 * RH) 
+                 - 4.686035;
+        return parseFloat(tw.toFixed(1));
+    }
+
+    function calculateDewPoint(temp, humi) {
+        const a = 17.625;
+        const b = 243.04;
+        const alpha = ((a * temp) / (b + temp)) + Math.log(humi / 100.0);
+        const dp = (b * alpha) / (a - alpha);
+        return parseFloat(dp.toFixed(1));
     }
 
     function initWeatherChart() {
