@@ -41,29 +41,155 @@
         </div>
     </section>
 
-    <!-- 2. Multi-Portal Choice Screen -->
+    <!-- 2. Multi-Portal Choice Screen (Comprehensive Main Dashboard) -->
     <section id="portal-screen" class="screen" aria-label="시스템 포털 선택">
         <div class="portal-container">
+            <!-- Minimal Main Dashboard Header -->
+            <header class="portal-header">
+                <div class="portal-logo">
+                    <div class="logo-mark"><i data-lucide="shield-check"></i></div>
+                    <span class="logo-text">CSEO <span>전사 안전·환경·에너지 통합 포털</span></span>
+                </div>
+                <div class="portal-meta-indicators">
+                    <div class="indicator-pill"><span class="pulse-dot green"></span> 시스템 통합 관제 중</div>
+                    <div class="indicator-pill"><i data-lucide="clock"></i> 실시간 텔레메트리</div>
+                </div>
+            </header>
+
+            <!-- 2x2 Grid of Detailed Portal Selection Cards -->
             <div class="portal-cards-grid">
-                <!-- CSEO Card (Top Left) - Simplified 3D Bevel Layout -->
+                <!-- CSEO Organization Card -->
                 <button type="button" class="portal-card manage-card" id="btn-go-manage" aria-label="CSEO 시스템 접속">
-                    <span class="portal-card-text text-group">CSEO</span>
+                    <div class="portal-card-inner">
+                        <div class="portal-card-header">
+                            <span class="portal-card-title">CSEO 조직 관리</span>
+                            <div class="portal-card-icon"><i data-lucide="network"></i></div>
+                        </div>
+                        <div class="portal-card-body">
+                            <div class="portal-metric-row">
+                                <span class="p-metric-lbl">조직 총원</span>
+                                <span class="p-metric-val">48명</span>
+                            </div>
+                            <div class="portal-metric-row">
+                                <span class="p-metric-lbl">조직 가동율</span>
+                                <span class="p-metric-val text-indigo">100%</span>
+                            </div>
+                            <div class="portal-progress-bar"><div class="p-bar-fill bg-indigo" style="width: 100%;"></div></div>
+                        </div>
+                    </div>
                 </button>
 
-                <!-- AX Card (Top Right) - Simplified 3D Bevel Layout -->
-                <button type="button" class="portal-card ax-card" id="btn-go-ax" aria-label="AX 시스템 접속">
-                    <span class="portal-card-text text-ax">AX</span>
-                </button>
-
-                <!-- Safety Card (Bottom Left) - Simplified 3D Bevel Layout -->
+                <!-- Safety Portal Card -->
                 <button type="button" class="portal-card safety-card" id="btn-go-safety" aria-label="Safety 시스템 접속">
-                    <span class="portal-card-text text-safety">Safety</span>
+                    <div class="portal-card-inner">
+                        <div class="portal-card-header">
+                            <span class="portal-card-title">Safety 안전보건 관제</span>
+                            <div class="portal-card-icon"><i data-lucide="shield-check"></i></div>
+                        </div>
+                        <div class="portal-card-body">
+                            <div class="portal-metric-row">
+                                <span class="p-metric-lbl">종합 안전지수</span>
+                                <span class="p-metric-val" id="portal-safety-idx">98.6%</span>
+                            </div>
+                            <div class="portal-metric-row">
+                                <span class="p-metric-lbl">무재해 일수</span>
+                                <span class="p-metric-val text-orange" id="portal-safety-days">412일 연속</span>
+                            </div>
+                            <div class="portal-progress-bar"><div class="p-bar-fill bg-orange" id="portal-safety-bar" style="width: 98.6%;"></div></div>
+                        </div>
+                    </div>
                 </button>
 
-                <!-- Energy Card (Bottom Right) - Simplified 3D Bevel Layout -->
+                <!-- Energy Portal Card -->
                 <button type="button" class="portal-card energy-card" id="btn-go-energy" aria-label="Energy 시스템 접속">
-                    <span class="portal-card-text text-energy">Energy</span>
+                    <div class="portal-card-inner">
+                        <div class="portal-card-header">
+                            <span class="portal-card-title">Energy 에너지 관제</span>
+                            <div class="portal-card-icon"><i data-lucide="zap"></i></div>
+                        </div>
+                        <div class="portal-card-body">
+                            <div class="portal-metric-row">
+                                <span class="p-metric-lbl">실시간 로컬 부하</span>
+                                <span class="p-metric-val" id="portal-energy-load">412.3 kW</span>
+                            </div>
+                            <div class="portal-metric-row">
+                                <span class="p-metric-lbl">파주 외기 습구온도</span>
+                                <span class="p-metric-val text-emerald" id="portal-energy-wetbulb">24.5°C</span>
+                            </div>
+                            <div class="portal-progress-bar"><div class="p-bar-fill bg-emerald" id="portal-energy-bar" style="width: 56%;"></div></div>
+                        </div>
+                    </div>
                 </button>
+
+                <!-- AX AI Portal Card -->
+                <button type="button" class="portal-card ax-card" id="btn-go-ax" aria-label="AX 시스템 접속">
+                    <div class="portal-card-inner">
+                        <div class="portal-card-header">
+                            <span class="portal-card-title">AX AI 가동 관제</span>
+                            <div class="portal-card-icon"><i data-lucide="cpu"></i></div>
+                        </div>
+                        <div class="portal-card-body">
+                            <div class="portal-metric-row">
+                                <span class="p-metric-lbl">GPU 부하율</span>
+                                <span class="p-metric-val" id="portal-ax-gpu">84.2%</span>
+                            </div>
+                            <div class="portal-metric-row">
+                                <span class="p-metric-lbl">실시간 요청 부하</span>
+                                <span class="p-metric-val text-purple" id="portal-ax-qps">18.5 req/s</span>
+                            </div>
+                            <div class="portal-progress-bar"><div class="p-bar-fill bg-purple" id="portal-ax-bar" style="width: 84.2%;"></div></div>
+                        </div>
+                    </div>
+                </button>
+            </div>
+
+            <!-- Bottom Split Panel Layout (Safety Guidelines & Task status overview) -->
+            <div class="portal-bottom-grid">
+                <!-- Safety Policy Card (안전/보건팀 필수 컨텐츠) -->
+                <div class="glass-card portal-bottom-card safety-policy-card">
+                    <div class="card-header-title">
+                        <i data-lucide="award" class="header-icon orange-text"></i>
+                        <h3>안전보건 경영방침 및 재해 예방 수칙</h3>
+                    </div>
+                    <div class="policy-content">
+                        <p class="policy-statement">"생명과 안전을 최우선 가치로 삼고, 전 임직원이 참여하여 쾌적하고 안전한 무재해 공장을 실현한다."</p>
+                        <ul class="policy-rules">
+                            <li><i data-lucide="check-circle-2"></i> <strong>개인 보호구 필수 착용</strong>: 현장 출입 시 안전모, 안전화 및 전용 작업구 100% 착용</li>
+                            <li><i data-lucide="check-circle-2"></i> <strong>비상 상황 대응 핫라인</strong>: 화재/누출 감지 즉시 비상 대피 및 종합 방재 컨트롤 센터 통보</li>
+                            <li><i data-lucide="check-circle-2"></i> <strong>자율적 유해 요인 점검</strong>: 각 부서별 일일 유틸리티/전설 설비 정기 순찰 및 사전 차단 실행</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Live Task Status Overview Card (기획팀/건설팀 업무 트래킹) -->
+                <div class="glass-card portal-bottom-card portal-task-card">
+                    <div class="card-header-title">
+                        <i data-lucide="clipboard-list" class="header-icon blue-text"></i>
+                        <h3>부서별 업무 현황 요약</h3>
+                    </div>
+                    <div class="portal-task-list">
+                        <div class="portal-task-item">
+                            <span class="p-task-dept bg-purple">기획팀</span>
+                            <span class="p-task-title">AI 에이전트 자율 최적화 하네스(Sandbox) 정책 승인</span>
+                            <span class="p-task-status ongoing">95%</span>
+                        </div>
+                        <div class="portal-task-item">
+                            <span class="p-task-dept bg-emerald">Utility운영</span>
+                            <span class="p-task-title">고효율 냉동기 COP 분석 및 송수 최적화</span>
+                            <span class="p-task-status ongoing">85%</span>
+                        </div>
+                        <div class="portal-task-item">
+                            <span class="p-task-dept bg-orange">방재팀</span>
+                            <span class="p-task-title">공장 스프링클러 및 화재 감지기 검사</span>
+                            <span class="p-task-status completed">완료</span>
+                        </div>
+                        <div class="portal-task-item">
+                            <span class="p-task-dept bg-blue">건설팀</span>
+                            <span class="p-task-title">Gumi C3 라인 증축 프로젝트 시공 안전 감독</span>
+                            <span class="p-task-status ongoing">60%</span>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </section>
@@ -144,48 +270,39 @@
                                 <div class="org-executive-level">
                                     <div class="org-tree-line-horizontal"></div>
                                     <div class="org-departments-grid">
-                                        <!-- CSEO직속: CSEO기획팀 -->
+                                        <!-- CSEO직속: 기획팀 -->
                                         <div class="org-node dept-node" id="node-cseo-direct">
                                             <div class="node-header-bar color-cseo-direct"></div>
                                             <div class="node-info">
                                                 <span class="dept-tag tag-cseo-direct">CSEO직속</span>
-                                                <span class="dept-manager" id="mgr-cseo-direct-text">장발장 팀장 (CSEO기획팀)</span>
+                                                <span class="dept-manager" id="mgr-cseo-direct-text">장발장 팀장 (기획팀)</span>
                                             </div>
                                         </div>
 
-                                        <!-- Dept 1: A담당 -->
-                                        <div class="org-node dept-node" id="node-planning">
-                                            <div class="node-header-bar color-planning"></div>
-                                            <div class="node-info">
-                                                <span class="dept-tag tag-planning">A담당</span>
-                                                <span class="dept-manager" id="mgr-a-text">이순신 담당 (3개 팀)</span>
-                                            </div>
-                                        </div>
-
-                                        <!-- Dept 2: B담당 -->
-                                        <div class="org-node dept-node active" id="node-rd">
-                                            <div class="node-header-bar color-rd"></div>
-                                            <div class="node-info">
-                                                <span class="dept-tag tag-rd">B담당</span>
-                                                <span class="dept-manager" id="mgr-b-text">세종대왕 담당 (3개 팀)</span>
-                                            </div>
-                                        </div>
-
-                                        <!-- Dept 3: C담당 -->
-                                        <div class="org-node dept-node" id="node-ops">
+                                        <!-- 안전/보건담당: 안전팀, 보건팀, 방재팀 -->
+                                        <div class="org-node dept-node" id="node-safety-health">
                                             <div class="node-header-bar color-ops"></div>
                                             <div class="node-info">
-                                                <span class="dept-tag tag-ops">C담당</span>
-                                                <span class="dept-manager" id="mgr-c-text">김구 담당 (3개 팀)</span>
+                                                <span class="dept-tag tag-ops">안전보건</span>
+                                                <span class="dept-manager" id="mgr-safety-health-text">이순신 담당 (3개 팀)</span>
                                             </div>
                                         </div>
 
-                                        <!-- Dept 4: D담당 -->
-                                        <div class="org-node dept-node" id="node-databiz">
+                                        <!-- Infra환경담당: Utility, 전기, 수질, 대기, 에너지절감 -->
+                                        <div class="org-node dept-node active" id="node-infra-env">
+                                            <div class="node-header-bar color-rd"></div>
+                                            <div class="node-info">
+                                                <span class="dept-tag tag-rd">Infra환경</span>
+                                                <span class="dept-manager" id="mgr-infra-env-text">세종대왕 담당 (5개 팀)</span>
+                                            </div>
+                                        </div>
+
+                                        <!-- 건설분야: 건설팀 -->
+                                        <div class="org-node dept-node" id="node-construction">
                                             <div class="node-header-bar color-databiz"></div>
                                             <div class="node-info">
-                                                <span class="dept-tag tag-databiz">D담당</span>
-                                                <span class="dept-manager" id="mgr-d-text">안중근 담당 (4개 팀)</span>
+                                                <span class="dept-tag tag-databiz">건설분야</span>
+                                                <span class="dept-manager" id="mgr-construction-text">김구 담당 (건설팀)</span>
                                             </div>
                                         </div>
                                     </div>
@@ -240,57 +357,76 @@
                                     <!-- Task 1 -->
                                     <div class="task-item">
                                         <div class="task-meta">
-                                            <span class="task-dept tag-rd">R&D</span>
+                                            <span class="task-dept tag-rd">Utility운영팀</span>
                                             <span class="task-status status-ongoing">진행중</span>
                                         </div>
-                                        <h4 class="task-title">IoT 에너지 실시간 계측 모듈 통신 속도 고도화</h4>
+                                        <h4 class="task-title">고효율 냉동기 COP 실시간 분석 및 냉수 공급 온도 최적화 제안</h4>
                                         <div class="task-progress-section">
                                             <div class="progress-bar-bg">
-                                                <div class="progress-bar-fill progress-rd" style="width: 82%;"></div>
+                                                <div class="progress-bar-fill progress-rd" style="width: 85%;"></div>
                                             </div>
-                                            <span class="progress-percentage">82%</span>
+                                            <span class="progress-percentage">85%</span>
                                         </div>
                                         <div class="task-footer">
                                             <span class="task-assignee"><i data-lucide="user-2"></i> 담당: 강도현 책임</span>
-                                            <span class="task-deadline">D-5일 (6/3까지)</span>
+                                            <span class="task-deadline">D-5일 (6/18까지)</span>
                                         </div>
                                     </div>
 
                                     <!-- Task 2 -->
                                     <div class="task-item">
                                         <div class="task-meta">
-                                            <span class="task-dept tag-databiz">데이터사업부</span>
-                                            <span class="task-status status-ongoing">진행중</span>
+                                            <span class="task-dept tag-ops">방재팀</span>
+                                            <span class="task-status status-completed">완료됨</span>
                                         </div>
-                                        <h4 class="task-title">조직 데이터 레이크하우스(Lakehouse) 1차 동기화 구축</h4>
+                                        <h4 class="task-title">소방법 개정에 따른 공장 내 스프링클러 및 화재 감지기 통합 검사</h4>
                                         <div class="task-progress-section">
                                             <div class="progress-bar-bg">
-                                                <div class="progress-bar-fill progress-databiz" style="width: 45%;"></div>
+                                                <div class="progress-bar-fill progress-ops" style="width: 100%;"></div>
                                             </div>
-                                            <span class="progress-percentage">45%</span>
+                                            <span class="progress-percentage">100%</span>
                                         </div>
                                         <div class="task-footer">
-                                            <span class="task-assignee"><i data-lucide="user-2"></i> 담당: 김선우 선임</span>
-                                            <span class="task-deadline">D-12일 (6/10까지)</span>
+                                            <span class="task-assignee"><i data-lucide="user-2"></i> 담당: 이진아 수석</span>
+                                            <span class="task-deadline">소방안전협회 정기 검사 합격</span>
                                         </div>
                                     </div>
 
                                     <!-- Task 3 -->
                                     <div class="task-item">
                                         <div class="task-meta">
-                                            <span class="task-dept tag-planning">기획조정실</span>
-                                            <span class="task-status status-completed">완료됨</span>
+                                            <span class="task-dept tag-databiz">건설팀</span>
+                                            <span class="task-status status-ongoing">진행중</span>
                                         </div>
-                                        <h4 class="task-title">ESG 지속가능 에너지 경영 등재를 위한 종합 지표 개발</h4>
+                                        <h4 class="task-title">Gumi 공장 C3 라인 증축 프로젝트 진척도 및 안전 가이드 준수율 검사</h4>
                                         <div class="task-progress-section">
                                             <div class="progress-bar-bg">
-                                                <div class="progress-bar-fill progress-planning" style="width: 100%;"></div>
+                                                <div class="progress-bar-fill progress-databiz" style="width: 60%;"></div>
                                             </div>
-                                            <span class="progress-percentage">100%</span>
+                                            <span class="progress-percentage">60%</span>
+                                        </div>
+                                        <div class="task-footer">
+                                            <span class="task-assignee"><i data-lucide="user-2"></i> 담당: 김선우 선임</span>
+                                            <span class="task-deadline">D-12일 (6/25까지)</span>
+                                        </div>
+                                    </div>
+
+                                    <!-- Task 4 -->
+                                    <div class="task-item">
+                                        <div class="task-meta">
+                                            <span class="task-dept tag-cseo-direct">기획팀</span>
+                                            <span class="task-status status-ongoing">진행중</span>
+                                        </div>
+                                        <h4 class="task-title">AI 에이전트 자율 최적화 하네스(Sandbox) 정책 승인 및 모니터링</h4>
+                                        <div class="task-progress-section">
+                                            <div class="progress-bar-bg">
+                                                <div class="progress-bar-fill progress-cseo-direct" style="width: 95%;"></div>
+                                            </div>
+                                            <span class="progress-percentage">95%</span>
                                         </div>
                                         <div class="task-footer">
                                             <span class="task-assignee"><i data-lucide="user-2"></i> 담당: 정서아 수석</span>
-                                            <span class="task-deadline">경영위원회 심사 승인</span>
+                                            <span class="task-deadline">CSEO 의사결정보고 대기</span>
                                         </div>
                                     </div>
                                 </div>
@@ -381,10 +517,9 @@
                                         <option value="">모든 소속</option>
                                         <option value="CSEO">CSEO</option>
                                         <option value="CSEO직속">CSEO직속</option>
-                                        <option value="A담당">A담당</option>
-                                        <option value="B담당">B담당</option>
-                                        <option value="C담당">C담당</option>
-                                        <option value="D담당">D담당</option>
+                                        <option value="안전보건">안전/보건담당</option>
+                                        <option value="Infra환경">Infra환경담당</option>
+                                        <option value="건설분야">건설분야</option>
                                     </select>
                                 </div>
 

@@ -99,6 +99,18 @@ document.addEventListener('DOMContentLoaded', () => {
             stopSafetySimulator();
             startAxSimulator();
             setTimeout(initAxChart, 200);
+        } else if (screenId === 'portal-screen') {
+            // Start all simulators for the portal screen metrics and push instant frame updates
+            startEnergySimulator();
+            startSafetySimulator();
+            startAxSimulator();
+            updateEnergyUI();
+            updateSafetyUI();
+            updateAxUI();
+            // Re-render Lucide icons dynamically since new cards have been introduced
+            if (typeof lucide !== 'undefined') {
+                lucide.createIcons();
+            }
         } else {
             stopEnergySimulator();
             stopSafetySimulator();
@@ -353,40 +365,40 @@ document.addEventListener('DOMContentLoaded', () => {
     // 5. Interactive Organization Chart Logic (Manage Screen)
     // ==========================================================================
     const deptData = {
-        'node-planning': {
-            badge: '기획',
-            title: '기획조정실 주요 R&R',
-            leader: '이성우 실장 (경영학 석사)',
-            mission: '중장기 전사 사업계획 수립, 글로벌 예산 배정, 사내 자본 재배치 및 ESG 경영 고도화 성과 전반 지휘 관리.',
-            members: ['정서아 수석 (전략기획)', '윤지후 책임 (재무분석)', '송지선 선임 (브랜드홍보)', '한준우 선임 (대외협력)']
+        'node-cseo-direct': {
+            badge: '기획팀',
+            title: 'CSEO 기획팀 주요 R&R',
+            leader: '장발장 팀장 (CSEO기획)',
+            mission: 'CSEO 직속 조직으로서 중장기 전사 안전/환경 계획 수립, AI 에이전트 자율 홈페이지 튜닝 권한 관리 및 통제 하네스 모니터링.',
+            members: ['정서아 수석 (전략기획)', '윤지후 책임 (하네스 보안)', '송지선 선임 (지표 관리)', '한준우 선임 (대외협력)']
         },
-        'node-rd': {
-            badge: 'R&D',
-            title: '연구개발본부 주요 R&R',
-            leader: '최윤서 본부장 (공학박사)',
-            mission: '인공지능 기반 데이터 수집/가공 머신러닝 엔진 설계, 친환경 분산 전원 시스템 계통 연계 핵심 인프라 H/W 및 S/W 플랫폼 연구개발.',
-            members: ['이진아 수석 (에너지 AI)', '강도현 책임 (IoT 하드웨어)', '정서율 책임 (빅데이터 파이프라인)', '최유진 선임 (클라우드 플랫폼)', '박성민 선임 (모바일 앱)']
+        'node-safety-health': {
+            badge: '안전보건',
+            title: '안전·보건·방재 부서 주요 R&R',
+            leader: '이안전 담당 (안전보건 총괄)',
+            mission: '산업안전보건법 및 소방 시설 규정 준수 검사, 유해 물질 보건 진단 및 재해 예방 수칙 공시 관리.',
+            members: ['이진아 수석 (방재 안전)', '강도현 책임 (작업장 순찰)', '정서율 책임 (소방 시설)', '최유진 선임 (보건 위생)', '박성민 선임 (재해 분석)']
         },
-        'node-ops': {
-            badge: '운영',
-            title: '운영지원부 주요 R&R',
-            leader: '박지한 부장',
-            mission: '사내 임직원 혁신 근무 환경 최적화 설계, 전사 인사 채용 및 인사 평가, 공공 행정 규제 준수 및 사옥 안전 시설 관리 감독.',
-            members: ['김민재 책임 (인사관리)', '이지현 책임 (행정지원)', '서지우 선임 (인프라보안)', '조은우 선임 (총무행정)']
+        'node-infra-env': {
+            badge: 'Infra환경',
+            title: '인프라 환경 기술지원 부서 주요 R&R',
+            leader: '박인프라 담당 (설비환경 총괄)',
+            mission: '유틸리티(냉동기, 보일러 등) 에너지 효율 분석 및 절감 가이드 제안, 실시간 수질(pH, COD) 및 대기(미세먼지) 관제점 데이터 모니터링.',
+            members: ['김선우 책임 (Utility운영)', '임하은 책임 (전기운영)', '신재희 선임 (수질운영)', '김주원 선임 (대기운영)', '최윤서 수석 (에너지절감)']
         },
-        'node-databiz': {
-            badge: '데이터본부',
-            title: '데이터사업부 주요 R&R',
-            leader: '한민석 부장',
-            mission: '연구소에서 가공된 탄소 배출 및 친환경 발전 정제 데이터를 활용한 금융/에너지 도매 시장 유통 기획 및 B2B B2G 전략적 마케팅 세일즈.',
-            members: ['김선우 책임 (비즈니스마케팅)', '임하은 책임 (에너지영업)', '신재희 선임 (솔루션엔지니어)', '김주원 선임 (상품기획)']
+        'node-construction': {
+            badge: '건설분야',
+            title: '건설팀 주요 R&R',
+            leader: '최건설 담당 (건설 프로젝트 총괄)',
+            mission: '신규 공장 설계 및 시공 관리, 기존 공장 증축 및 노후 설비 리모델링 공정 관리와 현장 안전 수칙 감독.',
+            members: ['김구 책임 (건설 프로젝트)', '이지현 책임 (현장 관리)', '서지우 선임 (시공 안전)', '조은우 선임 (설계 분석)']
         }
     };
 
     const deptNodes = document.querySelectorAll('.dept-node');
     const detailBadge = document.getElementById('detail-dept-badge');
     const detailTitle = document.getElementById('detail-dept-title');
-    const detailLeader = document.getElementById('detail-dept-leader');
+    const detailLeader = document.getElementById('detail-dept-leader-name');
     const detailMission = document.getElementById('detail-dept-mission');
     const detailMembers = document.getElementById('detail-dept-members');
 
@@ -400,7 +412,13 @@ document.addEventListener('DOMContentLoaded', () => {
             
             if (detailBadge) {
                 detailBadge.textContent = data.badge;
-                detailBadge.className = `detail-badge tag-${node.id.replace('node-', '')}`;
+                const classMap = {
+                    'node-cseo-direct': 'tag-cseo-direct',
+                    'node-safety-health': 'tag-ops',
+                    'node-infra-env': 'tag-rd',
+                    'node-construction': 'tag-databiz'
+                };
+                detailBadge.className = `detail-badge ${classMap[node.id] || 'tag-rd'}`;
             }
             if (detailTitle) detailTitle.textContent = data.title;
             if (detailLeader) detailLeader.textContent = data.leader;
@@ -428,7 +446,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (!ctx || manageChartInstance) return;
         
         const dataVolume = {
-            labels: ['기획조정실', '연구개발본부', '운영지원부', '데이터사업부'],
+            labels: ['기획팀', '안전보건담당', 'Infra환경담당', '건설분야'],
             datasets: [
                 {
                     label: '로컬 데이터 용량 (GB)',
@@ -805,6 +823,15 @@ document.addEventListener('DOMContentLoaded', () => {
         if (txtPriceDomWater) txtPriceDomWater.textContent = priceDomWater.toLocaleString();
         if (txtPriceSeoulGas) txtPriceSeoulGas.textContent = priceSeoulGas.toLocaleString();
         if (txtPriceYeongnamGas) txtPriceYeongnamGas.textContent = priceYeongnamGas.toLocaleString();
+
+        // Portal Screen Dynamic Indicators
+        const elPortalEnergyLoad = document.getElementById('portal-energy-load');
+        const elPortalEnergyWetbulb = document.getElementById('portal-energy-wetbulb');
+        const elPortalEnergyBar = document.getElementById('portal-energy-bar');
+
+        if (elPortalEnergyLoad) elPortalEnergyLoad.textContent = `${liveLoad.toFixed(1)} kW`;
+        if (elPortalEnergyWetbulb) elPortalEnergyWetbulb.textContent = `${calculateWetBulb(livePajuTemp, livePajuHumi).toFixed(1)}°C`;
+        if (elPortalEnergyBar) elPortalEnergyBar.style.width = `${((liveLoad - 300) / 200) * 100}%`;
 
         // Dynamic budget calculation
         const elEstimatePct = document.getElementById('bill-estimate-pct');
@@ -1370,6 +1397,15 @@ document.addEventListener('DOMContentLoaded', () => {
         
         if (txtOccupant) txtOccupant.textContent = liveOccupant;
         if (barOccupant) barOccupant.style.width = `${(liveOccupant / 80) * 100}%`;
+
+        // Portal Screen Dynamic Indicators
+        const elPortalSafetyIdx = document.getElementById('portal-safety-idx');
+        const elPortalSafetyDays = document.getElementById('portal-safety-days');
+        const elPortalSafetyBar = document.getElementById('portal-safety-bar');
+
+        if (elPortalSafetyIdx) elPortalSafetyIdx.textContent = `${liveSafety.toFixed(1)}%`;
+        if (elPortalSafetyDays) elPortalSafetyDays.textContent = `${safetyAccDays.toLocaleString()}일 연속`;
+        if (elPortalSafetyBar) elPortalSafetyBar.style.width = `${liveSafety}%`;
     }
 
     // ==========================================================================
@@ -1538,6 +1574,15 @@ document.addEventListener('DOMContentLoaded', () => {
         
         if (txtInference) txtInference.textContent = liveInference.toLocaleString();
         if (barInference) barInference.style.width = `${((liveInference - 148520) / 5000 + 78)}%`;
+
+        // Portal Screen Dynamic Indicators
+        const elPortalAxGpu = document.getElementById('portal-ax-gpu');
+        const elPortalAxQps = document.getElementById('portal-ax-qps');
+        const elPortalAxBar = document.getElementById('portal-ax-bar');
+
+        if (elPortalAxGpu) elPortalAxGpu.textContent = `${liveGpu.toFixed(1)}%`;
+        if (elPortalAxQps) elPortalAxQps.textContent = `${liveQps.toFixed(1)} req/s`;
+        if (elPortalAxBar) elPortalAxBar.style.width = `${liveGpu}%`;
     }
 
     // ==========================================================================

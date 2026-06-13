@@ -1,0 +1,20 @@
+[2026-06-13 19:04:00] [INFO] ================ CSEO HARNESS VALIDATION START ================
+[2026-06-13 19:04:00] [INFO] [Step 1] Verifying core file existence...
+[2026-06-13 19:04:00] [SUCCESS] Found file: index.html
+[2026-06-13 19:04:00] [SUCCESS] Found file: css/style.css
+[2026-06-13 19:04:00] [SUCCESS] Found file: js/app.js
+[2026-06-13 19:04:00] [SUCCESS] Found file: db_backend.py
+[2026-06-13 19:04:00] [SUCCESS] Found file: agents.md
+[2026-06-13 19:04:00] [INFO] [Step 2] Checking div tag balance in index.html...
+[2026-06-13 19:04:00] [INFO] Total open tags (excluding comments/scripts): 737
+[2026-06-13 19:04:00] [INFO] Total close tags (excluding comments/scripts): 738
+[2026-06-13 19:04:00] [WARNING] HTML tags have a legacy baseline mismatch of 1 (pre-existing dashboard-layout). Allowed under baseline.
+[2026-06-13 19:04:01] [INFO] [Step 3] Checking closed network sandbox compliance...
+[2026-06-13 19:04:01] [WARNING] index.html L10: Detected non-approved domain: fonts.googleapis.com. May fail in closed network.
+[2026-06-13 19:04:01] [WARNING] index.html L11: Detected non-approved domain: fonts.gstatic.com. May fail in closed network.
+[2026-06-13 19:04:01] [WARNING] index.html L12: Detected non-approved domain: fonts.googleapis.com. May fail in closed network.
+[2026-06-13 19:04:01] [INFO] [Step 4] Checking PostgreSQL backend connection script...
+[2026-06-13 19:04:01] [SUCCESS] db_backend.py database import pattern check passed (Python fallback).
+[2026-06-13 19:04:01] [INFO] ================ CSEO HARNESS VALIDATION END ================
+[2026-06-13 19:04:01] [INFO] Validation report summary: Errors=0, Warnings=4
+[2026-06-13 19:04:01] [SUCCESS] Harness verification PASSED. Dashboard system is compliant.

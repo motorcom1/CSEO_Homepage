@@ -247,33 +247,54 @@ button {
     }
 }
 
-/* 6. Portal Choice Screen Style */
+/* 6. Portal Choice Screen Style (Premium Main Dashboard) */
 #portal-screen {
-    background: radial-gradient(circle at center, rgba(255, 255, 255, 0.98) 0%, #f1f5f9 100%);
+    background: radial-gradient(circle at top, rgba(255, 255, 255, 0.99) 0%, #f1f5f9 100%);
+    overflow-y: auto !important;
+    height: 100vh;
 }
 
 .portal-container {
-    position: absolute;
-    top: 50%;
-    left: calc(50% - 90px);
-    transform: translate(-50%, -50%);
-    max-width: 1100px;
+    max-width: 1200px;
     width: 100%;
-    padding: 0 2.25rem;
+    margin: 0 auto;
+    padding: 3rem 1.5rem 4rem 1.5rem;
     box-sizing: border-box;
-    z-index: 10;
     display: flex;
-    justify-content: center;
+    flex-direction: column;
+    gap: 2.25rem;
+    z-index: 10;
+    position: relative;
+}
+
+/* Portal Main Header */
+.portal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-bottom: 1rem;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.portal-logo {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+}
+
+.portal-meta-indicators {
+    display: flex;
+    gap: 0.75rem;
     align-items: center;
 }
 
+/* 2x2 Grid Layout */
 .portal-cards-grid {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
-    gap: 2.5rem;
-    max-width: 740px;
+    gap: 2rem;
     width: 100%;
-    perspective: 1500px; /* Enhanced 3D depth perspective */
+    perspective: 1500px;
 }
 
 .portal-card {
@@ -281,35 +302,101 @@ button {
     backdrop-filter: blur(25px);
     -webkit-backdrop-filter: blur(25px);
     border: 2px solid rgba(255, 255, 255, 0.95);
-    border-radius: 40px;
-    height: 320px; /* Reduced vertical height to create a sleek rectangular shape */
+    border-radius: 28px;
+    height: 195px;
+    padding: 1.5rem 1.75rem;
+    cursor: pointer;
+    box-shadow: 
+        0 1px 0 rgba(255, 255, 255, 0.9) inset,
+        0 -1px 0 rgba(15, 23, 42, 0.08) inset,
+        0 4px 12px rgba(15, 23, 42, 0.03),
+        0 12px 24px -10px rgba(15, 23, 42, 0.08);
+    transition: 
+        transform 0.5s cubic-bezier(0.16, 1, 0.3, 1),
+        box-shadow 0.5s cubic-bezier(0.16, 1, 0.3, 1),
+        background-color 0.4s ease,
+        border-color 0.4s ease;
+    transform-style: preserve-3d;
+    position: relative;
+    overflow: hidden;
+    text-align: left;
+    display: block;
+    width: 100%;
+}
+
+.portal-card-inner {
+    transform: translateZ(30px);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    height: 100%;
+}
+
+.portal-card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1.25rem;
+}
+
+.portal-card-title {
+    font-size: 1.15rem;
+    font-weight: 800;
+    color: var(--text-primary);
+    letter-spacing: -0.3px;
+}
+
+.portal-card-icon {
+    width: 38px;
+    height: 38px;
+    border-radius: 10px;
     display: flex;
     align-items: center;
     justify-content: center;
-    text-align: center;
-    cursor: pointer;
-    
-    /* 3D Stereoscopic Bevel & Layered Solid Extrusion Shadows */
-    box-shadow: 
-        0 1px 0 rgba(255, 255, 255, 0.9) inset,                     /* Top highlight bevel */
-        0 -1px 0 rgba(15, 23, 42, 0.08) inset,                      /* Bottom inner shadow */
-        0 4px 0 rgba(15, 23, 42, 0.05),                             /* Solid 3D extruded block layers */
-        0 8px 0 rgba(15, 23, 42, 0.04),
-        0 12px 0 rgba(15, 23, 42, 0.03),
-        0 20px 40px -10px rgba(15, 23, 42, 0.12),                   /* Soft ambient depth */
-        0 8px 16px -8px rgba(15, 23, 42, 0.08);
-        
-    transition: 
-        transform 0.6s cubic-bezier(0.16, 1, 0.3, 1),
-        box-shadow 0.6s cubic-bezier(0.16, 1, 0.3, 1),
-        background-color 0.4s ease,
-        border-color 0.4s ease;
-    transform-style: preserve-3d; /* Enable nested 3D z-axis translation */
-    position: relative;
-    overflow: visible; /* CRITICAL: Prevent letter clipping & allow 3D texts to float beyond cards */
+    color: #ffffff;
 }
 
-/* Spotlight container inside portal-card, locked inside border-radius boundaries */
+/* Card Themes */
+.manage-card .portal-card-icon { background: var(--gradient-manage); }
+.safety-card .portal-card-icon { background: var(--gradient-safety); }
+.energy-card .portal-card-icon { background: var(--gradient-energy); }
+.ax-card .portal-card-icon { background: var(--gradient-ax); }
+
+.portal-card-body {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.portal-metric-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 0.88rem;
+    color: var(--text-secondary);
+}
+
+.portal-metric-row span:last-child {
+    font-weight: 700;
+    color: var(--text-primary);
+}
+
+.portal-progress-bar {
+    width: 100%;
+    height: 5px;
+    background: rgba(226, 232, 240, 0.8);
+    border-radius: 10px;
+    overflow: hidden;
+    margin-top: 0.25rem;
+}
+
+.p-bar-fill {
+    height: 100%;
+    border-radius: 10px;
+    transition: width 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* Spotlight container inside portal-card */
 .portal-card::before {
     content: '';
     position: absolute;
@@ -330,118 +417,134 @@ button {
     background: radial-gradient(800px circle at var(--x, 0px) var(--y, 0px), rgba(255, 255, 255, 0.28), transparent 45%);
 }
 
-/* Symmetrical 3D holographic tilt on hover with massive neon-glow floating effects */
+/* Holographic card tilts */
 .manage-card:hover {
-    transform: translateY(-24px) rotateX(10deg) rotateY(-12deg) scale(1.04);
-    background-color: rgba(255, 255, 255, 0.95);
-    border-color: rgba(99, 102, 241, 0.65);
-    box-shadow: 
-        0 1px 0 rgba(255, 255, 255, 0.9) inset,
-        0 35px 70px -15px rgba(99, 102, 241, 0.32),                 /* Volumetric neon glow */
-        0 15px 30px -10px rgba(99, 102, 241, 0.15),
-        0 0 40px rgba(99, 102, 241, 0.08);
+    transform: translateY(-12px) rotateX(6deg) rotateY(-8deg) scale(1.02);
+    border-color: rgba(99, 102, 241, 0.5);
+    box-shadow: 0 25px 50px -12px rgba(99, 102, 241, 0.18), 0 0 20px rgba(99, 102, 241, 0.04);
 }
 
 .safety-card:hover {
-    transform: translateY(-24px) rotateX(10deg) rotateY(0deg) scale(1.04);
-    background-color: rgba(255, 255, 255, 0.95);
-    border-color: rgba(249, 115, 22, 0.65);
-    box-shadow: 
-        0 1px 0 rgba(255, 255, 255, 0.9) inset,
-        0 35px 70px -15px rgba(249, 115, 22, 0.32),                 /* Volumetric safety-orange neon glow */
-        0 15px 30px -10px rgba(249, 115, 22, 0.15),
-        0 0 40px rgba(249, 115, 22, 0.08);
+    transform: translateY(-12px) rotateX(6deg) rotateY(0deg) scale(1.02);
+    border-color: rgba(249, 115, 22, 0.5);
+    box-shadow: 0 25px 50px -12px rgba(249, 115, 22, 0.18), 0 0 20px rgba(249, 115, 22, 0.04);
 }
 
 .energy-card:hover {
-    transform: translateY(-24px) rotateX(10deg) rotateY(12deg) scale(1.04);
-    background-color: rgba(255, 255, 255, 0.95);
-    border-color: rgba(16, 185, 129, 0.65);
-    box-shadow: 
-        0 1px 0 rgba(255, 255, 255, 0.9) inset,
-        0 35px 70px -15px rgba(16, 185, 129, 0.32),                 /* Volumetric eco-green neon glow */
-        0 15px 30px -10px rgba(16, 185, 129, 0.15),
-        0 0 40px rgba(16, 185, 129, 0.08);
+    transform: translateY(-12px) rotateX(6deg) rotateY(8deg) scale(1.02);
+    border-color: rgba(16, 185, 129, 0.5);
+    box-shadow: 0 25px 50px -12px rgba(16, 185, 129, 0.18), 0 0 20px rgba(16, 185, 129, 0.04);
 }
 
 .ax-card:hover {
-    transform: translateY(-24px) rotateX(10deg) rotateY(12deg) scale(1.04);
-    background-color: rgba(255, 255, 255, 0.95);
-    border-color: rgba(217, 70, 239, 0.65);
-    box-shadow: 
-        0 1px 0 rgba(255, 255, 255, 0.9) inset,
-        0 35px 70px -15px rgba(217, 70, 239, 0.32),                 /* Volumetric AX fuchsia neon glow */
-        0 15px 30px -10px rgba(217, 70, 239, 0.15),
-        0 0 40px rgba(217, 70, 239, 0.08);
+    transform: translateY(-12px) rotateX(6deg) rotateY(8deg) scale(1.02);
+    border-color: rgba(217, 70, 239, 0.5);
+    box-shadow: 0 25px 50px -12px rgba(217, 70, 239, 0.18), 0 0 20px rgba(217, 70, 239, 0.04);
 }
 
-/* 3D Floating Giant Centered Typography */
-.portal-card-text {
-    font-size: 8.2rem;
-    font-weight: 950;
-    letter-spacing: -4px;
-    line-height: 1.15; /* Increased to give ample vertical breathing room for descenders like 'g' and 'y' */
-    display: inline-block;
-    user-select: none;
-    transform: translateZ(55px); /* Push forward in 3D space */
-    transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1), filter 0.6s ease;
-    z-index: 10;
-    
-    /* CRITICAL: Precision padding to prevent 'p', 'y', and 'g' clipping at extreme font sizes */
-    padding: 15px 15px 30px 15px; /* Perfectly centered horizontally while keeping bottom margin for letter tails */
-    box-sizing: border-box;
+/* Bottom Split Panel Grid */
+.portal-bottom-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 2rem;
+    width: 100%;
+}
+
+.portal-bottom-card {
+    padding: 1.75rem 2rem;
+    border-radius: 24px;
+    box-shadow: var(--shadow-sm);
+    min-height: 220px;
+}
+
+.policy-content {
+    margin-top: 1.25rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.policy-statement {
+    font-size: 0.95rem;
+    font-weight: 700;
+    color: var(--text-primary);
+    line-height: 1.4;
+    border-left: 3px solid var(--orange-accent);
+    padding-left: 0.75rem;
+}
+
+.policy-rules {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 0.65rem;
+}
+
+.policy-rules li {
+    font-size: 0.85rem;
+    color: var(--text-secondary);
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.policy-rules li i {
+    width: 16px;
+    height: 16px;
+    color: var(--orange-accent);
+}
+
+/* Portal Task List */
+.portal-task-list {
+    margin-top: 1.25rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+}
+
+.portal-task-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0.65rem 0.85rem;
+    background: rgba(248, 250, 252, 0.6);
+    border: 1px solid var(--border-color);
+    border-radius: 12px;
+    font-size: 0.85rem;
+}
+
+.p-task-dept {
+    font-size: 0.72rem;
+    font-weight: 800;
+    padding: 0.2rem 0.5rem;
+    border-radius: 6px;
+    color: #ffffff;
+    width: 75px;
+    text-align: center;
+}
+
+.p-task-dept.bg-purple { background: var(--gradient-ax); }
+.p-task-dept.bg-emerald { background: var(--gradient-energy); }
+.p-task-dept.bg-orange { background: var(--gradient-safety); }
+.p-task-dept.bg-blue { background: var(--gradient-manage); }
+
+.p-task-title {
+    flex-grow: 1;
+    margin-left: 1rem;
+    color: var(--text-primary);
+    font-weight: 500;
     white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 280px;
 }
 
-/* Premium Gradient Fills & Soft Bevel Glows */
-.text-group {
-    background: var(--gradient-manage);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    filter: drop-shadow(0 6px 12px rgba(99, 102, 241, 0.12));
+.p-task-status {
+    font-weight: 700;
 }
 
-.text-safety {
-    background: var(--gradient-safety);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    filter: drop-shadow(0 6px 12px rgba(249, 115, 22, 0.12));
-}
-
-.text-energy {
-    background: var(--gradient-energy);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    filter: drop-shadow(0 6px 12px rgba(16, 185, 129, 0.12));
-}
-
-.text-ax {
-    background: var(--gradient-ax);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    filter: drop-shadow(0 6px 12px rgba(217, 70, 239, 0.12));
-}
-
-/* Extreme 3D Pop-out on Hover + Layered Depth shadows onto the card */
-.manage-card:hover .text-group {
-    transform: translateZ(115px) scale(1.04); /* Push deep towards user */
-    filter: drop-shadow(0 15px 30px rgba(99, 102, 241, 0.28));
-}
-
-.safety-card:hover .text-safety {
-    transform: translateZ(115px) scale(1.04);
-    filter: drop-shadow(0 15px 30px rgba(249, 115, 22, 0.28));
-}
-
-.energy-card:hover .text-energy {
-    transform: translateZ(115px) scale(1.04);
-    filter: drop-shadow(0 15px 30px rgba(16, 185, 129, 0.28));
-}
-
-.ax-card:hover .text-ax {
-    transform: translateZ(115px) scale(1.04);
-    filter: drop-shadow(0 15px 30px rgba(217, 70, 239, 0.28));
-}
+.p-task-status.ongoing { color: var(--blue-accent); }
+.p-task-status.completed { color: var(--primary-green); }
 
 /* ==========================================================================
    7. Sidebar Dashboard Layout (좌측 사이드바 + 우측 캔버스 구성)
