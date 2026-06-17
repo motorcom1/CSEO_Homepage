@@ -2166,3 +2166,89 @@ button {
     50% { transform: translateX(3px); }
 }
 
+/* -------------------------------------------------- */
+/* 설비별 에너지 현황 - 탭 버튼 및 냉동기/CDA 관제 스타일 (건설 부서 UI 조립) */
+/* -------------------------------------------------- */
+
+.facility-tab-buttons {
+    display: flex;
+    gap: 0.5rem;
+    margin-bottom: 1.25rem;
+    border-bottom: 1px solid var(--border-color);
+    padding-bottom: 0.6rem;
+}
+
+.facility-tab-btn {
+    padding: 0.5rem 1.25rem;
+    border-radius: 8px;
+    border: 1px solid transparent;
+    background: transparent;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    font-size: 0.85rem;
+    color: var(--text-secondary);
+}
+
+.facility-tab-btn:hover {
+    background: rgba(0, 0, 0, 0.03);
+    color: var(--text-primary);
+}
+
+.facility-tab-btn.active {
+    background: var(--bg-surface-solid);
+    border-color: var(--border-color);
+    color: var(--primary-green);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+}
+
+.chiller-select-input {
+    padding: 0.4rem 0.85rem;
+    border-radius: 8px;
+    border: 1px solid var(--border-color);
+    background: var(--bg-surface-solid);
+    font-size: 0.8rem;
+    font-weight: 700;
+    color: var(--text-primary);
+    cursor: pointer;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+    outline: none;
+}
+
+.chiller-select-input:focus {
+    border-color: #3b82f6;
+    box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.15);
+}
+
+.chiller-table {
+    width: 100%;
+    border-collapse: collapse;
+    text-align: left;
+    font-size: 0.8rem;
+}
+
+.chiller-table th {
+    padding: 0.75rem 0.95rem;
+    background: rgba(0, 0, 0, 0.01);
+    color: var(--text-secondary);
+    font-weight: 800;
+    border-bottom: 2px solid var(--border-color);
+}
+
+.chiller-table td {
+    padding: 0.75rem 0.95rem;
+    border-bottom: 1px solid var(--border-color);
+    color: var(--text-primary);
+    font-weight: 600;
+    transition: background-color 0.15s ease;
+}
+
+.chiller-table tbody tr:hover td {
+    background-color: rgba(16, 185, 129, 0.02);
+}
+
+.chiller-table td.numeric-cell {
+    text-align: right;
+    font-variant-numeric: tabular-nums;
+}
+

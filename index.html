@@ -1139,81 +1139,74 @@
             </div>
 
                     <!-- Sub-view 3: 설비별 에너지 현황 (신규 4대 설비 감시 그리드 + LED 점멸등) -->
-                    <div id="energy-facility-status" class="sub-view">
-                        <div class="glass-card full-height-card">
-                            <div class="card-header">
-                                <div class="card-header-title">
-                                    <i data-lucide="cpu" class="header-icon green-text"></i>
-                                    <div>
-                                        <h3>주요 대형 전력 소비 설비 실시간 감시</h3>
+                    <div id="energy-facility-status" class="sub-view" style="overflow-y: auto !important;">
+                        <!-- 상단 탭 버튼 그룹 (Utility 및 건설 부서 협업) -->
+                        <div class="facility-tab-buttons" style="display: flex; gap: 0.5rem; margin-bottom: 1.25rem; border-bottom: 1px solid var(--border-color); padding-bottom: 0.6rem;">
+                            <button type="button" class="facility-tab-btn active" id="btn-fac-chiller">냉동기</button>
+                            <button type="button" class="facility-tab-btn" id="btn-fac-cda">CDA</button>
+                        </div>
+
+                        <!-- 2. 신규 냉동기 관제 패널 (Utility 부서의 chiller_db 연동 설계) -->
+                        <div id="panel-fac-chiller" class="facility-panel" style="display: block;">
+                            <div class="glass-card full-height-card" style="padding: 1.5rem; display: flex; flex-direction: column; gap: 1.25rem;">
+                                <div class="chiller-header" style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border-color); padding-bottom: 0.75rem; flex-shrink: 0;">
+                                    <div class="card-header-title" style="margin: 0;">
+                                        <i data-lucide="droplet" class="header-icon blue-text"></i>
+                                        <div>
+                                            <h3 style="margin: 0; font-size: 1.15rem; font-weight: 800;">냉동기(Chiller) 효율 관제 대시보드</h3>
+                                        </div>
                                     </div>
+                                    <!-- 필터 컨트롤 그룹 -->
+                                    <div class="chiller-filter-group" style="display: flex; gap: 0.75rem; align-items: center;">
+                                        <div style="display: flex; align-items: center; gap: 0.4rem;">
+                                            <span style="font-size: 0.8rem; font-weight: 700; color: var(--text-secondary);">지역:</span>
+                                            <select id="chiller-filter-region" class="chiller-select-input"></select>
+                                        </div>
+                                        <div style="display: flex; align-items: center; gap: 0.4rem;">
+                                            <span style="font-size: 0.8rem; font-weight: 700; color: var(--text-secondary);">공장:</span>
+                                            <select id="chiller-filter-factory" class="chiller-select-input"></select>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- 시계열 트렌드 차트 카드 -->
+                                <div class="chiller-chart-card" style="background: rgba(255,255,255,0.4); border: 1px solid var(--border-color); border-radius: 16px; padding: 1.25rem; height: 350px; display: flex; flex-direction: column; flex-shrink: 0;">
+                                    <h4 style="font-size: 0.85rem; font-weight: 800; color: var(--text-primary); margin: 0 0 0.5rem 0;">실시간 냉동기 운전전력 및 냉동톤 이중 축 추이 (24시간 주기)</h4>
+                                    <div class="chiller-chart-wrapper" style="flex-grow: 1; position: relative; height: 100%;">
+                                        <canvas id="chiller-trend-chart"></canvas>
+                                    </div>
+                                </div>
+
+                                <!-- 집계 테이블 -->
+                                <div class="chiller-table-card" style="background: rgba(255,255,255,0.4); border: 1px solid var(--border-color); border-radius: 16px; padding: 1.25rem; overflow-x: auto; flex-shrink: 0;">
+                                    <h4 style="font-size: 0.85rem; font-weight: 800; color: var(--text-primary); margin: 0 0 0.75rem 0;">설비 호기별 에너지 데이터 종합 집계 현황</h4>
+                                    <table class="chiller-table" style="width: 100%; border-collapse: collapse; text-align: left; font-size: 0.8rem; min-width: 600px;">
+                                        <thead>
+                                            <tr style="border-bottom: 2px solid var(--border-color); color: var(--text-secondary); font-weight: 700;">
+                                                <th style="padding: 0.6rem 0.8rem;">공장</th>
+                                                <th style="padding: 0.6rem 0.8rem;">온도</th>
+                                                <th style="padding: 0.6rem 0.8rem;">공급처</th>
+                                                <th style="padding: 0.6rem 0.8rem; text-align: right;">냉동톤 (합계 RT)</th>
+                                                <th style="padding: 0.6rem 0.8rem; text-align: right;">운전전력 (합계 kW)</th>
+                                                <th style="padding: 0.6rem 0.8rem; text-align: right;">ECI (평균 kW/RT)</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="chiller-table-body" style="color: var(--text-primary);">
+                                            <!-- 동적 바인딩 -->
+                                        </tbody>
+                                    </table>
                                 </div>
                             </div>
-                            
-                            <div class="facility-monitoring-grid">
-                                <!-- Machine 1 -->
-                                <div class="facility-card">
-                                    <div class="fac-status-led">
-                                        <span class="led-dot led-active"></span>
-                                        <span class="led-lbl-active">가동중</span>
-                                    </div>
-                                    <h4 class="fac-title">중앙 HVAC 공조 시스템 1호기</h4>
-                                    <div class="fac-meta-grid">
-                                        <div class="fac-meta-item"><span>실시간 부하:</span> <strong>142.5 kW</strong></div>
-                                        <div class="fac-meta-item"><span>기기 효율:</span> <strong>COP 4.2</strong></div>
-                                    </div>
-                                    <div class="fac-load-track">
-                                        <div class="fac-load-bar" style="width: 71%; background: var(--primary-green);"></div>
-                                    </div>
-                                </div>
+                        </div>
 
-                                <!-- Machine 2 -->
-                                <div class="facility-card">
-                                    <div class="fac-status-led">
-                                        <span class="led-dot led-active"></span>
-                                        <span class="led-lbl-active">가동중</span>
-                                    </div>
-                                    <h4 class="fac-title">사옥 터보 냉동기 및 빙축열 설비</h4>
-                                    <div class="fac-meta-grid">
-                                        <div class="fac-meta-item"><span>실시간 부하:</span> <strong>185.0 kW</strong></div>
-                                        <div class="fac-meta-item"><span>유량 속도:</span> <strong>3.2 m³/h</strong></div>
-                                    </div>
-                                    <div class="fac-load-track">
-                                        <div class="fac-load-bar" style="width: 82%; background: var(--primary-green);"></div>
-                                    </div>
+                        <!-- 3. 신규 CDA 관제 패널 (준비중 카드) -->
+                        <div id="panel-fac-cda" class="facility-panel" style="display: none;">
+                            <div class="glass-card full-height-card" style="padding: 3rem 1.5rem; text-align: center; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 1rem;">
+                                <div style="width: 60px; height: 60px; border-radius: 50%; background: rgba(59, 130, 246, 0.1); color: #3b82f6; display: flex; align-items: center; justify-content: center; font-size: 1.8rem;">
+                                    <i data-lucide="construction"></i>
                                 </div>
-
-                                <!-- Machine 3 -->
-                                <div class="facility-card">
-                                    <div class="fac-status-led">
-                                        <span class="led-dot led-warning"></span>
-                                        <span class="led-lbl-warning">완충대기</span>
-                                    </div>
-                                    <h4 class="fac-title">ESS 리튬 배터리 랙 및 PCS 모듈</h4>
-                                    <div class="fac-meta-grid">
-                                        <div class="fac-meta-item"><span>배터리 용량:</span> <strong>84.0%</strong></div>
-                                        <div class="fac-meta-item"><span>충·방전율:</span> <strong>0.15 C</strong></div>
-                                    </div>
-                                    <div class="fac-load-track">
-                                        <div class="fac-load-bar" style="width: 84%; background: var(--blue-accent);"></div>
-                                    </div>
-                                </div>
-
-                                <!-- Machine 4 -->
-                                <div class="facility-card">
-                                    <div class="fac-status-led">
-                                        <span class="led-dot led-standby"></span>
-                                        <span class="led-lbl-standby">발전대기</span>
-                                    </div>
-                                    <h4 class="fac-title">옥상 친환경 태양광 인버터 (100kW급)</h4>
-                                    <div class="fac-meta-grid">
-                                        <div class="fac-meta-item"><span>일사량:</span> <strong>12 W/m²</strong></div>
-                                        <div class="fac-meta-item"><span>현재 발전:</span> <strong>0 kW (야간)</strong></div>
-                                    </div>
-                                    <div class="fac-load-track">
-                                        <div class="fac-load-bar" style="width: 0%; background: var(--orange-accent);"></div>
-                                    </div>
-                                </div>
+                                <h3 style="font-size: 1.25rem; font-weight: 800; color: var(--text-primary); margin: 0;">CDA 관제 시스템 준비 중</h3>
+                                <p style="font-size: 0.85rem; color: var(--text-secondary); max-width: 420px; margin: 0; line-height: 1.5;">압축공기 설비(CDA)의 압력, 유량 및 전력량 실시간 모니터링 시스템은 다음 인프라 표준화 단계에서 연동될 예정입니다.</p>
                             </div>
                         </div>
                     </div>
@@ -2625,6 +2618,6 @@
     </div>
 
     <!-- Shared application script -->
-    <script src="js/app.js"></script>
+    <script src="js/app.js?v=1.0.2"></script>
 </body>
 </html>

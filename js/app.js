@@ -2187,6 +2187,381 @@ document.addEventListener('DOMContentLoaded', () => {
             containerHaiphong.appendChild(hpRow);
         }
 
+        // ==========================================
+        // [신규] 설비별 에너지 현황 - 탭 전환 및 냉동기 실시간 데이터 연동 (건설/Utility 운영 부서)
+        // ==========================================
+        let chillerChartInstance = null;
+
+        // 탭 버튼 및 패널 요소 가져오기
+        const btnFacChiller = document.getElementById('btn-fac-chiller');
+        const btnFacCda = document.getElementById('btn-fac-cda');
+
+        const panelFacChiller = document.getElementById('panel-fac-chiller');
+        const panelFacCda = document.getElementById('panel-fac-cda');
+
+        // 탭 전환 이벤트 리스너
+        function switchFacilityTab(activeBtn, activePanel) {
+            // 모든 탭 버튼 비활성화
+            [btnFacChiller, btnFacCda].forEach(btn => {
+                if (btn) btn.classList.remove('active');
+            });
+            // 모든 패널 숨김
+            [panelFacChiller, panelFacCda].forEach(panel => {
+                if (panel) panel.style.display = 'none';
+            });
+
+            // 선택된 탭 활성화
+            if (activeBtn) activeBtn.classList.add('active');
+            if (activePanel) activePanel.style.display = 'block';
+
+            // 냉동기 탭이 활성화되면 필터 로드 및 데이터 바인딩
+            if (activeBtn === btnFacChiller) {
+                initChillerSystem();
+            }
+        }
+
+        if (btnFacChiller) btnFacChiller.addEventListener('click', () => switchFacilityTab(btnFacChiller, panelFacChiller));
+        if (btnFacCda) btnFacCda.addEventListener('click', () => switchFacilityTab(btnFacCda, panelFacCda));
+
+        // 냉동기 관제 시스템 초기화
+        let isChillerInitialized = false;
+        function initChillerSystem() {
+            if (isChillerInitialized) return;
+            isChillerInitialized = true;
+
+            // 1. 필터 구성 가져오기
+            const apiHost = window.location.hostname || 'localhost';
+            fetch(`http://${apiHost}:5000/api/chiller/filters`)
+                .then(res => res.json())
+                .then(data => {
+                    if (data.status === 'success') {
+                        setupChillerFilters(data.regions, data.factories, data.mapping);
+                    } else {
+                        loadChillerMockFilters();
+                    }
+                })
+                .catch(err => {
+                    console.warn('냉동기 API 연결 실패. 가상 모의 데이터로 전환합니다.', err);
+                    loadChillerMockFilters();
+                });
+        }
+
+        // 필터 구성 설정 및 이벤트 바인딩
+        function setupChillerFilters(regions, factories, mapping) {
+            const selectRegion = document.getElementById('chiller-filter-region');
+            const selectFactory = document.getElementById('chiller-filter-factory');
+
+            if (selectRegion && selectFactory) {
+                // 이벤트 리스너 중복 누적 방지를 위해 엘리먼트를 복제 후 교체
+                const newSelectRegion = selectRegion.cloneNode(true);
+                const newSelectFactory = selectFactory.cloneNode(true);
+                selectRegion.parentNode.replaceChild(newSelectRegion, selectRegion);
+                selectFactory.parentNode.replaceChild(newSelectFactory, selectFactory);
+
+                // API mapping이 누락된 경우 기본 매핑 구조 사용 (가상 모의용)
+                const activeMapping = mapping || {
+                    'GG': ['P1', 'P2'],
+                    'GS': ['A1', 'A2']
+                };
+
+                const activeRegions = regions && regions.length > 0 ? regions : Object.keys(activeMapping);
+
+                newSelectRegion.innerHTML = '';
+                activeRegions.forEach(r => {
+                    const opt = document.createElement('option');
+                    opt.value = r;
+                    opt.textContent = r;
+                    newSelectRegion.appendChild(opt);
+                });
+
+                // 특정 지역이 선택되었을 때 공장 드롭다운을 갱신하는 헬퍼 함수
+                const updateFactoryOptions = (selectedRegion) => {
+                    newSelectFactory.innerHTML = '';
+                    const mappedFactories = activeMapping[selectedRegion] || [];
+                    mappedFactories.forEach(f => {
+                        const opt = document.createElement('option');
+                        opt.value = f;
+                        opt.textContent = f;
+                        newSelectFactory.appendChild(opt);
+                    });
+                };
+
+                // 최초 공장 옵션 셋업 (첫 번째 지역 기준)
+                if (activeRegions.length > 0) {
+                    updateFactoryOptions(activeRegions[0]);
+                }
+
+                // 지역 변경 이벤트 바인딩
+                newSelectRegion.addEventListener('change', () => {
+                    const selectedRegion = newSelectRegion.value;
+                    updateFactoryOptions(selectedRegion);
+                    const selectedFactory = newSelectFactory.value;
+                    if (selectedRegion && selectedFactory) {
+                        loadChillerData(selectedRegion, selectedFactory);
+                    }
+                });
+
+                // 공장 변경 이벤트 바인딩
+                newSelectFactory.addEventListener('change', () => {
+                    const selectedRegion = newSelectRegion.value;
+                    const selectedFactory = newSelectFactory.value;
+                    if (selectedRegion && selectedFactory) {
+                        loadChillerData(selectedRegion, selectedFactory);
+                    }
+                });
+
+                // 페이지 첫 진입 시 최초 데이터 조회
+                const initialRegion = newSelectRegion.value;
+                const initialFactory = newSelectFactory.value;
+                if (initialRegion && initialFactory) {
+                    loadChillerData(initialRegion, initialFactory);
+                }
+            }
+        }
+
+        // API 실패 시 로드되는 가상 필터 데이터
+        function loadChillerMockFilters() {
+            const mockRegions = ['GS', 'GG'];
+            const mockFactories = ['P1', 'P2', 'A1', 'A2'];
+            const mockMapping = {
+                'GS': ['A1', 'A2'],
+                'GG': ['P1', 'P2']
+            };
+            setupChillerFilters(mockRegions, mockFactories, mockMapping);
+        }
+
+
+        // 냉동기 데이터 로드 및 차트/테이블 렌더링
+        function loadChillerData(region, factory) {
+            const apiHost = window.location.hostname || 'localhost';
+            fetch(`http://${apiHost}:5000/api/chiller/data?region=${encodeURIComponent(region)}&factory=${encodeURIComponent(factory)}`)
+                .then(res => res.json())
+                .then(data => {
+                    if (data.status === 'success') {
+                        renderChillerTable(data.table_data);
+                        renderChillerChart(data.chart_data);
+                    } else {
+                        renderChillerMockData(region, factory);
+                    }
+                })
+                .catch(err => {
+                    console.warn('냉동기 데이터 API 호출 실패. 모의 데이터를 생성합니다.', err);
+                    renderChillerMockData(region, factory);
+                });
+        }
+
+        // API 호출 실패 시 가상 데이터 생성 및 렌더링
+        function renderChillerMockData(region, factory) {
+            // 1. 가상 집계 테이블 데이터 생성
+            const mockTable = [
+                { factory: factory, temp: '13℃', supply: '저층부', sum_ton: 380.5, sum_power: 420.2, avg_eci: 1.104 },
+                { factory: factory, temp: '13℃', supply: '고층부', sum_ton: 450.0, sum_power: 510.8, avg_eci: 1.135 },
+                { factory: factory, temp: '7℃', supply: '공통', sum_ton: 620.1, sum_power: 780.4, avg_eci: 1.258 }
+            ];
+            renderChillerTable(mockTable);
+
+            // 2. 가상 시계열 데이터 생성 (24시간 주기 사인곡선 기반)
+            const mockChart = [];
+            const now = new Date();
+            for (let i = 23; i >= 0; i--) {
+                const targetTime = new Date(now.getTime() - i * 60 * 60 * 1000);
+                const hourStr = String(targetTime.getHours()).padStart(2, '0');
+                const minStr = String(targetTime.getMinutes()).padStart(2, '0');
+                const dtime = `${targetTime.getMonth() + 1}/${targetTime.getDate()} ${hourStr}:${minStr}`;
+                
+                // 시간 흐름에 따른 가상 부하 모델링
+                const baseLoad = 400 + Math.sin((targetTime.getHours() - 8) * Math.PI / 12) * 150;
+                const ton = Math.round((baseLoad + Math.random() * 30) * 10) / 10;
+                const power = Math.round((ton * 1.15 + Math.random() * 20) * 10) / 10;
+                const eci = Math.round((power / ton) * 100) / 100;
+
+                mockChart.push({ dtime, ton, power, eci });
+            }
+            renderChillerChart(mockChart);
+        }
+
+        // 테이블 렌더링 함수
+        function renderChillerTable(tableData) {
+            const tbody = document.getElementById('chiller-table-body');
+            if (!tbody) return;
+
+            tbody.innerHTML = '';
+            if (tableData.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="6" style="text-align: center; padding: 1rem; color: var(--text-secondary);">조회된 데이터가 없습니다.</td></tr>';
+                return;
+            }
+
+            tableData.forEach(row => {
+                const tr = document.createElement('tr');
+                tr.innerHTML = `
+                    <td style="padding: 0.75rem 0.95rem;">${row.factory}</td>
+                    <td style="padding: 0.75rem 0.95rem;">${row.temp}</td>
+                    <td style="padding: 0.75rem 0.95rem;">${row.supply}</td>
+                    <td style="padding: 0.75rem 0.95rem; text-align: right; font-variant-numeric: tabular-nums;">${parseFloat(row.sum_ton).toLocaleString(undefined, {minimumFractionDigits: 1})} RT</td>
+                    <td style="padding: 0.75rem 0.95rem; text-align: right; font-variant-numeric: tabular-nums;">${parseFloat(row.sum_power).toLocaleString(undefined, {minimumFractionDigits: 1})} kW</td>
+                    <td style="padding: 0.75rem 0.95rem; text-align: right; font-variant-numeric: tabular-nums; color: var(--primary-green); font-weight: 700;">${row.avg_eci !== null ? parseFloat(row.avg_eci).toFixed(3) : '-'} kW/RT</td>
+                `;
+                tbody.appendChild(tr);
+            });
+        }
+
+        // 차트 렌더링 함수 (이중 Y축 적용)
+        function renderChillerChart(chartData) {
+            const ctx = document.getElementById('chiller-trend-chart');
+            if (!ctx) return;
+
+            const labels = chartData.map(item => item.dtime);
+            const tonData = chartData.map(item => item.ton);
+            const powerData = chartData.map(item => item.power);
+
+            if (chillerChartInstance) {
+                chillerChartInstance.destroy();
+            }
+
+            chillerChartInstance = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: labels,
+                    datasets: [
+                        {
+                            label: '공통 냉동톤 (RT)',
+                            data: tonData,
+                            borderColor: '#10b981', // 녹색
+                            backgroundColor: 'rgba(16, 185, 129, 0.05)',
+                            borderWidth: 2.5,
+                            fill: true,
+                            tension: 0.4,
+                            yAxisID: 'y-ton',
+                            pointRadius: 3,
+                            pointHoverRadius: 5
+                        },
+                        {
+                            label: 'Total 운전전력 (kW)',
+                            data: powerData,
+                            borderColor: '#3b82f6', // 파란색
+                            backgroundColor: 'rgba(59, 130, 246, 0.05)',
+                            borderWidth: 2.5,
+                            fill: true,
+                            tension: 0.4,
+                            yAxisID: 'y-power',
+                            pointRadius: 3,
+                            pointHoverRadius: 5
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'top',
+                            labels: {
+                                font: {
+                                    family: 'Outfit, Noto Sans KR',
+                                    size: 11,
+                                    weight: 700
+                                },
+                                color: 'var(--text-secondary)'
+                            }
+                        },
+                        tooltip: {
+                            mode: 'index',
+                            intersect: false,
+                            backgroundColor: 'rgba(255, 255, 255, 0.95)',
+                            titleColor: '#1e293b',
+                            bodyColor: '#334155',
+                            borderColor: 'var(--border-color)',
+                            borderWidth: 1,
+                            bodyFont: {
+                                family: 'Outfit, Noto Sans KR'
+                            },
+                            titleFont: {
+                                family: 'Outfit, Noto Sans KR',
+                                weight: 700
+                            },
+                            callbacks: {
+                                label: function(context) {
+                                    let label = context.dataset.label || '';
+                                    if (label) {
+                                        label += ': ';
+                                    }
+                                    if (context.parsed.y !== null) {
+                                        if (context.datasetIndex === 0) {
+                                            label += context.parsed.y.toFixed(1) + ' RT';
+                                        } else {
+                                            label += context.parsed.y.toFixed(1) + ' kW';
+                                        }
+                                    }
+                                    return label;
+                                }
+                            }
+                        }
+                    },
+                    scales: {
+                        x: {
+                            grid: {
+                                display: false
+                            },
+                            ticks: {
+                                font: {
+                                    family: 'Outfit',
+                                    size: 10
+                                },
+                                color: 'var(--text-secondary)'
+                            }
+                        },
+                        'y-ton': {
+                            type: 'linear',
+                            position: 'left',
+                            title: {
+                                display: true,
+                                text: '냉동톤 (RT)',
+                                color: '#10b981',
+                                font: {
+                                    family: 'Outfit, Noto Sans KR',
+                                    weight: 700
+                                }
+                            },
+                            grid: {
+                                color: 'rgba(0, 0, 0, 0.04)'
+                            },
+                            ticks: {
+                                font: {
+                                    family: 'Outfit'
+                                },
+                                color: 'var(--text-secondary)'
+                            }
+                        },
+                        'y-power': {
+                            type: 'linear',
+                            position: 'right',
+                            title: {
+                                display: true,
+                                text: '운전전력 (kW)',
+                                color: '#3b82f6',
+                                font: {
+                                    family: 'Outfit, Noto Sans KR',
+                                    weight: 700
+                                }
+                            },
+                            grid: {
+                                drawOnChartArea: false
+                            },
+                            ticks: {
+                                font: {
+                                    family: 'Outfit'
+                                },
+                                color: 'var(--text-secondary)'
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+        // 페이지 최초 진입 시 냉동기 시스템 선제적 로드 및 초기화
+        initChillerSystem();
+
         if (typeof lucide !== 'undefined') {
             lucide.createIcons();
         }
