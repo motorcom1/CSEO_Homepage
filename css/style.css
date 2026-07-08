@@ -648,6 +648,7 @@ button {
 }
 
 .mark-green { background: var(--gradient-energy); }
+.mark-law { background: var(--gradient-law); }
 
 .logo-text {
     font-size: 1.08rem;
@@ -743,6 +744,7 @@ button {
 
 .status-lbl { color: var(--primary-purple); }
 .green-text { color: var(--primary-green); }
+.law-text { color: #334155; }
 
 .pulse-dot {
     width: 7px;
@@ -800,6 +802,95 @@ button {
     box-shadow: 0 4px 12px rgba(16, 185, 129, 0.15);
 }
 
+.law-sidebar .sidebar-top {
+    gap: 1.25rem;
+}
+
+.law-sidebar .sidebar-bottom {
+    padding-bottom: 1rem;
+}
+
+.law-sidebar .sidebar-btn.active {
+    background: #f1f5f9;
+    color: #334155;
+    border-color: rgba(71, 85, 105, 0.15);
+}
+
+.law-sidebar .sidebar-btn.active::before {
+    background: #475569;
+}
+
+.law-info-btn {
+    justify-content: flex-start;
+}
+
+.ax-network-layout {
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    background: #f8fafc;
+    position: relative;
+    z-index: 10;
+}
+
+.ax-network-topbar {
+    height: 56px;
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    padding: 0 1.25rem;
+    background: rgba(255, 255, 255, 0.82);
+    backdrop-filter: blur(18px);
+    -webkit-backdrop-filter: blur(18px);
+    border-bottom: 1px solid var(--border-color);
+}
+
+.ax-return-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.55rem 0.85rem;
+    border-radius: 12px;
+    background: var(--primary-ax-light);
+    color: var(--primary-ax);
+    font-size: 0.86rem;
+    font-weight: 800;
+    border: 1px solid rgba(217, 70, 239, 0.14);
+    transition: var(--transition-quick);
+}
+
+.ax-return-btn i {
+    width: 17px;
+    height: 17px;
+}
+
+.ax-return-btn:hover {
+    background: var(--primary-ax);
+    color: #ffffff;
+    box-shadow: 0 8px 20px rgba(217, 70, 239, 0.16);
+    transform: translateX(-2px);
+}
+
+.ax-network-title {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    color: var(--text-secondary);
+    font-size: 0.86rem;
+    font-weight: 800;
+}
+
+.ax-network-frame {
+    width: 100%;
+    flex: 1;
+    min-height: 0;
+    border: 0;
+    background: #ffffff;
+}
+
 /* ==========================================================================
    8. Main content area (우측 대시보드 뷰 영역)
    ========================================================================== */
@@ -811,6 +902,82 @@ button {
     flex-direction: column;
     position: relative;
     z-index: 10;
+}
+
+.law-main-content {
+    background: rgba(248, 250, 252, 0.72);
+}
+
+.law-view-container {
+    padding: 1.25rem;
+}
+
+.law-network-shell {
+    width: 100%;
+    height: 100%;
+    min-height: 0;
+    background: var(--bg-surface-solid);
+    border: 1px solid var(--border-color);
+    border-radius: 18px;
+    box-shadow: var(--shadow-sm);
+    overflow: hidden;
+    position: relative;
+}
+
+.law-network-placeholder {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 0.85rem;
+    padding: 2rem;
+    text-align: center;
+}
+
+.law-placeholder-icon {
+    width: 64px;
+    height: 64px;
+    border-radius: 18px;
+    background: #f1f5f9;
+    color: #475569;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.law-placeholder-icon i {
+    width: 30px;
+    height: 30px;
+}
+
+.law-network-placeholder h3 {
+    font-size: 1.2rem;
+    font-weight: 800;
+    color: var(--text-primary);
+}
+
+.law-network-placeholder p {
+    max-width: 520px;
+    font-size: 0.92rem;
+    color: var(--text-secondary);
+}
+
+.law-network-frame {
+    display: none;
+    width: 100%;
+    height: 100%;
+    border: 0;
+    background: #ffffff;
+}
+
+.law-network-shell.is-loaded .law-network-placeholder {
+    display: none;
+}
+
+.law-network-shell.is-loaded .law-network-frame {
+    display: block;
 }
 
 /* Minimal Header Bar */

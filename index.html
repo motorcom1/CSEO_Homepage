@@ -109,7 +109,82 @@
         </div>
     </section>
 
-    <!-- 3. Manage Dashboard (Left Sidebar Layout) -->
+    <!-- 3. AX Closed Network Screen (Top Return Bar Layout) -->
+    <section id="ax-network-screen" class="screen" aria-label="AX 폐쇄망 접속 화면">
+        <div class="ax-network-layout">
+            <header class="ax-network-topbar">
+                <button type="button" class="ax-return-btn" id="btn-ax-return-portal" aria-label="포털 선택 화면으로 돌아가기">
+                    <i data-lucide="arrow-left"></i>
+                    <span>포털로 돌아가기</span>
+                </button>
+                <div class="ax-network-title">
+                    <span class="pulse-dot purple"></span>
+                    <span>AX 폐쇄망 접속</span>
+                </div>
+            </header>
+
+            <iframe
+                id="ax-network-frame"
+                class="ax-network-frame"
+                title="AX 폐쇄망 접속 화면"
+                src="http://10.116.203.140:5004"
+            ></iframe>
+        </div>
+    </section>
+
+    <!-- 4. Law Lookup Screen (Left Sidebar Layout) -->
+    <section id="law-screen" class="screen" aria-label="법령 조회 시스템">
+        <div class="dashboard-layout">
+            <aside class="sidebar law-sidebar">
+                <div class="sidebar-top">
+                    <button type="button" class="sidebar-logo" id="logo-btn-law" aria-label="포털 홈으로 이동">
+                        <div class="logo-mark mark-law"><i data-lucide="scale"></i></div>
+                        <span class="logo-text">CSEO <span>법령 조회</span></span>
+                    </button>
+                </div>
+
+                <div class="sidebar-bottom">
+                    <button type="button" class="sidebar-btn active law-info-btn" data-target="law-info" aria-label="법령 정보 보기">
+                        <i data-lucide="book-open-check"></i>
+                        <span>법령 정보</span>
+                    </button>
+                </div>
+            </aside>
+
+            <main class="main-content law-main-content">
+                <header class="main-header">
+                    <div class="header-breadcrumb">
+                        <span class="parent-crumb law-text">CSEO 법령 조회</span>
+                        <span class="crumb-separator"><i data-lucide="chevron-right"></i></span>
+                        <span class="child-crumb" id="law-breadcrumb-text">법령 정보</span>
+                    </div>
+                    <div class="summary-indicators">
+                        <div class="indicator-pill law-text"><i data-lucide="network"></i> 폐쇄망 IP 연동 대기</div>
+                    </div>
+                </header>
+
+                <div class="sub-view-container law-view-container">
+                    <div id="law-info" class="sub-view active">
+                        <div class="law-network-shell">
+                            <div class="law-network-placeholder" id="law-network-placeholder">
+                                <div class="law-placeholder-icon"><i data-lucide="server-cog"></i></div>
+                                <h3>사내 폐쇄망 법령 정보 화면 연동 대기</h3>
+                                <p>접속 주소가 확인되면 `http://10.116.***.**:****` 형식의 IP를 연결해 이 영역에 표시하겠습니다.</p>
+                            </div>
+                            <iframe
+                                id="law-network-frame"
+                                class="law-network-frame"
+                                title="CSEO 법령 정보 폐쇄망 화면"
+                                data-src=""
+                            ></iframe>
+                        </div>
+                    </div>
+                </div>
+            </main>
+        </div>
+    </section>
+
+    <!-- 4. Manage Dashboard (Left Sidebar Layout) -->
     <section id="manage-screen" class="screen" aria-label="조직 및 데이터 관리 시스템">
         <div class="dashboard-layout">
             <!-- Left Sidebar Navigation -->

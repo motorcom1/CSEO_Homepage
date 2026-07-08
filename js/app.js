@@ -60,7 +60,9 @@ document.addEventListener('DOMContentLoaded', () => {
         'manage-screen': document.getElementById('manage-screen'),
         'energy-screen': document.getElementById('energy-screen'),
         'safety-screen': document.getElementById('safety-screen'),
-        'ax-screen': document.getElementById('ax-screen')
+        'ax-screen': document.getElementById('ax-screen'),
+        'law-screen': document.getElementById('law-screen'),
+        'ax-network-screen': document.getElementById('ax-network-screen')
     };
 
     function navigateTo(screenId) {
@@ -99,6 +101,16 @@ document.addEventListener('DOMContentLoaded', () => {
             stopSafetySimulator();
             startAxSimulator();
             setTimeout(initAxChart, 200);
+        } else if (screenId === 'law-screen') {
+            resetSidebarViews('law-screen', 'law-info', '법령 정보');
+            stopEnergySimulator();
+            stopSafetySimulator();
+            stopAxSimulator();
+            initLawNetworkFrame();
+        } else if (screenId === 'ax-network-screen') {
+            stopEnergySimulator();
+            stopSafetySimulator();
+            stopAxSimulator();
         } else if (screenId === 'portal-screen') {
             // Start all simulators for the portal screen metrics and push instant frame updates
             startEnergySimulator();
@@ -115,6 +127,23 @@ document.addEventListener('DOMContentLoaded', () => {
             stopEnergySimulator();
             stopSafetySimulator();
             stopAxSimulator();
+        }
+    }
+
+    function initLawNetworkFrame() {
+        const frame = document.getElementById('law-network-frame');
+        const shell = document.querySelector('.law-network-shell');
+        if (!frame || !shell) return;
+
+        const networkUrl = frame.dataset.src?.trim();
+        if (networkUrl) {
+            if (frame.getAttribute('src') !== networkUrl) {
+                frame.setAttribute('src', networkUrl);
+            }
+            shell.classList.add('is-loaded');
+        } else {
+            frame.removeAttribute('src');
+            shell.classList.remove('is-loaded');
         }
     }
 
@@ -146,6 +175,8 @@ document.addEventListener('DOMContentLoaded', () => {
             document.getElementById('safety-breadcrumb-text').textContent = breadcrumbText;
         } else if (screenId === 'ax-screen') {
             document.getElementById('ax-breadcrumb-text').textContent = breadcrumbText;
+        } else if (screenId === 'law-screen') {
+            document.getElementById('law-breadcrumb-text').textContent = breadcrumbText;
         }
     }
 
@@ -153,15 +184,16 @@ document.addEventListener('DOMContentLoaded', () => {
     document.getElementById('btn-go-manage')?.addEventListener('click', () => navigateTo('manage-screen'));
     document.getElementById('btn-go-safety')?.addEventListener('click', () => navigateTo('safety-screen'));
     document.getElementById('btn-go-energy')?.addEventListener('click', () => navigateTo('energy-screen'));
-    document.getElementById('btn-go-ax')?.addEventListener('click', () => {
-        window.location.href = 'http://10.116.203.140:5004';
-    });
+    document.getElementById('btn-go-ax')?.addEventListener('click', () => navigateTo('ax-network-screen'));
+    document.getElementById('btn-go-law')?.addEventListener('click', () => navigateTo('law-screen'));
+    document.getElementById('btn-ax-return-portal')?.addEventListener('click', () => navigateTo('portal-screen'));
     
     // Sidebar return buttons via Logo Click
     document.getElementById('logo-btn-manage')?.addEventListener('click', () => navigateTo('portal-screen'));
     document.getElementById('logo-btn-energy')?.addEventListener('click', () => navigateTo('portal-screen'));
     document.getElementById('logo-btn-safety')?.addEventListener('click', () => navigateTo('portal-screen'));
     document.getElementById('logo-btn-ax')?.addEventListener('click', () => navigateTo('portal-screen'));
+    document.getElementById('logo-btn-law')?.addEventListener('click', () => navigateTo('portal-screen'));
 
     // ==========================================================================
     // 3. Sidebar Menu Sub-view Toggle Engine (좌측 버튼 제어 & 브레드크럼 매핑)
