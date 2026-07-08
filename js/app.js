@@ -153,7 +153,9 @@ document.addEventListener('DOMContentLoaded', () => {
     document.getElementById('btn-go-manage')?.addEventListener('click', () => navigateTo('manage-screen'));
     document.getElementById('btn-go-safety')?.addEventListener('click', () => navigateTo('safety-screen'));
     document.getElementById('btn-go-energy')?.addEventListener('click', () => navigateTo('energy-screen'));
-    document.getElementById('btn-go-ax')?.addEventListener('click', () => navigateTo('ax-screen'));
+    document.getElementById('btn-go-ax')?.addEventListener('click', () => {
+        window.location.href = 'http://10.116.203.140:5004';
+    });
     
     // Sidebar return buttons via Logo Click
     document.getElementById('logo-btn-manage')?.addEventListener('click', () => navigateTo('portal-screen'));
